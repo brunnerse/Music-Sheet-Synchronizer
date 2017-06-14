@@ -1,0 +1,26 @@
+Das Array besteht aus Samples
+											bsp. 440 Hz
+Größe Sample								8 Bits			//Die Größe des Samples und die Sample_Rate wirken sich auf die Qualität aus								
+Sample_Rate = samples / sekunde				16000 Samples/s	(gängiger Wert)
+Das Array besteht aus Sinuswellen
+Ton Frequenz [Hz] = Sinuswellen / Sekunde	440 Hz
+Periode = 1 / Frequenz						0.00227273 s
+Samples / Sinuswelle:	Sample_Rate / f 	36,3636 Samples / Periode bzw. Samples / Sinuswelle
+
+Die for-Schleife geht nun jedes einzelne Sample der Sampleliste durch
+Der Sinus-Wert der Schleife wird für jedes Sample bzw. für jeden Zeitpunkt berechnet, sodass die Amplitude 1 und die Periode bei der Anzahl der Samples / Sinuswelle liegt.
+Abschließend wird der Sinus-Wert auf den Wertebereich des Samples projiziert (bsp. 8 Bytes : Wertebereich -127 bis 127)
+			
+ 			sin[] = new byte[SAMPLE_RATE * SECONDS];
+            double f = 440d * Math.pow(2d, exp); //Berechnung der Frequenz
+            for (int i = 0; i < sin.length; i++) { //
+                double period = (double)SAMPLE_RATE / f;
+                double angle = 2.0 * Math.PI * i / period;
+                sin[i] = (byte)(Math.sin(angle) * 127f);
+             }   
+     
+             
+Gängige Werte für das AudioFormat:
+bsp. Take That - Rule the world.wav
+				Encoding	SampleRate	SampleSize, channel,    frameSize	, SpeicherFormat der Samples
+	Audioformat: PCM_SIGNED 44100.0 Hz,  16 bit,     stereo,  4 bytes/frame, little-endian
