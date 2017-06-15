@@ -24,3 +24,14 @@ Gängige Werte für das AudioFormat:
 bsp. Take That - Rule the world.wav
 				Encoding	SampleRate	SampleSize, channel,    frameSize	, SpeicherFormat der Samples
 	Audioformat: PCM_SIGNED 44100.0 Hz,  16 bit,     stereo,  4 bytes/frame, little-endian
+		Encoding:
+			PCM_SIGNED, PCM_UNSIGNED, PCM_FLOAT
+			
+Die Werte eines Audiostreams ergeben zusammen Sinuskurven verschiedener Amplitude, Höhe und Frequenz bzw. Periode. 
+Die Werte sind im Wertebereich der Bitanzahl eines Samples projiziert, ausnahme: Kodierung PCM_FLOAT(Name spricht für sich selbst)
+Bei mehreren Kanälen, beispielsweise Stereo mit zwei Kanälen, werden die Werte hintereinander in einem sog. Frame abgespeichert.
+Bsp. SampleSize 16 bit = 2 Byte, channel stereo = 2, frameSize = 4 bytes /frame
+
+
+Implementierung von Obertönen für unterschiedliche Klangfarben:
+	Sinuswellen übereinanderlegen (also Werte addieren)
