@@ -40,8 +40,7 @@ implements ActionListener, AdjustmentListener, ItemListener {
 		
 		leftChannel = new Scrollbar(Scrollbar.VERTICAL, 50, 1, 0, 101);
 		rightChannel = new Scrollbar(Scrollbar.VERTICAL, 50, 1, 0, 101);
-		leftChannel.addAdjustmentListener(this);
-		rightChannel.addAdjustmentListener(this);
+		
 
 		Panel settings = new Panel();
 		settings.setLayout(new GridLayout(numWaves + 1, 4, 10, 10));
@@ -60,17 +59,21 @@ implements ActionListener, AdjustmentListener, ItemListener {
 			settings.add(freqTextField[i]);
 			ampTextField[i] = new TextField(10);
 			settings.add(ampTextField[i]);
+			
+			channelCheckbox[i].addItemListener(this);
+			freqTextField[i].addActionListener(this);
+			ampTextField[i].addActionListener(this);
 		}
 		
 		Panel North  = new Panel();
 		North.setLayout(new GridLayout(1, 4, 15, 0));
 		leftLabel = new Label();
 		North.add(leftLabel);
-		switchButton = new Button("Switch On");
-		switchButton.addActionListener(this);
+		switchButton = new Button("On/Off");
+		
 		North.add(switchButton, BorderLayout.NORTH);
 		Button reset = new Button("Reset");
-		reset.addActionListener(this);
+		
 		North.add(reset);
 		rightLabel = new Label();
 		North.add(rightLabel);
@@ -81,23 +84,16 @@ implements ActionListener, AdjustmentListener, ItemListener {
 		this.add(settings, BorderLayout.CENTER);
 		this.add(rightChannel, BorderLayout.EAST);
 		
+		leftChannel.addAdjustmentListener(this);
+		rightChannel.addAdjustmentListener(this);
+		switchButton.addActionListener(this);
+		reset.addActionListener(this);
 		
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				dataLine.close();
 				dispose();
-			}
-		});
-		
-		this.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				System.out.println("Key pressed: " + e.getKeyChar());
-				if (e.getKeyChar() == '\n') {
-					System.out.println("Updating Sample List...");
-					updateSampleList();
-				}
 			}
 		});
 		
@@ -108,7 +104,8 @@ implements ActionListener, AdjustmentListener, ItemListener {
 		this.setVisible(true);
 		
 	}
-
+	
+	
 	private void resetValues() {
 		channelCheckbox[0].setState(true);
 		freqTextField[0].setText("440");
@@ -135,7 +132,8 @@ implements ActionListener, AdjustmentListener, ItemListener {
 	}
 	
 	private void updateSampleList() {
-		ChannelManager[] ch = fetchData();
+		System.out.println("Updating Sample List...");
+		WaveManager[] ch = fetchData();
 		double sin;
 		final int valueRange = (int)(Math.pow(2,  sampleSizeinBits - 1) - 1);
 		int sinVal;
@@ -143,7 +141,7 @@ implements ActionListener, AdjustmentListener, ItemListener {
 			sin = 0;
 			int curSample = i / (sampleSize * channels);
 			for(int idx = 0; idx < ch.length; ++idx) {
-				sin += Math.sin(2 * Math.PI * curSample / ch[idx].period) * ch[idx].amplitude;
+				sin += Math.sin(2 * Math.PI * curSample / ch[idx].samplesPerPeriod) * ch[idx].amplitude;
 			}
 			//Left Sample
 			sinVal = limitVal((int)(sin * getScrollValue(true) / 100 * valueRange), -valueRange, valueRange);
@@ -165,8 +163,6 @@ implements ActionListener, AdjustmentListener, ItemListener {
 		}
 	}
 	
-
-	
 	private void playSound() {
 		dataLine.start();
 		new PlaySound().start();
@@ -186,22 +182,21 @@ implements ActionListener, AdjustmentListener, ItemListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Switch On")) {
+		if (e.getActionCommand().equals("On/Off")) {
 			updateSampleList();
-			playSound();
-			((Button)e.getSource()).setLabel("Switch Off");
-		} else if (e.getActionCommand().equals("Switch Off")) {
-			stopSound();
-			((Button)e.getSource()).setLabel("Switch On");
+			if(dataLine.isRunning())
+				stopSound();
+			else
+				playSound();
 		} else if (e.getActionCommand().equals("Reset")) {
 			this.resetValues();
 			stopSound();
-			switchButton.setLabel("Switch On");
+		} else if (e.getSource().getClass().equals(TextField.class)) {
+				updateSampleList();
 		}
 	}
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		System.out.println("Updating Sample List...");
 		updateSampleList();
 	}
 	
@@ -212,35 +207,34 @@ implements ActionListener, AdjustmentListener, ItemListener {
 		}
 	}
 	
-	private class ChannelManager {
-		public int numChannel;
+	private class WaveManager {
+		@SuppressWarnings("unused")
 		public double frequency;
 		public double amplitude;
-		public double period;
+		public double samplesPerPeriod;
 		
-		public ChannelManager(int numChannel, double frequency, double amplitude, double period) {
-			this.numChannel = numChannel;
+		public WaveManager(double frequency, double amplitude, double sampleRate) {
 			this.frequency = frequency;
 			this.amplitude = amplitude;
-			this.period = period;
+			this.samplesPerPeriod = sampleRate / frequency;
 		}
 	}
 	
-	public ChannelManager[] fetchData() {
+	public WaveManager[] fetchData() {
 		int numActiveWaves = 0;
 		for (int x = 0; x < numWaves; ++x) {
 			if (channelCheckbox[x].getState())
 				numActiveWaves += 1;
 		}
 		int idx = 0;
-		ChannelManager[] ch = new ChannelManager[numActiveWaves];
+		WaveManager[] wm = new WaveManager[numActiveWaves];
 		for (int i = 0; i < numWaves; ++i) {
 			if (!channelCheckbox[i].getState())
 				continue;
 			double freq = Double.parseDouble(freqTextField[i].getText());
-			ch[idx++] = new ChannelManager(i, freq, Double.parseDouble(ampTextField[i].getText()) / 100d, sampleRate / freq);
+			wm[idx++] = new WaveManager(freq, Double.parseDouble(ampTextField[i].getText()) / 100d, sampleRate);
 		}
-		return ch;
+		return wm;
 	}
 	
 	
@@ -255,5 +249,5 @@ implements ActionListener, AdjustmentListener, ItemListener {
 	public static void main(String[] args) {
 		new Frequency_Modulation();
 	}
-	
+
 }

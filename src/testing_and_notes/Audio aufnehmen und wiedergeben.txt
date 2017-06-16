@@ -1,0 +1,52 @@
+Audio aufnehmen:
+
+	AudioFormat af = new AudioFormat(SampleRate, SampleSizeinBytes, channels, signed, bigEndian)
+	TargetDataLine line = AudioSystem.getTargetDataLine(format);
+	
+	line.open(format);
+	
+	//start recording
+	line.start();
+	
+	line.stop();
+	
+	numBytes = line.read(bytes[] b, int offset, int length)
+	
+	
+	line.close()
+	
+	
+	//.read kann auch for .stop() aufgerufen werden
+	
+Audio wiedergeben:
+		AudioFormat af = new AudioFormat(SampleRate, SampleSizeinBytes, channels, signed, bigEndian)
+		SourceDataLine line = AudioSystem.getSourceDataLine(audioInputStream.getFormat());
+		
+		/*
+		 WAV-Datei laden:
+		 	AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(ClassLoader.getSystemResource(fileName));
+		 	audioInputStream.read(bytes [] b, int offset, int length);
+		*/
+		
+		line.open(format, bufSize);
+		
+		numBytes = line.write(bytes [] b, int offset, int length);
+		line.start();
+			//hier kann line.write auch aufgerufen werden
+		line.stop();	
+		
+		line.close();
+
+Überwachen einer DataLine:
+	line.addLineListener(new LineHandler());
+	
+	public class LineHandler implements LineListener {
+		@Override
+		public void update(LineEvent e) {
+			if (e.getLine().equals(<line>) {
+				if (e.getType().equals(LineEvent.Type.STOP) {
+					System.out.println("Line has stopped.");
+				}
+			}
+		}
+	}	
