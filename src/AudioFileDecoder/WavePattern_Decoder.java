@@ -72,11 +72,11 @@ public class WavePattern_Decoder {
 
 	private static void createSampleList() {
 		double sin;
-		WaveManager wm[] = new WaveManager[3];
-		final double amplitude = 0.01;
+		WaveManager wm[] = new WaveManager[2];
+		final double amplitude = 0.5;
 		wm[0] = new WaveManager(440, amplitude, sampleRate);
 		wm[1] = new WaveManager(880, amplitude, sampleRate);
-		wm[2] = new WaveManager(1320, amplitude, sampleRate);
+		//wm[2] = new WaveManager(1760, amplitude, sampleRate);
 		final int valueRange = (int)(Math.pow(2,  sampleSizeinBits - 1) - 1);
 		int sinVal;
 		for (int i = 0; i < sampleList.length; i += sampleSize * channels) {
@@ -107,7 +107,7 @@ public class WavePattern_Decoder {
 		return val;
 	}
 	
-	private static class WaveManager {
+	public static class WaveManager {
 		@SuppressWarnings("unused")
 		public double frequency;
 		public double amplitude;

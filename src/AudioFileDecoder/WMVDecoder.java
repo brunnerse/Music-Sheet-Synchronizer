@@ -8,8 +8,9 @@ import javax.sound.sampled.*;
 public class WMVDecoder {
 
 	public static boolean setTimeStamp = false;
+	public static double startSecond = 5;
 	public static void main(String[] args) {
-		final String fileName = "Rule the world.wav", outFileName;
+		final String fileName = "all about you.wav", outFileName;
 		System.out.println(ClassLoader.getSystemResource(fileName));
 		try {
 			AudioSystem.getAudioInputStream(ClassLoader.getSystemResource(fileName));
@@ -24,7 +25,7 @@ public class WMVDecoder {
 			outFileName = fileName + " - decoded.txt";
 			//decode_freq_amp(audioInputStream, outFileName, 60, 5);
 			System.out.println("Finished decoding Amplitude and Frequency, decoding raw values now...");
-			decode_values(audioInputStream, outFileName, 10, 2);
+			decode_values(audioInputStream, outFileName, startSecond, 2);
 			System.out.println("Writing process finished, saved in file " + outFileName);
 		} catch (Exception e) {
 			System.err.println("Decoding failed: " + e.getMessage());

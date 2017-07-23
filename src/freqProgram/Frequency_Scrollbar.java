@@ -11,7 +11,7 @@ public class Frequency_Scrollbar extends Frame implements ActionListener, Adjust
 	private Label freqLabel, amplLabel, heightLabel;
 	private SourceDataLine dataLine;
 	private byte[] sampleList;
-	private final int sampleRate = 16 * 1024;
+	private final int sampleRate = 44000;
 	private final int sampleSizeinBits = 16;
 	private final int playMS = 5000;
 	

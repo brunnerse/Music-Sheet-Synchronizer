@@ -41,6 +41,6 @@ public class Mic_Recording {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+		System.out.println("finished.");
 	}
 }
