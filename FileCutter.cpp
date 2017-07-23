@@ -9,14 +9,22 @@ using namespace std;
 
 int main(int argc, char **argv) {
 	string s;
-	int bytesToWrite, bytesInLoop;
+	long long bytesToWrite, bytesInLoop;
 	char buffer[100];
-	if (argc < 3) {
+	if (argc != 3 && argc != 5) {
 		printf("Usage: FileCutter <FileName> <Bytes> (optional) -o <outFile>\n");
 		return 1;
 	}
 	ifstream inFile(argv[1], ios::binary);
 	ofstream outFile;
+
+	bytesToWrite = atoll(argv[2]);
+	inFile.seekg(0, ios::end);
+	if (inFile.tellg() <= bytesToWrite) {
+		printf("The Filesize is only %d bytes. Choose a value below that.\n", inFile.tellg());
+		return 1;
+	}
+	inFile.seekg(0, ios::beg);
 	if (argc == 5) {
 		outFile.open(argv[4], ios::binary | ios::trunc);
 	}
@@ -26,14 +34,8 @@ int main(int argc, char **argv) {
 		printf("Writing into File %s...\n", s.c_str());
 		outFile.open(s.c_str(), ios::binary);
 	}
-	bytesToWrite = atoi(argv[2]);
-	inFile.seekg(0, inFile.end);
-	if (inFile.tellg() <= bytesToWrite) {
-		printf("The Filesize is only %d bytes. Choose a value below that.\n", inFile.tellg());
-		return 1;
-	}
 	do {
-		bytesInLoop = min(100, bytesToWrite);
+		bytesInLoop = min(100ll, bytesToWrite);
 		inFile.read(buffer, bytesInLoop);
 		outFile.write(buffer, bytesInLoop);
 		bytesToWrite -= bytesInLoop;
