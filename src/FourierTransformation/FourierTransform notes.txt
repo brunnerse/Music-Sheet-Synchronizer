@@ -1,0 +1,18 @@
+Real DFT:
+	Takes a N point time domain signal
+	Outputs Frequency Domain:
+		N/2 + 1 point Real Part: contains cosinus amplitudes (ampl = Value / N/2 )
+		N/2 + 1 point Imaginary Part: contains sinus amplitudes (ampl = Value / N/2 )
+Complex DFT:
+	Time Domain signal, consisting of
+		N point Real Part
+		N point Imaginary Part
+	Outputs Frequency Domain:
+		N point Real Part
+		N point Imaginary Part
+	Consistencies with Real DFT:
+		Set Imaginary Part values to zero
+		in Frequency Domain, Real and Imaginary Part values from idx 0 to N/2 are the same
+		Frequency Domain:
+			Real Part from idx N/2 + 1 to N-1 contains mirror of values 0 to N/2 (ReX[N/2 + 1] = ReX[N/2 - 1] and so on)
+			Imaginary Part  from idx N/2 + 1 to N-1 contains mirror of values 0 to N/2 (ReX[N/2 + 1] = - ReX[N/2 - 1] and so on)

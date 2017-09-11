@@ -8,7 +8,7 @@ public class Music_Playback{
 	//This only works with .wav Files.
 	public static void main(String[] args) throws LineUnavailableException {
 		byte sampleList[];
-		final String fileName = "Rule the world.wav";
+		final String fileName = "all about you.wav";
 		System.out.println(ClassLoader.getSystemResource(fileName));
 		try {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(ClassLoader.getSystemResource(fileName));
