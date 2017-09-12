@@ -116,7 +116,7 @@ public class FourierTesting {
 	public static void printArray(float array[]) {
 		System.out.print("[");
 		for (int i = 0; i < array.length; ++i) {
-			if (i % 15 == 0)
+			if (i % 16 == 0)
 				System.out.println("");
 			System.out.printf("%8.4f\t", array[i]);
 		}
