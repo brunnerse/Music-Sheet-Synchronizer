@@ -5,7 +5,7 @@ import javax.sound.sampled.*;
 
 public class Mic_Recording {
 	private static final double sampleRate = 20000d;
-	private static final double seconds = 15d;
+	private static final double seconds = 5d;
 	private static final int sampleSize = 2;
 	public static void main(String args[]) {
 		TargetDataLine line;

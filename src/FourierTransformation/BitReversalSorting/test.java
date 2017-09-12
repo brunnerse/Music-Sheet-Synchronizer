@@ -1,7 +1,7 @@
 package FourierTransformation.BitReversalSorting;
 
 public class test {
-	private static int N = 64;
+	private static int N = 32;
 	
 	public static void main (String args[]) {
 		int array[] = new int[N];
@@ -13,32 +13,21 @@ public class test {
 		printIntArray(array);
 	}	
 		
+	//CREDIT: https://www.nayuki.io/page/free-small-fft-in-multiple-languages
 	public static void bitReversalSorting(int array[]) {
-		int swap, rev;
-		double dM = Math.log(array.length) / Math.log(2);
-		
-		if (Math.abs(dM - (int)dM) > 0.0001) {
-			System.err.println("ERROR: array doesn't have a length of l = 2 ^ x");
-			return;
-		}
-		
-		int M = (int) Math.round(dM);
-		//Index 0 and array.length - 1 stay the same
-		for(int i = 1; i < array.length - 1; ++i) {
-			rev = 0;
-			//loop through each index
-			for (int  x = 0; x < M; ++x) {
-				//create reversal of each index
-				rev |= ((1 << x) & i) << M - 1 - x - x;	//take the bit of i at position x, then move it to the first position of the integer ( >> x), then move it to the correct position for reversal ( << M - 1 - x)	
-			}
-			//swap the indexes (if not already done)
-			if (i < rev) {
-				swap = array[i];
-				array[i] = array[rev];
-				array[rev] = swap;
+		int n = array.length;
+		int levels = 31 - Integer.numberOfLeadingZeros(n);  // Equal to floor(log2(n))
+		// Bit-reversed addressing permutation
+		for (int i = 0; i < n; i++) {
+			int j = Integer.reverse(i) >>> (32 - levels);
+			if (j > i) {
+				int temp = array[i];
+				array[i] = array[j];
+				array[j] = temp;
 			}
 		}
 	}
+	
 	
 	public static void printIntArray(int array[]) {
 		System.out.print("[");

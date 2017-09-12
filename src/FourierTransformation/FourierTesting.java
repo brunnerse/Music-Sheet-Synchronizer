@@ -9,13 +9,58 @@ import java.nio.file.*;
 
 public class FourierTesting {
 
-	public static int N = 64;
+	public static int N = 32;
+	public static final int MaxN = 1048576; // 1 >> 20
 
 	public static void main(String args[]) {
+		//FunctionTesting()
+		//SpeedTesting();
+	}
+
+	@SuppressWarnings("unused")
+	private static void SpeedTesting() {
+		final int backupN = N;
+		float valueList[];
+		float imaginaryVals[];
+		for (int n = N; n <= MaxN; n <<= 1) {
+			System.out.println("\n\n===\nTesting speed for " + n + " values...\n===\n\n");
+			System.out.println("Creating time domain...");
+			N = n;
+			valueList = analyse_FrequencySpectrum();
+			imaginaryVals = new float[n];
+			for (int i = 0; i < n; ++i)
+				imaginaryVals[i] = 0;
+			float CosVals[] = new float[N];
+			float SinVals[] = new float[N];
+			
+			System.out.print("Testing Complex DFT... ");
+			long startTime = System.currentTimeMillis();
+			FourierTransform.ComplexDFT(valueList, imaginaryVals, CosVals, SinVals);
+			System.out.printf("Finished in %.3f seconds.\n", (System.currentTimeMillis() - startTime) / 1000f);
+			System.out.print("Testing Inverse Complex FFT... ");
+			startTime = System.currentTimeMillis();
+			FourierTransform.InverseComplexDFT(valueList, imaginaryVals, CosVals, SinVals);
+			System.out.printf("Finished in %.3f seconds.\n", (System.currentTimeMillis() - startTime) / 1000f);
+			
+			System.out.print("\nTesting FFT Cooley-Tukey algorithm... ");
+			startTime = System.currentTimeMillis();
+			FourierTransform.FFT(valueList,  imaginaryVals);
+			System.out.printf("Finished in %.3f seconds.\n", (System.currentTimeMillis() - startTime) / 1000f);
+			System.out.print("Testing Inverse FFT algorithm... ");
+			startTime = System.currentTimeMillis();
+			FourierTransform.InverseFFT(valueList,  imaginaryVals);
+			System.out.printf("Finished in %.3f seconds.\n", (System.currentTimeMillis() - startTime) / 1000f);
+		}
+		N = backupN;
+	}
+	
+	@SuppressWarnings("unused")
+	private static void FunctionTesting() {
 		float[] valueList = FourierTesting.analyse_FrequencySpectrum();
 		System.out.println("Testing Fourier Transformation for wave 12 hz / 8hz ...");
 		System.out.print("values: ");
 		printArray(valueList);
+		
 		
 		System.out.println("\nStarting Complex DFT for " + N + " values...");
 		long startTime = System.currentTimeMillis();
@@ -35,7 +80,19 @@ public class FourierTesting {
 		printArray(valueList);
 		printArray(imaginaryVals);
 		
+		System.out.println("\nStarting FFT for " + N + " values...");
+		startTime = System.currentTimeMillis();
+		FourierTransform.FFT(valueList, imaginaryVals);
+		System.out.printf("Finished in %.3f seconds. Values: [\n", (System.currentTimeMillis() - startTime) / 1000f);
+		printDomain(valueList, imaginaryVals, N);
 		
+		System.out.println("\nTransforming back...");
+		startTime = System.currentTimeMillis();
+		FourierTransform.InverseFFT(valueList, imaginaryVals);
+		System.out.printf("Finished in %.3f seconds. Values: [\n", (System.currentTimeMillis() - startTime) / 1000f);
+		printArray(valueList);
+		printArray(imaginaryVals);
+		/*
 		valueList = analyse_FrequencySpectrum();
 		System.out.println("\n\nStarting Real DFT for " + N + " values...");
 		startTime = System.currentTimeMillis();
@@ -48,9 +105,9 @@ public class FourierTesting {
 		FourierTransform.InverseRealDFT(CosVals, SinVals, valueList, N);
 		System.out.printf("Finished in %.3f seconds. Values: [\n", (System.currentTimeMillis() - startTime) / 1000f);
 		printArray(valueList);
-
+		*/
 	}
-
+	
 	@SuppressWarnings("unused")
 	private static ArrayList<Double> analyse_PDFSample() {
 		List<Double> valueListasObjects = Arrays.asList(1.0000, 0.3804, 0.8090, 0.2351, 0.3090, -0.0000, -0.3090,
@@ -90,7 +147,7 @@ public class FourierTesting {
 		// Frequenzspektrum analysieren
 		float DC_Offset = 1f;
 		float values[] = new float[N];
-		int freq1 = 12, freq2 = 8, freq3 = 3, freq4 = 32, freq5 = 33, freq6 = 30;
+		int freq1 = 12, freq2 = 8, freq3 = 3, freq4 = 16, freq5 = 17, freq6 = 14;
 		for (int x = 0; x < N; ++x) {
 			values[x] = (float) (1 * Math.cos(freq1 * 2 * Math.PI * x / N)
 					+ 0.8 * Math.cos(freq2 * 2 * Math.PI * x / N));

@@ -1,0 +1,141 @@
+===
+Testing speed for 32 values...
+===
+
+
+Creating time domain...
+Testing Complex DFT... Finished in 0,001 seconds.
+Testing Inverse Complex FFT... Finished in 0,000 seconds.
+
+Testing FFT Cooley-Tukey algorithm... Finished in 0,000 seconds.
+Testing Inverse FFT algorithm... Finished in 0,000 seconds.
+
+
+===
+Testing speed for 64 values...
+===
+
+
+Creating time domain...
+Testing Complex DFT... Finished in 0,001 seconds.
+Testing Inverse Complex FFT... Finished in 0,001 seconds.
+
+Testing FFT Cooley-Tukey algorithm... Finished in 0,000 seconds.
+Testing Inverse FFT algorithm... Finished in 0,000 seconds.
+
+
+===
+Testing speed for 128 values...
+===
+
+
+Creating time domain...
+Testing Complex DFT... Finished in 0,004 seconds.
+Testing Inverse Complex FFT... Finished in 0,003 seconds.
+
+Testing FFT Cooley-Tukey algorithm... Finished in 0,000 seconds.
+Testing Inverse FFT algorithm... Finished in 0,000 seconds.
+
+
+===
+Testing speed for 256 values...
+===
+
+
+Creating time domain...
+Testing Complex DFT... Finished in 0,024 seconds.
+Testing Inverse Complex FFT... Finished in 0,017 seconds.
+
+Testing FFT Cooley-Tukey algorithm... Finished in 0,001 seconds.
+Testing Inverse FFT algorithm... Finished in 0,000 seconds.
+
+
+===
+Testing speed for 512 values...
+===
+
+
+Creating time domain...
+Testing Complex DFT... Finished in 0,039 seconds.
+Testing Inverse Complex FFT... Finished in 0,043 seconds.
+
+Testing FFT Cooley-Tukey algorithm... Finished in 0,000 seconds.
+Testing Inverse FFT algorithm... Finished in 0,000 seconds.
+
+
+===
+Testing speed for 1024 values...
+===
+
+
+Creating time domain...
+Testing Complex DFT... Finished in 0,108 seconds.
+Testing Inverse Complex FFT... Finished in 0,119 seconds.
+
+Testing FFT Cooley-Tukey algorithm... Finished in 0,001 seconds.
+Testing Inverse FFT algorithm... Finished in 0,000 seconds.
+
+
+===
+Testing speed for 2048 values...
+===
+
+
+Creating time domain...
+Testing Complex DFT... Finished in 0,425 seconds.
+Testing Inverse Complex FFT... Finished in 0,439 seconds.
+
+Testing FFT Cooley-Tukey algorithm... Finished in 0,001 seconds.
+Testing Inverse FFT algorithm... Finished in 0,001 seconds.
+
+
+===
+Testing speed for 4096 values...
+===
+
+
+Creating time domain...
+Testing Complex DFT... Finished in 1,722 seconds.
+Testing Inverse Complex FFT... Finished in 1,705 seconds.
+
+Testing FFT Cooley-Tukey algorithm... Finished in 0,001 seconds.
+Testing Inverse FFT algorithm... Finished in 0,001 seconds.
+
+
+===
+Testing speed for 8192 values...
+===
+
+
+Creating time domain...
+Testing Complex DFT... Finished in 6,891 seconds.
+Testing Inverse Complex FFT... Finished in 6,987 seconds.
+
+Testing FFT Cooley-Tukey algorithm... Finished in 0,001 seconds.
+Testing Inverse FFT algorithm... Finished in 0,001 seconds.
+
+
+===
+Testing speed for 16384 values...
+===
+
+
+Creating time domain...
+Testing Complex DFT... Finished in 28,766 seconds.
+Testing Inverse Complex FFT... Finished in 30,399 seconds.
+
+Testing FFT Cooley-Tukey algorithm... Finished in 0,004 seconds.
+Testing Inverse FFT algorithm... Finished in 0,005 seconds.
+
+
+===
+Testing speed for 32768 values...
+===
+
+
+Creating time domain...
+Testing Complex DFT... Finished in 124,145 seconds.
+Testing Inverse Complex FFT... Finished in 120,222 seconds.
+
+Testing FFT Cooley-Tukey algorithm... Finished in 0,008 seconds.
+Testing Inverse FFT algorithm... Finished in 0,008 seconds.
