@@ -139,60 +139,7 @@ public class FourierTransform {
 				break;
 		}
 	}
-
-	// Transforms the time domain data of inout_Rex[] into frequency domain data
-	// with
-	// real part inout_Rex[] and out_Imx[]. out_Imx[] needs a length of at least N/2
-	// + 1.
-	public static void RealFFT(float inout_real[], float out_imag[]) {
-		// ImaginaryPart: All values are zero
-		// out_ReX and out_ImX : idx 0 - N/2
-		// Length variables
-		int n = inout_real.length;
-		if (out_imag.length < n / 2 + 1)
-			throw new IllegalArgumentException("Out_Imag is too small!");
-		int levels = 31 - Integer.numberOfLeadingZeros(n); // Equal to floor(log2(n))
-		if (1 << levels != n)
-			throw new IllegalArgumentException("Length is not a power of 2");
-
-		// Bit-reversed addressing permutation
-		for (int i = 0; i < n; i++) {
-			int j = Integer.reverse(i) >>> (32 - levels);
-			if (j > i) {
-				double temp = inout_real[i];
-				inout_real[i] = inout_real[j];
-				inout_real[j] = (float) temp;
-				temp = out_imag[i];
-				out_imag[i] = out_imag[j];
-				out_imag[j] = (float) temp;
-			}
-		}
-
-		// Cooley-Tukey decimation-in-time radix-2 FFT
-		for (int size = 2; size <= n; size *= 2) {
-			int halfsize = size / 2;
-			int tablestep = n / size;
-			double factor = 2 * Math.PI / n;
-			for (int i = 0; i < n; i += size) {
-				for (int j = i, k = 0; j < i + halfsize; j++, k += tablestep) {
-
-					double cosVal = Math.cos(factor * k);
-					double sinVal = Math.sin(factor * k);
-
-					int l = j + halfsize;
-					double tpre = inout_real[l] * cosVal + out_imag[l] * sinVal;
-					double tpim = -inout_real[l] * sinVal + out_imag[l] * cosVal;
-					inout_real[l] = (float) (inout_real[j] - tpre);
-					out_imag[l] = (float) (out_imag[j] - tpim);
-					inout_real[j] += tpre;
-					out_imag[j] += tpim;
-				}
-			}
-			if (size == n) // Prevent overflow in 'size *= 2'
-				break;
-		}
-	}
-
+	
 	public static void InverseFFT(float inout_Rex[], float inout_Imx[]) {
 		int N = inout_Rex.length;
 		if (inout_Imx.length != N) {
@@ -208,16 +155,6 @@ public class FourierTransform {
 			inout_Rex[i] = inout_Rex[i] / N;
 			inout_Imx[i] = inout_Imx[i] / -N;
 		}
-	}
-
-	public static void InverseRealFFT(float inout_real[], float in_imag[]) {
-		int n = inout_real.length;
-		if (in_imag.length != n / 2 + 1)
-			throw new IllegalArgumentException("in_Imag is too small!");
-		int levels = 31 - Integer.numberOfLeadingZeros(n); // Equal to floor(log2(n))
-		if (1 << levels != n)
-			throw new IllegalArgumentException("Length is not a power of 2");
-		
 	}
 
 }
