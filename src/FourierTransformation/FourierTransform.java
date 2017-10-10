@@ -111,12 +111,12 @@ public class FourierTransform {
 		for (int i = 0; i < n; i++) {
 			int j = Integer.reverse(i) >>> (32 - levels);
 			if (j > i) {
-				double temp = real[i];
+				float temp = real[i];
 				real[i] = real[j];
-				real[j] = (float) temp;
+				real[j] = temp;
 				temp = imag[i];
 				imag[i] = imag[j];
-				imag[j] = (float) temp;
+				imag[j] = temp;
 			}
 		}
 
@@ -157,4 +157,17 @@ public class FourierTransform {
 		}
 	}
 
+	//One of the original arrays can be used as the output array.
+	//Is meant for the complex DFT: out_Amp.length must be > real.length / 2
+	public static void GetAmplitudes(float[] real, float[] imag, float[] out_Amp) {
+		int N = real.length, Nd2 = N / 2;
+		if (out_Amp.length <= Nd2) {
+			throw new IllegalArgumentException("Size of out_Amp is too small");
+		}
+		out_Amp[0] = real[0] / N;
+		for(int i = 1; i < Nd2; ++i) {
+			out_Amp[i] = (float)Math.sqrt(real[i] * real[i] + imag[i] * imag[i]) / Nd2;
+		}
+		out_Amp[Nd2] = real[Nd2] / N;
+	}
 }

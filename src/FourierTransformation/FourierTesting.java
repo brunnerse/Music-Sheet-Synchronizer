@@ -13,7 +13,7 @@ public class FourierTesting {
 	public static final int MaxN = 1048576; // 1 >> 20
 
 	public static void main(String args[]) {
-		//FunctionTesting()
+		FunctionTesting();
 		//SpeedTesting();
 	}
 
@@ -76,20 +76,20 @@ public class FourierTesting {
 		System.out.println("\nTransforming back...");
 		startTime = System.currentTimeMillis();
 		FourierTransform.InverseComplexDFT(CosVals, SinVals, valueList, imaginaryVals);
-		System.out.printf("Finished in %.3f seconds. Values: [\n", (System.currentTimeMillis() - startTime) / 1000f);
+		System.out.printf("Finished in %.3f seconds. Values: \n", (System.currentTimeMillis() - startTime) / 1000f);
 		printArray(valueList);
 		printArray(imaginaryVals);
 		
 		System.out.println("\nStarting FFT for " + N + " values...");
 		startTime = System.currentTimeMillis();
 		FourierTransform.FFT(valueList, imaginaryVals);
-		System.out.printf("Finished in %.3f seconds. Values: [\n", (System.currentTimeMillis() - startTime) / 1000f);
+		System.out.printf("Finished in %.3f seconds. Values: \n", (System.currentTimeMillis() - startTime) / 1000f);
 		printDomain(valueList, imaginaryVals, N);
 		
 		System.out.println("\nTransforming back...");
 		startTime = System.currentTimeMillis();
 		FourierTransform.InverseFFT(valueList, imaginaryVals);
-		System.out.printf("Finished in %.3f seconds. Values: [\n", (System.currentTimeMillis() - startTime) / 1000f);
+		System.out.printf("Finished in %.3f seconds. Values: \n", (System.currentTimeMillis() - startTime) / 1000f);
 		printArray(valueList);
 		printArray(imaginaryVals);
 		/*
@@ -162,7 +162,7 @@ public class FourierTesting {
 	public static void printDomain(float real[], float img[], int len) {
 		System.out.print("[");
 		for (int i = 0; i < len; ++i) {
-			if (i % 8 == 0)
+			if (i % 7 == 0)
 				System.out.println("");
 			System.out.printf("%3d : ( %7.4f; %7.4f)\t",i,  real[i], img[i]);
 
@@ -173,7 +173,7 @@ public class FourierTesting {
 	public static void printArray(float array[]) {
 		System.out.print("[");
 		for (int i = 0; i < array.length; ++i) {
-			if (i % 16 == 0)
+			if (i % 14 == 0)
 				System.out.println("");
 			System.out.printf("%8.4f\t", array[i]);
 		}
