@@ -55,6 +55,7 @@ public class MicAnalysisWindow extends JFrame implements ActionListener {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				dispose();
+				System.exit(0);
 			}
 		});
 		new Thread(new UpdateData()).start();
