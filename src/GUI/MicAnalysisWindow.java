@@ -32,7 +32,7 @@ public class MicAnalysisWindow extends JFrame implements ActionListener {
 		lMaxFreq = new JLabel("Current Loudest Frequency: -");
 		p.add(lMaxFreq);
 		this.add(p, BorderLayout.NORTH);
-		signalDisplay = new AudioFrequencyDisplay(1 << 15, 100, 2000, 600, 600);
+		signalDisplay = new AudioFrequencyDisplay(1 << 16, 100, 500, 1000, 600);
 		signalDisplay.setDarkColorTheme();
 		this.add(signalDisplay, BorderLayout.CENTER);
 		

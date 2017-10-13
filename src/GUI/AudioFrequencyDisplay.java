@@ -7,7 +7,6 @@ import java.awt.Graphics;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 import javax.swing.JPanel;
@@ -67,27 +66,48 @@ public class AudioFrequencyDisplay extends JPanel {
 	public void startAnalysis() {
 		isAnalysing = true;
 		if (line == null) {
-			this.setFormat(new AudioFormat(44100, 16, 1, true, false));
-			DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-			if (!AudioSystem.isLineSupported(info)) {
-				throw new IllegalArgumentException("ERROR: Das Audioformat " + format.toString()
-						+ "\nwird von der TargetDataLine nicht unterstützt.");
+			System.out.println("Finding supported audio format...");
+			boolean formatFound = false;
+			int[] possibleSampleRates = {192000, 96000, 48000, 44100};
+			for (int sampleRate : possibleSampleRates) {
+					this.setFormat(new AudioFormat(sampleRate, 16, 1, true, false));
+					line = testAudioFormat(this.format);
+					if(line != null) {
+						System.out.println("Using AudioFormat " + this.format);
+						formatFound = true;
+						break;
+					} else {
+						System.out.println("The AudioFormat " + this.format + "isn't supported by the System.");
+					}
 			}
-			try {
-				this.audioUpdaterThread = new AudioUpdater(AudioSystem.getTargetDataLine(format), dataSize);
-			} catch (LineUnavailableException e) {
-				System.err.println("Line is currently unavailable");
-				stopAnalysis();
-			}
-		} else {
-			this.audioUpdaterThread = new AudioUpdater(line, dataSize);
-		}
+			if (!formatFound)
+				throw new IllegalArgumentException("The system doesn't support any known AudioFormat");
+		} 
+		
+		this.audioUpdaterThread = new AudioUpdater(line, dataSize);
 		this.audioUpdaterThread.start();
+	}
+	
+	private TargetDataLine testAudioFormat(AudioFormat format) {
+		TargetDataLine dLine;
+		try {
+			dLine = AudioSystem.getTargetDataLine(format);
+			dLine.open();
+			dLine.start();
+			dLine.stop();
+			dLine.close();
+			//If all Operations suceeded, get the same line as new
+			dLine = AudioSystem.getTargetDataLine(format);
+		} catch(Exception e) {
+			return null;
+		}
+		return dLine;
 	}
 
 	public void stopAnalysis() {
 		isAnalysing = false;
 		try { this.audioUpdaterThread.join(); } catch (InterruptedException e) {}
+		this.line = null;
 	}
 
 	@Override
@@ -123,9 +143,9 @@ public class AudioFrequencyDisplay extends JPanel {
 		g.setFont(new Font(null, Font.PLAIN, 11));
 		// draw Frequencies on X-Axis
 		int offsetPerText = dotsPerLetter * String.valueOf(maxFreq).length() + 8;
-		int numSegments = axisLenX / offsetPerText;
+		float numSegments = (float)axisLenX / offsetPerText;
 		for (int i = 1; i < numSegments; ++i) {
-			String freq = String.valueOf(i * (maxFreq - minFreq) / numSegments + minFreq);
+			String freq = String.valueOf((int)(i * (maxFreq - minFreq) / numSegments + minFreq));
 			g.drawString(freq, scaleTextOffsetX + offsetPerText * i - freq.length() * dotsPerLetter / 2,
 					this.getHeight() - 2);
 			g.drawLine(scaleTextOffsetX + offsetPerText * i, this.getHeight() - scaleTextOffsetY + 3,
@@ -133,10 +153,10 @@ public class AudioFrequencyDisplay extends JPanel {
 		}
 		// draw Amplitudes on Y-Axis
 		offsetPerText = 20;
-		numSegments = axisLenY / offsetPerText;
-		for (int i = 1; i < numSegments; ++i) {
-			String amp = String.valueOf(i * maxAmp / numSegments);
-			int yPosition = this.getHeight() - scaleTextOffsetY - i * offsetPerText;
+		numSegments = (float)axisLenY / offsetPerText;
+		for (int i = 1; i < numSegments - 1; ++i) {
+			String amp = String.valueOf((int)(i * maxAmp / numSegments));
+			int yPosition = (int) (this.getHeight() - scaleTextOffsetY - i * axisLenY / numSegments);
 			g.drawString(amp, 3, yPosition + 5);
 			g.drawLine(scaleTextOffsetX - 3, yPosition, scaleTextOffsetX + 3, yPosition);
 		}
@@ -148,8 +168,12 @@ public class AudioFrequencyDisplay extends JPanel {
 			// Don't display value 0(The DC Offset)
 			for (int i = 1; i < Math.min(amps.length, maxFreq) - minFreq; ++i) {
 				int currentYVal = axisLenY * (int) amps[i + minFreq] / maxAmp;
-				g.drawRect((int)(i * axisLenX * precision)/ (maxFreq - minFreq) + scaleTextOffsetX, this.getHeight() - scaleTextOffsetY - currentYVal,
-						(int)(axisLenX * precision) / (maxFreq - minFreq) , currentYVal);
+				if ((float)axisLenX / (maxFreq - minFreq) < 2.3)
+					g.drawRect(i * axisLenX / (maxFreq - minFreq) + scaleTextOffsetX, this.getHeight() - scaleTextOffsetY - currentYVal,
+							axisLenX / (maxFreq - minFreq) , currentYVal);
+				else
+					g.fillRect(i * axisLenX / (maxFreq - minFreq) + scaleTextOffsetX, this.getHeight() - scaleTextOffsetY - currentYVal,
+							axisLenX / (maxFreq - minFreq) , currentYVal);
 			}
 		}
 	}
@@ -255,7 +279,7 @@ public class AudioFrequencyDisplay extends JPanel {
 	public void setBrightColorTheme() {
 		this.bgColor = new Color(240, 240, 240);
 		this.scaleColor = new Color(0, 0, 0);
-		this.graphColor = new Color(50, 255, 50);
+		this.graphColor = new Color(10, 150, 10);
 		this.setBackground(bgColor);
 		repaint();
 	}
