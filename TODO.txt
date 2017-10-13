@@ -1,0 +1,14 @@
+AudioFrequencyDisplay:
+	surpass precision as argument for constructor, not array size
+	for random precision, try to make FFT work with any array size
+Read PDF/jpg, make into bitmap, display it, make it scrollable
+
+Make noise reducer, replay sound with reduced background noise
+
+Read notes from bitmap
+
+Get notes from sound
+
+Play sound from notes(eventually with multiple instruments)
+
+Find position in bitmap where the sound is playing, put a marker there

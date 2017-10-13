@@ -34,9 +34,7 @@ public class AudioFrequencyDisplay extends JPanel {
 	// 401 Hz.
 	private float precision;
 
-	private Color bgColor = new Color(240, 240, 240);
-	private Color scaleColor = new Color(10, 10, 10);
-	private Color graphColor = new Color(20, 255, 20);
+	private Color bgColor, scaleColor, graphColor;
 
 	private final int scaleTextOffsetX = 20;
 	private final int scaleTextOffsetY = 15;
@@ -53,9 +51,11 @@ public class AudioFrequencyDisplay extends JPanel {
 		this.setDataSize(dataSize);
 		amps = new float[dataSize];
 		this.setBackground(bgColor);
-		this.setVisible(true);
-		this.setPreferredSize(new Dimension(width, height));
 		this.isAnalysing = false;
+		
+		this.setBrightColorTheme();
+		this.setPreferredSize(new Dimension(width, height));
+		this.setVisible(true);
 	}
 
 	public AudioFrequencyDisplay(TargetDataLine line, int dataSize, int minFrequency, int maxFrequency, int width,	int height) {
@@ -144,7 +144,7 @@ public class AudioFrequencyDisplay extends JPanel {
 		// draw Frequencies on X-Axis
 		int offsetPerText = dotsPerLetter * String.valueOf(maxFreq).length() + 8;
 		float numSegments = (float)axisLenX / offsetPerText;
-		for (int i = 1; i < numSegments; ++i) {
+		for (int i = 1; i < numSegments - 1; ++i) {
 			String freq = String.valueOf((int)(i * (maxFreq - minFreq) / numSegments + minFreq));
 			g.drawString(freq, scaleTextOffsetX + offsetPerText * i - freq.length() * dotsPerLetter / 2,
 					this.getHeight() - 2);
@@ -166,14 +166,17 @@ public class AudioFrequencyDisplay extends JPanel {
 		g.setColor(graphColor);
 		if (format.getSampleSizeInBits() == 16) {
 			// Don't display value 0(The DC Offset)
-			for (int i = 1; i < Math.min(amps.length, maxFreq) - minFreq; ++i) {
-				int currentYVal = axisLenY * (int) amps[i + minFreq] / maxAmp;
-				if ((float)axisLenX / (maxFreq - minFreq) < 2.3)
-					g.drawRect(i * axisLenX / (maxFreq - minFreq) + scaleTextOffsetX, this.getHeight() - scaleTextOffsetY - currentYVal,
-							axisLenX / (maxFreq - minFreq) , currentYVal);
+			int startIdx = Math.round(minFreq / precision) + 1;
+			int endIdx = Math.round(maxFreq / precision);
+			int IdxDiff = endIdx - startIdx;
+			for (int i = startIdx; i < Math.min(amps.length, endIdx + 1) - startIdx; ++i) {
+				int currentYVal = (int)(axisLenY * amps[i + startIdx] / maxAmp);
+				if ((float)axisLenX / IdxDiff < 2.3) //If the size of one bar is too small, draw instead of fill it(fill doesn't work under a certain value)
+					g.drawRect(i * axisLenX / IdxDiff + scaleTextOffsetX, this.getHeight() - scaleTextOffsetY - currentYVal,
+							axisLenX / IdxDiff , currentYVal);
 				else
-					g.fillRect(i * axisLenX / (maxFreq - minFreq) + scaleTextOffsetX, this.getHeight() - scaleTextOffsetY - currentYVal,
-							axisLenX / (maxFreq - minFreq) , currentYVal);
+					g.fillRect(i * axisLenX / IdxDiff + scaleTextOffsetX, this.getHeight() - scaleTextOffsetY - currentYVal,
+							axisLenX / IdxDiff , currentYVal);
 			}
 		}
 	}
@@ -197,7 +200,6 @@ public class AudioFrequencyDisplay extends JPanel {
 			fImag = new float[numData];
 			bData1 = new byte[numData * 2];
 			bData2 = new byte[numData * 2];
-			try {Thread.sleep(500);} catch (Exception e) {}
 		}
 
 		@Override
