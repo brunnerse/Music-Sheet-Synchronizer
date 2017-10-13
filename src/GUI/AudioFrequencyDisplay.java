@@ -1,8 +1,7 @@
 package GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 
@@ -11,7 +10,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import FourierTransformation.FourierTransform;
@@ -47,7 +45,7 @@ public class AudioFrequencyDisplay extends JPanel {
 	private int axisLenX, axisLenY;
 	
 	private AudioUpdater audioUpdaterThread;
-	private volatile AudioAnalyseCanvas canvas1, canvas2, canvas;
+
 	public AudioFrequencyDisplay(int dataSize, int minFrequency, int maxFrequency, int width, int height) {
 		super();
 		this.minFreq = minFrequency;
@@ -56,19 +54,13 @@ public class AudioFrequencyDisplay extends JPanel {
 		this.setDataSize(dataSize);
 		amps = new float[dataSize];
 		this.setBackground(bgColor);
-		this.setSize(width, height);
 		this.setVisible(true);
+		this.setPreferredSize(new Dimension(width, height));
 		this.isAnalysing = false;
-		this.canvas1 = new AudioAnalyseCanvas(width, height);
-		this.canvas2 = new AudioAnalyseCanvas(width, height);
-		canvas = canvas1;
-		this.swapCanvas();
-		this.add(canvas1, BorderLayout.CENTER);
-		this.add(canvas2, BorderLayout.CENTER);
 	}
 
-	public AudioFrequencyDisplay(TargetDataLine line, int dataSize, int minFrequency, int maxFrequency, int length,	int width) {
-		this(dataSize, minFrequency, maxFrequency, length, width);
+	public AudioFrequencyDisplay(TargetDataLine line, int dataSize, int minFrequency, int maxFrequency, int width,	int height) {
+		this(dataSize, minFrequency, maxFrequency, width, height);
 		this.line = line;
 	}
 
@@ -97,91 +89,71 @@ public class AudioFrequencyDisplay extends JPanel {
 		isAnalysing = false;
 		try { this.audioUpdaterThread.join(); } catch (InterruptedException e) {}
 	}
-	
-	//Function to support the double buffer(Canvas) system. this.canvas points to the canvas currently processed, the other one is being shown.
-	private void swapCanvas() {
-		if (this.canvas == canvas1) {
-			canvas2.setVisible(false);
-			canvas1.setVisible(true);
-			canvas = canvas2;
-		} else {
-			canvas1.setVisible(false);
-			canvas2.setVisible(true);
-			canvas = canvas1;
+
+	@Override
+	public void paintComponent(Graphics g) {
+		this.axisLenX = this.getWidth() - scaleTextOffsetX - scaleArrowOffset;
+		this.axisLenY = this.getHeight() - scaleTextOffsetY - scaleArrowOffset;
+		g.setColor(bgColor);
+		//As with repaint() shit doesn't seem to work, I'm gonna clear the Panel manually 
+		g.fillRect(0,  0,  this.getWidth(), this.getHeight());
+		// Whose Graphics is that
+		drawScale(g);
+		if (isAnalysing) {
+			drawGraph(g);
 		}
 	}
-	
-	private class AudioAnalyseCanvas extends Canvas {
-		public AudioAnalyseCanvas(int width, int height) {
-			super();
-			this.setSize(width, height);
-		}
-		
-		@Override
-		public void paint(Graphics g) {
-			axisLenX = this.getWidth() - scaleTextOffsetX - scaleArrowOffset;
-			axisLenY = this.getHeight() - scaleTextOffsetY - scaleArrowOffset;
-			// Whose Graphics is that
-			drawScale(g);
-			if (isAnalysing) {
-				drawGraph(g);
-			}
-			if (this == canvas1)
-				g.drawString("This is Canvas No. 1", 300, 300);
-			else
-				g.drawString("This is Canvas No. Two", 300, 350);
-		}
 
-		private void drawScale(Graphics g) {
-			final int dotsPerLetter = 6;
-			g.setColor(scaleColor);
-			int offset = this.getHeight() - scaleTextOffsetY;
-			g.drawLine(scaleTextOffsetX, scaleArrowOffset, scaleTextOffsetX, offset); // y-Line
-			g.drawLine(scaleTextOffsetX, offset, this.getWidth() - scaleArrowOffset, offset); // x-Line
-			g.drawLine(scaleTextOffsetX, scaleArrowOffset, scaleTextOffsetX - scaleArrowOffset, scaleArrowOffset + 3); // Arrow Lines for
-																										// y-Line
-			g.drawLine(scaleTextOffsetX, scaleArrowOffset, scaleTextOffsetX + scaleArrowOffset, scaleArrowOffset + 3);
-			offset = this.getHeight() - scaleTextOffsetY;
-			g.drawLine(getWidth() - scaleArrowOffset, offset, getWidth() - 3 - scaleArrowOffset, offset - 3); // Arrow Lines for
-																									// x-Line
-			g.drawLine(getWidth() - scaleArrowOffset, offset, getWidth() - 3 - scaleArrowOffset, offset + 3);
-			g.setFont(new Font(null, Font.BOLD, 12));
-			g.drawString("Hz", this.getWidth() - 3 - 14, getHeight() - 2);
-			g.drawString("Amp", scaleTextOffsetX + 7, 15);
-			g.setFont(new Font(null, Font.PLAIN, 11));
-			// draw Frequencies on X-Axis
-			int offsetPerText = dotsPerLetter * String.valueOf(maxFreq).length() + 8;
-			int numSegments = axisLenX / offsetPerText;
-			for (int i = 1; i < numSegments; ++i) {
-				String freq = String.valueOf(i * (maxFreq - minFreq) / numSegments + minFreq);
-				g.drawString(freq, scaleTextOffsetX + offsetPerText * i - freq.length() * dotsPerLetter / 2,
-						this.getHeight() - 2);
-				g.drawLine(scaleTextOffsetX + offsetPerText * i, this.getHeight() - scaleTextOffsetY + 3,
-						scaleTextOffsetX + offsetPerText * i, this.getHeight() - scaleTextOffsetY - 3);
-			}
-			// draw Amplitudes on Y-Axis
-			offsetPerText = 20;
-			numSegments = axisLenY / offsetPerText;
-			for (int i = 1; i < numSegments; ++i) {
-				String amp = String.valueOf(i * maxAmp / numSegments);
-				int yPosition = this.getHeight() - scaleTextOffsetY - i * offsetPerText;
-				g.drawString(amp, 3, yPosition + 5);
-				g.drawLine(scaleTextOffsetX - 3, yPosition, scaleTextOffsetX + 3, yPosition);
-			}
+	private void drawScale(Graphics g) {
+		final int dotsPerLetter = 6;
+		g.setColor(scaleColor);
+		int offset = this.getHeight() - scaleTextOffsetY;
+		g.drawLine(scaleTextOffsetX, scaleArrowOffset, scaleTextOffsetX, offset); // y-Line
+		g.drawLine(scaleTextOffsetX, offset, this.getWidth() - scaleArrowOffset, offset); // x-Line
+		g.drawLine(scaleTextOffsetX, scaleArrowOffset, scaleTextOffsetX - scaleArrowOffset, scaleArrowOffset + 3); // Arrow Lines for
+																									// y-Line
+		g.drawLine(scaleTextOffsetX, scaleArrowOffset, scaleTextOffsetX + scaleArrowOffset, scaleArrowOffset + 3);
+		offset = this.getHeight() - scaleTextOffsetY;
+		g.drawLine(getWidth() - scaleArrowOffset, offset, getWidth() - 3 - scaleArrowOffset, offset - 3); // Arrow Lines for
+																								// x-Line
+		g.drawLine(getWidth() - scaleArrowOffset, offset, getWidth() - 3 - scaleArrowOffset, offset + 3);
+		g.setFont(new Font(null, Font.BOLD, 12));
+		g.drawString("Hz", this.getWidth() - 3 - 14, getHeight() - 2);
+		g.drawString("Amp", scaleTextOffsetX + 7, 15);
+		g.setFont(new Font(null, Font.PLAIN, 11));
+		// draw Frequencies on X-Axis
+		int offsetPerText = dotsPerLetter * String.valueOf(maxFreq).length() + 8;
+		int numSegments = axisLenX / offsetPerText;
+		for (int i = 1; i < numSegments; ++i) {
+			String freq = String.valueOf(i * (maxFreq - minFreq) / numSegments + minFreq);
+			g.drawString(freq, scaleTextOffsetX + offsetPerText * i - freq.length() * dotsPerLetter / 2,
+					this.getHeight() - 2);
+			g.drawLine(scaleTextOffsetX + offsetPerText * i, this.getHeight() - scaleTextOffsetY + 3,
+					scaleTextOffsetX + offsetPerText * i, this.getHeight() - scaleTextOffsetY - 3);
 		}
+		// draw Amplitudes on Y-Axis
+		offsetPerText = 20;
+		numSegments = axisLenY / offsetPerText;
+		for (int i = 1; i < numSegments; ++i) {
+			String amp = String.valueOf(i * maxAmp / numSegments);
+			int yPosition = this.getHeight() - scaleTextOffsetY - i * offsetPerText;
+			g.drawString(amp, 3, yPosition + 5);
+			g.drawLine(scaleTextOffsetX - 3, yPosition, scaleTextOffsetX + 3, yPosition);
+		}
+	}
 
-		private void drawGraph(Graphics g) {
-			g.setColor(graphColor);
-			if (format.getSampleSizeInBits() == 16) {
-				// Don't display value 0(The DC Offset)
-				for (int i = 1; i < Math.min(amps.length, maxFreq) - minFreq; ++i) {
-					int currentYVal = axisLenY * (int) amps[i + minFreq] / maxAmp;
-					g.drawRect(i * axisLenX / (maxFreq - minFreq) + scaleTextOffsetX, this.getHeight() - scaleTextOffsetY - currentYVal,
-							axisLenX / (maxFreq - minFreq), currentYVal);
-				}
+	private void drawGraph(Graphics g) {
+		g.setColor(graphColor);
+		if (format.getSampleSizeInBits() == 16) {
+			// Don't display value 0(The DC Offset)
+			for (int i = 1; i < Math.min(amps.length, maxFreq) - minFreq; ++i) {
+				int currentYVal = axisLenY * (int) amps[i + minFreq] / maxAmp;
+				g.drawRect((int)(i * axisLenX * precision)/ (maxFreq - minFreq) + scaleTextOffsetX, this.getHeight() - scaleTextOffsetY - currentYVal,
+						(int)(axisLenX * precision) / (maxFreq - minFreq) , currentYVal);
 			}
 		}
 	}
+
 	
 	private class AudioUpdater extends Thread {
 		private float[] fReal, fImag;
@@ -230,8 +202,7 @@ public class AudioFrequencyDisplay extends JPanel {
 				}
 				FourierTransform.FFT(fReal,  fImag);
 				FourierTransform.GetAmplitudes(fReal,  fReal, amps);
-				canvas.repaint();
-				swapCanvas();
+				repaint();
 			}
 			try {
 				tRead.join();
@@ -258,16 +229,10 @@ public class AudioFrequencyDisplay extends JPanel {
 	
 
 	public float getLoudestFreq() {
-		//Skip the first Frequency(as it's the DC Offset which we don't care about)
 		int MaxFreq = 1;
-		if (format == null)
-			return 0f;
-		if (format.getSampleSizeInBits() == 16) {
-			for (int i = 2; i < amps.length; ++i) {
-				if (amps[i] > amps[MaxFreq]) {
-					MaxFreq = i;
-				}	
-			}
+		for (int i = 2; i < amps.length; ++i) {
+			if (amps[i] > amps[MaxFreq])
+				MaxFreq = i;
 		}
 		return MaxFreq * precision;
 	}
