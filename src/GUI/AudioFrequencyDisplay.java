@@ -66,7 +66,7 @@ public class AudioFrequencyDisplay extends JPanel {
 			int[] possibleSampleRates = {48000, 44100, 96000, 192000};
 			for (int sampleRate : possibleSampleRates) {
 					format = new AudioFormat(sampleRate, 16, 1, true, false);
-					line = testAudioFormat(this.format);
+					line = testAudioFormat(format);
 					if(line != null) {
 						System.out.println("Using AudioFormat " + format);
 						formatFound = true;
@@ -81,7 +81,6 @@ public class AudioFrequencyDisplay extends JPanel {
 		}
 		int dataSize = getDataSizeByPrecision(this.precision);
 		this.precision = this.format.getSampleRate() / dataSize;
-		System.out.println(dataSize + "\t" + precision);
 		amps = new float[dataSize];
 		this.audioUpdaterThread = new AudioUpdater(this.line, dataSize);
 		this.audioUpdaterThread.start();
@@ -261,7 +260,7 @@ public class AudioFrequencyDisplay extends JPanel {
 			if (amps[i] > amps[MaxFreq])
 				MaxFreq = i;
 		}
-		return MaxFreq;
+		return MaxFreq * precision;
 	}
 
 
