@@ -1,7 +1,7 @@
 package GUI;
 
-import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 
@@ -10,12 +10,13 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
+import javax.swing.JPanel;
 
 import FourierTransformation.FourierTransform;
 
 //support for AudioFormats 16-bit signed and 8-bit signed
 @SuppressWarnings("serial")
-public class AudioFrequencyDisplay extends Canvas {
+public class AudioFrequencyDisplay extends JPanel {
 
 	private volatile boolean isAnalysing;
 
@@ -44,9 +45,8 @@ public class AudioFrequencyDisplay extends Canvas {
 	private int axisLenX, axisLenY;
 	
 	private AudioUpdater audioUpdaterThread;
-	private Canvas scndCanvas;
 
-	public AudioFrequencyDisplay(int dataSize, int minFrequency, int maxFrequency, int length, int width) {
+	public AudioFrequencyDisplay(int dataSize, int minFrequency, int maxFrequency, int width, int height) {
 		super();
 		this.minFreq = minFrequency;
 		this.maxFreq = maxFrequency;
@@ -54,16 +54,13 @@ public class AudioFrequencyDisplay extends Canvas {
 		this.setDataSize(dataSize);
 		amps = new float[dataSize];
 		this.setBackground(bgColor);
-		this.setSize(length, width);
 		this.setVisible(true);
+		this.setPreferredSize(new Dimension(width, height));
 		this.isAnalysing = false;
-		this.scndCanvas = new Canvas() {
-			
-		};
 	}
 
-	public AudioFrequencyDisplay(TargetDataLine line, int dataSize, int minFrequency, int maxFrequency, int length,	int width) {
-		this(dataSize, minFrequency, maxFrequency, length, width);
+	public AudioFrequencyDisplay(TargetDataLine line, int dataSize, int minFrequency, int maxFrequency, int width,	int height) {
+		this(dataSize, minFrequency, maxFrequency, width, height);
 		this.line = line;
 	}
 
@@ -94,9 +91,12 @@ public class AudioFrequencyDisplay extends Canvas {
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
 		this.axisLenX = this.getWidth() - scaleTextOffsetX - scaleArrowOffset;
 		this.axisLenY = this.getHeight() - scaleTextOffsetY - scaleArrowOffset;
+		g.setColor(bgColor);
+		//As with repaint() shit doesn't seem to work, I'm gonna clear the Panel manually 
+		g.fillRect(0,  0,  this.getWidth(), this.getHeight());
 		// Whose Graphics is that
 		drawScale(g);
 		if (isAnalysing) {
@@ -148,8 +148,8 @@ public class AudioFrequencyDisplay extends Canvas {
 			// Don't display value 0(The DC Offset)
 			for (int i = 1; i < Math.min(amps.length, maxFreq) - minFreq; ++i) {
 				int currentYVal = axisLenY * (int) amps[i + minFreq] / maxAmp;
-				g.drawRect(i * axisLenX / (maxFreq - minFreq) + scaleTextOffsetX, this.getHeight() - scaleTextOffsetY - currentYVal,
-						axisLenX / (maxFreq - minFreq), currentYVal);
+				g.drawRect((int)(i * axisLenX * precision)/ (maxFreq - minFreq) + scaleTextOffsetX, this.getHeight() - scaleTextOffsetY - currentYVal,
+						(int)(axisLenX * precision) / (maxFreq - minFreq) , currentYVal);
 			}
 		}
 	}
@@ -229,14 +229,10 @@ public class AudioFrequencyDisplay extends Canvas {
 	
 
 	public float getLoudestFreq() {
-		int MaxFreq = 0, amp = 0;
-		if (format == null)
-			return 0f;
-		if (format.getSampleSizeInBits() == 16) {
-			for (int i = 0; i < amps.length; ++i) {
-				if (amps[i] > amp)
-					MaxFreq = i;
-			}
+		int MaxFreq = 1;
+		for (int i = 2; i < amps.length; ++i) {
+			if (amps[i] > amps[MaxFreq])
+				MaxFreq = i;
 		}
 		return MaxFreq * precision;
 	}
