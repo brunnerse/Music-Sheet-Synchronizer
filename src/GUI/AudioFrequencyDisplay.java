@@ -17,7 +17,7 @@ import FourierTransformation.FourierTransform;
 @SuppressWarnings("serial")
 public class AudioFrequencyDisplay extends JPanel {
 
-	private volatile boolean isAnalysing;
+	private volatile boolean isAnalysing = false;
 
 	private TargetDataLine line = null;
 	private AudioFormat format;
@@ -26,8 +26,6 @@ public class AudioFrequencyDisplay extends JPanel {
 	private int minFreq = 0;
 	private int maxFreq = 20000;
 	private int maxAmp = 100;
-
-	private int dataSize;
 
 	// precision value is the 'range' of one frequency; e.g. precision of 2 means
 	// that a frequency of 400 is for all frequencies of the range between 399 and
@@ -43,49 +41,57 @@ public class AudioFrequencyDisplay extends JPanel {
 	
 	private AudioUpdater audioUpdaterThread;
 
-	public AudioFrequencyDisplay(int dataSize, int minFrequency, int maxFrequency, int width, int height) {
+	public AudioFrequencyDisplay(float precision, int minFrequency, int maxFrequency, int width, int height) {
 		super();
 		this.minFreq = minFrequency;
 		this.maxFreq = maxFrequency;
-		precision = 0;
-		this.setDataSize(dataSize);
-		amps = new float[dataSize];
 		this.setBackground(bgColor);
-		this.isAnalysing = false;
-		
+		this.setPrecision(precision);
 		this.setBrightColorTheme();
 		this.setPreferredSize(new Dimension(width, height));
 		this.setVisible(true);
 	}
 
-	public AudioFrequencyDisplay(TargetDataLine line, int dataSize, int minFrequency, int maxFrequency, int width,	int height) {
-		this(dataSize, minFrequency, maxFrequency, width, height);
-		this.line = line;
+	public AudioFrequencyDisplay(TargetDataLine line, float precision, int minFrequency, int maxFrequency, int width,	int height) {
+		this(precision, minFrequency, maxFrequency, width, height);
+		setLine(line);
 	}
 
 	public void startAnalysis() {
-		isAnalysing = true;
 		if (line == null) {
 			System.out.println("Finding supported audio format...");
 			boolean formatFound = false;
-			int[] possibleSampleRates = {192000, 96000, 48000, 44100};
+			AudioFormat format;
+			TargetDataLine line;
+			int[] possibleSampleRates = {48000, 44100, 96000, 192000};
 			for (int sampleRate : possibleSampleRates) {
-					this.setFormat(new AudioFormat(sampleRate, 16, 1, true, false));
+					format = new AudioFormat(sampleRate, 16, 1, true, false);
 					line = testAudioFormat(this.format);
 					if(line != null) {
-						System.out.println("Using AudioFormat " + this.format);
+						System.out.println("Using AudioFormat " + format);
 						formatFound = true;
+						setLine(line);
 						break;
 					} else {
-						System.out.println("The AudioFormat " + this.format + "isn't supported by the System.");
+						System.out.println("The AudioFormat " + format + "isn't supported by the System.");
 					}
 			}
 			if (!formatFound)
 				throw new IllegalArgumentException("The system doesn't support any known AudioFormat");
-		} 
-		
-		this.audioUpdaterThread = new AudioUpdater(line, dataSize);
+		}
+		int dataSize = getDataSizeByPrecision(this.precision);
+		this.precision = this.format.getSampleRate() / dataSize;
+		System.out.println(dataSize + "\t" + precision);
+		amps = new float[dataSize];
+		this.audioUpdaterThread = new AudioUpdater(this.line, dataSize);
 		this.audioUpdaterThread.start();
+		isAnalysing = true;
+	}
+	
+	public void stopAnalysis() {
+		isAnalysing = false;
+		try { this.audioUpdaterThread.join(); } catch (InterruptedException e) {}
+		this.line = null;
 	}
 	
 	private TargetDataLine testAudioFormat(AudioFormat format) {
@@ -104,12 +110,7 @@ public class AudioFrequencyDisplay extends JPanel {
 		return dLine;
 	}
 
-	public void stopAnalysis() {
-		isAnalysing = false;
-		try { this.audioUpdaterThread.join(); } catch (InterruptedException e) {}
-		this.line = null;
-	}
-
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		this.axisLenX = this.getWidth() - scaleTextOffsetX - scaleArrowOffset;
@@ -260,15 +261,9 @@ public class AudioFrequencyDisplay extends JPanel {
 			if (amps[i] > amps[MaxFreq])
 				MaxFreq = i;
 		}
-		return MaxFreq * precision;
+		return MaxFreq;
 	}
 
-	public void setDataSize(int dataSize) {
-		int levels = 31 - Integer.numberOfLeadingZeros(dataSize); // Equal to floor(log2(n))
-		if (1 << levels != dataSize)
-			throw new IllegalArgumentException("ERROR: Length is not a power of 2");
-		this.dataSize = dataSize;
-	}
 
 	public void setDarkColorTheme() {
 		this.bgColor = new Color(0, 0, 0);
@@ -286,8 +281,27 @@ public class AudioFrequencyDisplay extends JPanel {
 		repaint();
 	}
 
-	private void calcPrecision() {
-		this.precision = this.format.getSampleRate() / amps.length;
+	private int getDataSizeByPrecision(float precision) {
+		//Calculate dataSize(which must be 2^n)
+		int dataSize = (int)(this.format.getSampleRate() / precision);
+		int power = 31 - Integer.numberOfLeadingZeros(dataSize); //floor(log2(dataSize))
+		if (dataSize - (1 << power) < ((1 << (power + 1)) - dataSize)) { //test which power of 2 is closer to dataSize
+			dataSize = 1 << power;
+		} else {
+			dataSize = 1 << (power + 1);
+		}
+		return dataSize;
+	}
+	
+	
+	public void setPrecision(float precision) {
+		if (precision <= 0)
+			throw new IllegalArgumentException("precision must be higher than 0");
+		this.precision = precision;
+		if (isAnalysing) {
+			this.stopAnalysis();
+			this.startAnalysis();
+		}
 	}
 
 	public float getPrecision() {
@@ -326,8 +340,16 @@ public class AudioFrequencyDisplay extends JPanel {
 		return format;
 	}
 
+	public void setLine(TargetDataLine line) {
+		this.line = line;
+		this.setFormat(line.getFormat());
+	}
+				
 	public void setFormat(AudioFormat format) {
 		this.format = format;
-		calcPrecision();
+		if (isAnalysing) {
+			this.stopAnalysis();
+			this.startAnalysis();
+		}
 	}
 }
