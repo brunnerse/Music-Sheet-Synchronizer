@@ -1,5 +1,6 @@
 AudioFrequencyDisplay:
-	surpass precision as argument for constructor, not array size
+	surpass precision as argument for constructor, not array size	DONE
+	smaller array Size if you don't need all 20000 Hz
 	for random precision, try to make FFT work with any array size
 Read PDF/jpg, make into bitmap, display it, make it scrollable
 
