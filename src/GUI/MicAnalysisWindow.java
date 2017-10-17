@@ -1,6 +1,5 @@
 package GUI;
 
-//import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,12 +36,11 @@ public class MicAnalysisWindow extends JFrame implements ActionListener {
 		p.add(lMaxFreq);
 		this.add(p, BorderLayout.NORTH);
 		signalDisplay = new AudioFrequencyDisplay(3, 0, 1000, 800, 600);
-		signalDisplay.setMaxAmplitude(100);
+		signalDisplay.setMaxAmplitude(0.1f);
 		signalDisplay.setDarkColorTheme();
 		this.add(signalDisplay, BorderLayout.CENTER);
 		
 		JPanel controlButtons = new JPanel();
-		//controlButtons.setLayout(new BoxLayout(controlButtons, BoxLayout.Y_AXIS));
 		controlButtons.setLayout(new GridLayout(6, 1));
 		toggleButton = new JButton("Start Analysis");
 		toggleButton.addActionListener(this);
@@ -73,6 +71,7 @@ public class MicAnalysisWindow extends JFrame implements ActionListener {
 		group.add(mDark);
 		group.add(mBright);
 		mDark.setSelected(true);
+		
 		
 		this.addWindowListener(new WindowAdapter() {
 			@Override
@@ -131,8 +130,8 @@ public class MicAnalysisWindow extends JFrame implements ActionListener {
 		} else if (e.getSource().equals(inMaxFreq)) {
 			try {
 				this.signalDisplay.setMaxFrequency(Integer.valueOf(inMaxFreq.getText())); 
-			} catch (NumberFormatException nfe) {
-				System.err.println("False Input: " + nfe.getMessage());
+			} catch (IllegalArgumentException ex) {
+				System.err.println("False Input: " + ex.getMessage());
 			}
 		} else if (e.getSource().equals(inMinFreq)) {
 			try {
@@ -142,7 +141,7 @@ public class MicAnalysisWindow extends JFrame implements ActionListener {
 			}
 		} else if (e.getSource().equals(inMaxAmp)) {
 			try {
-				this.signalDisplay.setMaxAmplitude(Integer.valueOf(inMaxAmp.getText()));
+				this.signalDisplay.setMaxAmplitude(Float.valueOf(inMaxAmp.getText()));
 			} catch (IllegalArgumentException ex) {
 				System.err.println("False Input: " + ex.getMessage());
 			}

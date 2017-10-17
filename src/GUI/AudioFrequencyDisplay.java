@@ -25,7 +25,8 @@ public class AudioFrequencyDisplay extends JPanel {
 
 	private int minFreq = 0;
 	private int maxFreq = 20000;
-	private int maxAmp = 100;
+	private float maxAmp = 0.1f;
+	private int maxAmpFactor = 1000; //Depending on maxAmp is, the numbers of the Amplitude scale will be scaled by a 
 
 	// precision value is the 'range' of one frequency; e.g. precision of 2 means
 	// that a frequency of 400 is for all frequencies of the range between 399 and
@@ -37,6 +38,9 @@ public class AudioFrequencyDisplay extends JPanel {
 	private int scaleTextOffsetX;
 	private int scaleTextOffsetY;
 	private final int scaleArrowOffset = 3;
+	private final int dotsPerLetter = 6;
+	private final int fontSize = 11;
+	int maxAmplitudeLetters;  //The Number of letters maxAmp has
 	private int axisLenX, axisLenY;
 	
 	private AudioUpdater audioUpdaterThread;
@@ -88,8 +92,8 @@ public class AudioFrequencyDisplay extends JPanel {
 	}
 	
 	public void stopAnalysis() {
-		isAnalysing = false;
 		try { this.audioUpdaterThread.join(); } catch (InterruptedException e) {}
+		isAnalysing = false;
 		this.line = null;
 	}
 	
@@ -112,25 +116,23 @@ public class AudioFrequencyDisplay extends JPanel {
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		this.axisLenX = this.getWidth() - scaleTextOffsetX - scaleArrowOffset;
-		this.axisLenY = this.getHeight() - scaleTextOffsetY - scaleArrowOffset;
 		g.setColor(bgColor);
 		//As with repaint() shit doesn't seem to work, I'm gonna clear the Panel manually 
 		g.fillRect(0,  0,  this.getWidth(), this.getHeight());
 		
+		this.axisLenX = this.getWidth() - scaleTextOffsetX - scaleArrowOffset;
+		this.axisLenY = this.getHeight() - scaleTextOffsetY - scaleArrowOffset;
+		this.maxAmplitudeLetters = String.valueOf(maxAmp).length();
+		this.scaleTextOffsetY = fontSize + 4;
+		this.scaleTextOffsetX = dotsPerLetter * maxAmplitudeLetters + 6;
+		
 		if (amps != null)
 			drawGraph(g);
 		drawScale(g);
-
 	}
 
 	private void drawScale(Graphics g) {
-		final int dotsPerLetter = 6;
-		final int fontSize = 11;
-		int maxAmplitudeLetters = String.valueOf(maxAmp).length();
-		scaleTextOffsetY = fontSize + 4;
-		scaleTextOffsetX = dotsPerLetter * maxAmplitudeLetters + 6;
-		
+
 		g.setColor(scaleColor);
 		int offset = this.getHeight() - scaleTextOffsetY;
 
@@ -145,7 +147,7 @@ public class AudioFrequencyDisplay extends JPanel {
 		
 		g.setFont(new Font(null, Font.BOLD, fontSize + 1));
 		g.drawString("Hz", this.getWidth() - 3 - 14, getHeight() - 2);
-		g.drawString("Amp", scaleTextOffsetX + 7, 15);
+		g.drawString("Amp * " + this.maxAmpFactor, scaleTextOffsetX + 7, 15);
 		
 		g.setFont(new Font(null, Font.PLAIN, fontSize));
 		// draw Frequencies on X-Axis
@@ -162,7 +164,7 @@ public class AudioFrequencyDisplay extends JPanel {
 		offsetPerText = 20;
 		numSegments = (float)axisLenY / offsetPerText;
 		for (int i = 1; i < numSegments - 1; ++i) {
-			String amp = String.format("%" + maxAmplitudeLetters + "d",(int)(i * maxAmp / numSegments));
+			String amp = String.format("%" + maxAmplitudeLetters + "d",(int)(i * maxAmp * maxAmpFactor / numSegments));
 			int yPosition = (int) (this.getHeight() - scaleTextOffsetY - i * axisLenY / numSegments);
 			g.drawString(amp, 3, yPosition + 5);
 			g.drawLine(scaleTextOffsetX - 3, yPosition, scaleTextOffsetX + 3, yPosition);
@@ -179,7 +181,7 @@ public class AudioFrequencyDisplay extends JPanel {
 			float dotsPerAmp = (float)axisLenX / IdxDiff;
 			//i goes from the start index of amp[] to the end index of amp[]
 			for (int i = startIdx; i < Math.min(amps.length, endIdx + 1); ++i) {
-				int currentYVal = (int)(axisLenY * amps[i] / maxAmp);
+				int currentYVal = (int)(axisLenY  * amps[i] / (amps.length - 1) / maxAmp); //The (real) Amplitude is amps[i] / N/2, N/2 = amps.length - 1 . axisLenY / maxAmp = space per unit.
 				if (dotsPerAmp < 2.1) //If the size of one bar is too small, draw instead of fill it(fill doesn't work under a certain value)
 					g.drawRect((int)((i - startIdx) * dotsPerAmp) + scaleTextOffsetX, this.getHeight() - scaleTextOffsetY - currentYVal,
 							(int)dotsPerAmp , currentYVal);
@@ -318,17 +320,6 @@ public class AudioFrequencyDisplay extends JPanel {
 		}
 		return dataSize;
 	}
-	
-	
-	public void setPrecision(float precision) {
-		if (precision <= 0)
-			throw new IllegalArgumentException("precision must be higher than 0");
-		this.precision = precision;
-		if (isAnalysing) {
-			this.stopAnalysis();
-			this.startAnalysis();
-		}
-	}
 
 	public float getPrecision() {
 		return this.precision;
@@ -342,7 +333,7 @@ public class AudioFrequencyDisplay extends JPanel {
 		return this.minFreq;
 	}
 
-	public int getMaxAmplitude() {
+	public float getMaxAmplitude() {
 		return this.maxAmp;
 	}
 	
@@ -362,8 +353,13 @@ public class AudioFrequencyDisplay extends JPanel {
 		repaint();
 	}
 
-	public void setMaxAmplitude(int amp) {
+	public void setMaxAmplitude(float amp) {
+		if (amp <= 0 || amp > 1)
+			throw new IllegalArgumentException("Max Amplitude must be a value between 0 and 1");
 		this.maxAmp = amp;
+		//TODO: set maxAmpFactor so that most numbers between 0 and maxAmp have 2 decimals
+		//this.maxAmpFactor = (int)Math.pow(10, String.valueOf((int)(maxAmp * 2000)).length()); //350 was chosen empirically
+		this.maxAmpFactor = 1000;
 		repaint();
 	}
 
@@ -384,6 +380,16 @@ public class AudioFrequencyDisplay extends JPanel {
 		}
 	}
 
+	public void setPrecision(float precision) {
+		if (precision <= 0)
+			throw new IllegalArgumentException("precision must be higher than 0");
+		this.precision = precision;
+		if (isAnalysing) {
+			this.stopAnalysis();
+			this.startAnalysis();
+		}
+	}
+	
 	public boolean isAnalysing() {
 		return isAnalysing;
 	}
