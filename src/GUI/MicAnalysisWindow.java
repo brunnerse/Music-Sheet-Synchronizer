@@ -10,6 +10,7 @@ import java.awt.event.*;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
@@ -24,6 +25,8 @@ public class MicAnalysisWindow extends JFrame implements ActionListener {
 	private JRadioButtonMenuItem mDark, mBright;
 	private JLabel lPrecision, lMaxFreq;
 	JTextField inMaxFreq, inMinFreq, inMaxAmp, inPrecision;
+	private final int startMinFrequency = 100, startMaxFrequency = 2000;
+	private final float startPrecision = 3f, startAmplitude = 0.1f;
 	
 	
 	public MicAnalysisWindow() {
@@ -35,7 +38,7 @@ public class MicAnalysisWindow extends JFrame implements ActionListener {
 		lMaxFreq = new JLabel("Current Loudest Frequency: -");
 		p.add(lMaxFreq);
 		this.add(p, BorderLayout.NORTH);
-		signalDisplay = new AudioFrequencyDisplay(3, 0, 1000, 800, 600);
+		signalDisplay = new AudioFrequencyDisplay(startPrecision, startMinFrequency, startMaxFrequency, 800, 600);
 		signalDisplay.setMaxAmplitude(0.1f);
 		signalDisplay.setDarkColorTheme();
 		this.add(signalDisplay, BorderLayout.CENTER);
@@ -53,8 +56,6 @@ public class MicAnalysisWindow extends JFrame implements ActionListener {
 		inMaxAmp = new JTextField(); inMaxAmp.addActionListener(this); controlButtons.add(inMaxAmp);
 		inPrecision = new JTextField(); inPrecision.addActionListener(this); controlButtons.add(inPrecision);
 		updateControlButtonText();
-		
-		
 		this.add(controlButtons, BorderLayout.EAST);
 		
 		JMenuBar mb = new JMenuBar();
@@ -88,16 +89,34 @@ public class MicAnalysisWindow extends JFrame implements ActionListener {
 	}
 
 	private class UpdateData extends Thread {
+		float prevPrecision = startPrecision;
+		float prevFreq = 0, freq;
+		float prevAmp = startAmplitude;
+		int prevMinFreq = startMinFrequency, prevMaxFreq = startMaxFrequency;
 		@Override
 		public void run() {
 			while(true) {
 				if (!signalDisplay.isAnalysing()) {
 						try { Thread.sleep(500); } catch (InterruptedException e) {}
 				} else {
-					lPrecision.setText(String.format("  Precision: %.2f Hz", signalDisplay.getPrecision()));
-					float freq = signalDisplay.getLoudestFreq();
-					lMaxFreq.setText(String.format("\t\tLoudest Frequency: %.1f Hz (Note: %s), Amp %.4f", freq, FrequencyAnalyzer.getNoteFromFreq(freq), signalDisplay.getAmpFromFreq(freq)));
+					if (signalDisplay.getPrecision() != prevPrecision) {
+						lPrecision.setText(String.format("  Precision: %.2f Hz", signalDisplay.getPrecision()));
+						prevPrecision = signalDisplay.getPrecision();
+					}
+					if (prevFreq != (freq = signalDisplay.getLoudestFreq())) {
+						lMaxFreq.setText(String.format("\t\tLoudest Frequency: %.1f Hz (Note: %s), Amp %.4f",
+								freq, FrequencyAnalyzer.getNoteFromFreq(freq), signalDisplay.getAmpFromFreq(freq)));
+					}
+					
+					
 					try { Thread.sleep(50); } catch (InterruptedException e) {}
+				}
+				if (prevAmp != signalDisplay.getMaxAmplitude() || prevMinFreq != signalDisplay.getMinFrequency() ||
+						prevMaxFreq != signalDisplay.getMaxFrequency()) {
+					updateControlButtonText();
+					prevAmp = signalDisplay.getMaxAmplitude();
+					prevMinFreq = signalDisplay.getMinFrequency();
+					prevMaxFreq = signalDisplay.getMaxFrequency();
 				}
 			}
 		}
@@ -131,28 +150,32 @@ public class MicAnalysisWindow extends JFrame implements ActionListener {
 			try {
 				this.signalDisplay.setMaxFrequency(Integer.valueOf(inMaxFreq.getText())); 
 			} catch (IllegalArgumentException ex) {
-				System.err.println("False Input: " + ex.getMessage());
+				createWarningDialog("False Input: " + ex.getMessage());
 			}
 		} else if (e.getSource().equals(inMinFreq)) {
 			try {
 				this.signalDisplay.setMinFrequency(Integer.valueOf(inMinFreq.getText()));
 			} catch (IllegalArgumentException ex) {
-				System.err.println("False Input: " + ex.getMessage());
+				createWarningDialog("False Input: " + ex.getMessage());
 			}
 		} else if (e.getSource().equals(inMaxAmp)) {
 			try {
 				this.signalDisplay.setMaxAmplitude(Float.valueOf(inMaxAmp.getText()));
 			} catch (IllegalArgumentException ex) {
-				System.err.println("False Input: " + ex.getMessage());
+				createWarningDialog("False Input: " + ex.getMessage());
 			}
 		} else if (e.getSource().equals(inPrecision)) {
 			try {
 				signalDisplay.setPrecision(Float.valueOf(inPrecision.getText()));
 			} catch (IllegalArgumentException ex) {
-				System.err.println("False Input: " + ex.getMessage());
+				createWarningDialog("False Input: " + ex.getMessage());
 			}
 		}
 		updateControlButtonText();
+	}
+	
+	private void createWarningDialog(String message) {
+		JOptionPane.showMessageDialog(this, message);
 	}
 	
 }

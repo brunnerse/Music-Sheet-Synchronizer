@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -45,6 +48,7 @@ public class AudioFrequencyDisplay extends JPanel {
 	
 	private AudioUpdater audioUpdaterThread;
 
+	//if Constructor is called without giving a line, it will use the TargetDataLine of the AudioSystem
 	public AudioFrequencyDisplay(float precision, int minFrequency, int maxFrequency, int width, int height) {
 		super();
 		this.minFreq = minFrequency;
@@ -53,6 +57,10 @@ public class AudioFrequencyDisplay extends JPanel {
 		this.setPrecision(precision);
 		this.setBrightColorTheme();
 		this.setPreferredSize(new Dimension(width, height));
+		
+		MouseDragManager m = new MouseDragManager();
+		this.addMouseMotionListener(m);
+		this.addMouseListener(m);
 		this.setVisible(true);
 	}
 
@@ -92,8 +100,8 @@ public class AudioFrequencyDisplay extends JPanel {
 	}
 	
 	public void stopAnalysis() {
-		try { this.audioUpdaterThread.join(); } catch (InterruptedException e) {}
 		isAnalysing = false;
+		try { this.audioUpdaterThread.join(); } catch (InterruptedException e) {}
 		this.line = null;
 	}
 	
@@ -113,7 +121,6 @@ public class AudioFrequencyDisplay extends JPanel {
 		return dLine;
 	}
 
-	
 	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(bgColor);
@@ -122,9 +129,9 @@ public class AudioFrequencyDisplay extends JPanel {
 		
 		this.axisLenX = this.getWidth() - scaleTextOffsetX - scaleArrowOffset;
 		this.axisLenY = this.getHeight() - scaleTextOffsetY - scaleArrowOffset;
-		this.maxAmplitudeLetters = String.valueOf(maxAmp).length();
+		this.maxAmplitudeLetters = String.valueOf((int)(maxAmp * maxAmpFactor)).length();
 		this.scaleTextOffsetY = fontSize + 4;
-		this.scaleTextOffsetX = dotsPerLetter * maxAmplitudeLetters + 6;
+		this.scaleTextOffsetX = dotsPerLetter * maxAmplitudeLetters + 9;	
 		
 		if (amps != null)
 			drawGraph(g);
@@ -132,7 +139,6 @@ public class AudioFrequencyDisplay extends JPanel {
 	}
 
 	private void drawScale(Graphics g) {
-
 		g.setColor(scaleColor);
 		int offset = this.getHeight() - scaleTextOffsetY;
 
@@ -166,7 +172,7 @@ public class AudioFrequencyDisplay extends JPanel {
 		for (int i = 1; i < numSegments - 1; ++i) {
 			String amp = String.format("%" + maxAmplitudeLetters + "d",(int)(i * maxAmp * maxAmpFactor / numSegments));
 			int yPosition = (int) (this.getHeight() - scaleTextOffsetY - i * axisLenY / numSegments);
-			g.drawString(amp, 3, yPosition + 5);
+			g.drawString(amp, 5, yPosition + 5);
 			g.drawLine(scaleTextOffsetX - 3, yPosition, scaleTextOffsetX + 3, yPosition);
 		}
 	}
@@ -191,7 +197,6 @@ public class AudioFrequencyDisplay extends JPanel {
 			}
 		}
 	}
-
 	
 	private class AudioUpdater extends Thread {
 		private float[] fReal, fImag;
@@ -342,6 +347,8 @@ public class AudioFrequencyDisplay extends JPanel {
 	}
 
 	public void setMaxFrequency(int freq) {
+		if (freq <= minFreq)
+			throw new IllegalArgumentException("Max Frequency must be bigger than the Min Frequency");
 		this.maxFreq = freq;
 		repaint();
 	}
@@ -392,6 +399,48 @@ public class AudioFrequencyDisplay extends JPanel {
 	
 	public boolean isAnalysing() {
 		return isAnalysing;
+	}
+	
+	private class MouseDragManager implements MouseMotionListener, MouseListener {
+
+		private int oldXPos, oldYPos;
+		private float oldMaxAmp; 
+		private int oldMinFreq, oldMaxFreq;
+		private boolean dragFreq;
+		@Override
+		public void mousePressed(MouseEvent e) {
+			oldXPos = e.getX();
+			oldYPos = e.getY();
+			oldMaxAmp = getMaxAmplitude();
+			oldMinFreq = getMinFrequency();
+			oldMaxFreq = getMaxFrequency();
+			dragFreq = oldYPos > getHeight() - 30;
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			try {
+				float newAmp = oldMaxAmp * (axisLenY - oldYPos) / (axisLenY - e.getY());
+				int newMaxFreq = (oldMaxFreq - oldMinFreq) * oldXPos / e.getX() + oldMinFreq;
+				
+				//Two modes: Scaling and Dragging. if click is under Y=30pts: Drag mode
+				//Drag mode: "Scroll" through the Frequency without changing Amplitude
+				//Scale mode: Change Max Frequency and Amplitude based on Mouse Movement
+				setMaxFrequency(newMaxFreq);
+				if (dragFreq) {
+					setMinFrequency(oldMinFreq + getMaxFrequency() - oldMaxFreq);
+				} else {
+					setMaxAmplitude(newAmp);
+				}
+			} catch(ArithmeticException x) {
+			} catch (IllegalArgumentException x) {}
+		}
+		
+		public void mouseEntered(MouseEvent arg0) {}
+		public void mouseExited(MouseEvent arg0) {}
+		public void mouseClicked(MouseEvent e) {}
+		public void mouseReleased(MouseEvent arg0) {}
+		public void mouseMoved(MouseEvent e) {}
 	}
 
 }
