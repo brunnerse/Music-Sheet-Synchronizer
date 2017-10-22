@@ -1,6 +1,6 @@
 package freqProgram;
 
-import AudioFileDecoder.WavePattern_Decoder.WaveManager;
+import AudioFile.WavePattern_Decoder.WaveManager;
 
 public class FFTtester {
 	

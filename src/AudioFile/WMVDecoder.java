@@ -1,4 +1,4 @@
-package AudioFileDecoder;
+package AudioFile;
 
 import java.io.*;
 import java.nio.file.*;
