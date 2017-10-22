@@ -27,6 +27,7 @@ public class Mic_Recording {
 			line.start();
 			System.out.println("Recording now...");
 			line.read(b, 0, b.length);
+			line.stop();
 			System.out.println("Recording finished. Playing audio in 3 seconds...");
 			Thread.sleep(3000);
 			//playback slightly faster

@@ -4,7 +4,6 @@ import java.io.Closeable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Date;
 
 import javax.sound.sampled.AudioFormat;
 
@@ -42,16 +41,11 @@ public class WAVWriter implements Closeable {
 		//One Chunk consists of: The Riff Tag, size of the data segment, the data segment
 		writeStringToFile("RIFF", false);
 		//FileSize, overwritten when file is closed
-		try {
-			fileSizeIdx = raf.getChannel().position();
-		} catch (IOException e) {
-			System.err.println("Couldn't get current Position in file.");
-			return;
-		}
+		fileSizeIdx = raf.getFilePointer();
 		writeIntToFile(0);
 		writeStringToFile("WAVE", false);
 		//format Chunk
-		writeStringToFile("fmt", false);
+		writeStringToFile("fmt ", false);
 		//Length of fmt header
 		writeIntToFile(16);
 		//Data Format (e.g. PCM = 0x0001, MPEG-1 Layer III (MP3) = 0x0055
@@ -62,30 +56,43 @@ public class WAVWriter implements Closeable {
 		writeShortToFile((short)format.getFrameSize());
 		writeShortToFile((short)format.getSampleSizeInBits());
 		//Information Chunks
-		writeStringToFile("INAM", false);
-		writeIntToFile(name.length() + 1);
-		writeStringToFile(name, true);
+		writeStringToFile("LIST", false);
+		//Write the list Size later
+		long listSizeIdx = raf.getFilePointer();
+		writeIntToFile(0);
+		writeStringToFile("INFO", false);
+		
 		writeStringToFile("IART", false);
 		writeIntToFile(artist.length() + 1);
 		writeStringToFile(artist, true);
-		String date = new Date().toString();
-		writeStringToFile("ICRD", false);
-		writeIntToFile(date.length() + 1);
-		writeStringToFile(date, true);
-		String comment = "WAV created with the WAVWriter Tool from TheGadgeteer";
+
+		String comment = "created with WAVWriter from TheGadgeteer";
 		writeStringToFile("ICMT", false);
 		writeIntToFile(comment.length() + 1);
 		writeStringToFile(comment, true);
+		raf.write(0);
+		writeStringToFile("INAM", false);
+		writeIntToFile(name.length() + 1);
+		writeStringToFile(name, true);
+		raf.write(0);
+		//Write the list Size
+		int listSize = (int) (raf.getFilePointer() - listSizeIdx - 4);
+		raf.seek(listSizeIdx);
+		writeIntToFile(listSize);
+		raf.seek(raf.length());
+		
 		//Data Chunk
 		writeStringToFile("data", false);
 		//dataSize: write when closing
-		dataSizeIdx = raf.getChannel().position();
+		dataSizeIdx = raf.getFilePointer();
 		writeIntToFile(0);
 		headerSize = (int)raf.length();
 	}
 	
 	@Override
 	public void close() throws IOException {
+		if (raf == null)
+			return;
 		//update FileSize and dataSize
 		int fileSize = (int) raf.length();
 		raf.seek(fileSizeIdx);
@@ -113,6 +120,7 @@ public class WAVWriter implements Closeable {
 		}
 	}
 	
+	//Need own method instead of RandomAcessFile.write(int) because the Integer has to be in little endian format
 	private void writeIntToFile(int i) {
 		byte[] b = new byte[4];
 		for (int x = 0; x < 4; ++x) {
