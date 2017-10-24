@@ -3,12 +3,12 @@ package AudioFile;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Stack;
+import java.util.ArrayList;
 
 import javax.sound.sampled.AudioFormat;
 
 public class WAVReader {
-	private Stack<Chunk> chunks;
+	private ArrayList<Chunk> chunks;
 	private String fileName;
 	private AudioFormat format;
 	private RandomAccessFile raf;
@@ -17,7 +17,7 @@ public class WAVReader {
 	
 	public WAVReader(String fileName) {
 		this.fileName = fileName;
-		chunks = new Stack<Chunk>();
+		chunks = new ArrayList<Chunk>();
 	}
 	
 	public void open() throws IOException {
@@ -33,30 +33,62 @@ public class WAVReader {
 		if (readString(4).compareTo("RIFF") != 0)
 			throw new IllegalArgumentException("File is not in RIFF-Format");
 		fileSize = readInt();
+		if (readString(4).compareTo("WAVE") != 0)
+			throw new IllegalArgumentException("File does not contain a WAVE");
+		
 		//read all chunks until you get to the data chunk
+		Chunk fmtChunk = null;
 		while(true) { //TODO: handle nested Chunks
 			Chunk c = new Chunk(readString(4), readInt(), raf.getFilePointer());
 			chunks.add(c);
-			if (c.getTag().compareTo("data") == 0)
+			if (c.getTag().compareTo("data") == 0) {
 				break;
-			c.setContent(readString(c.getLength()));
+			} else if (c.getTag().compareTo("LIST") == 0) { //LIST chunk can be nested
+				if (readString(4).compareTo("INFO") == 0) {
+					while (raf.getFilePointer() < c.getIdx() + c.getLength()) {
+						Chunk cn = new Chunk(readString(4), readInt(), raf.getFilePointer());
+						cn.setContent(readString(cn.getLength()));
+						chunks.add(cn);
+						if (cn.getTag().compareTo("ICMT") == 0 ||
+								cn.getTag().compareTo("INAM") == 0) //for some reason, len of ICMT and INAM is one longer than given
+							raf.seek(cn.getIdx() + cn.getLength() + 1);
+						else
+							raf.seek(cn.getIdx() + cn.getLength());
+					}
+				}
+			} else if (c.getTag().compareTo("fmt ") == 0){
+				fmtChunk = c;
+			} else {
+				c.setContent(readString(c.getLength())); //Only read content if it's not a nested or data chunk
+			}
+			if (c.getIdx() + c.getLength() >= fileSize)
+			break;
 			raf.seek(c.getIdx() + c.getLength());
 		}
-		dataIdx = chunks.peek().getIdx();
-		
-		//Get Format
-		Chunk fmtChunk = null;
-		for (Chunk chunk : chunks) {
-			if (chunk.getTag().compareTo("fmt ") == 0) {
-				fmtChunk = chunk;
-				break;
-			}
+		dataIdx = chunks.get(chunks.size() - 1).getIdx();
+
+		raf.seek(fmtChunk.getIdx());
+		short formatTag = readShort();
+		switch (formatTag) {
+		case 0x0001: //Data Format is PCM
+			break;
+		default:
+			System.err.println("Data Format of WAV is not supported!");
+			return;
 		}
-		if (fmtChunk == null)
-			throw new IllegalArgumentException("The file didn't contain a format description");
-		//TODO: Read format
-		
+		int channels = readShort();
+		int sampleRate = readInt();
+		readInt(); //FrameRate; (sampleRate * frameSize [bytes\second] : Value not needed
+		readShort(); //frameSize; (bitsPerSample * channels (rounded so it fills n bytes): Value not needed
+		int bitsPerSample = readShort();
+		this.format = new AudioFormat((float)sampleRate, bitsPerSample, channels, true, false);
 		raf.seek(dataIdx);
+		
+		System.out.println("Chunks in RIFF File:");
+		for (Chunk c : chunks)
+			System.out.println(c.getTag() + "\t" + c.getContent() + "\t" + c.getLength() +
+					"\t" + c.getIdx());
+		System.out.println("");
 	}
 	
 	public void close() throws IOException {
@@ -64,8 +96,8 @@ public class WAVReader {
 			raf.close();
 	}
 	
-	public void read(byte[] b, int off, int len) throws IOException {
-		raf.read(b, off, len);
+	public int read(byte[] b, int off, int len) throws IOException {
+		return raf.read(b, off, len);
 	}
 	
 	//Reads String until either maxLen Characters were read or a Null-Termination was reached
@@ -74,8 +106,6 @@ public class WAVReader {
 		char c;
 		for (int i = 0; i < maxLen; ++i) {
 			c = (char)raf.read();
-			if (c == 0)
-				break;
 			sb.append(c);
 		}
 		return sb.toString();
@@ -91,12 +121,16 @@ public class WAVReader {
 	}
 	
 	public String getArtist() {
-		
+		for (Chunk c : chunks)
+			if (c.getTag().compareTo("IART") == 0)
+				return c.getContent();
 		return "";
 	}
 	
 	public String getName() {
-		
+		for (Chunk c : chunks)
+			if (c.getTag().compareTo("INAM") == 0)
+				return c.getContent();
 		return "";
 	}
 	
