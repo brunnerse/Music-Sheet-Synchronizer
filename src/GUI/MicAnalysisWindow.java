@@ -20,7 +20,7 @@ import Music.FrequencyAnalyzer;
 @SuppressWarnings("serial")
 public class MicAnalysisWindow extends JFrame implements ActionListener {
 	
-	private AudioFrequencyDisplay  signalDisplay;
+	private MicFrequencyDisplay  signalDisplay;
 	private JButton toggleButton, clearButton;
 	private JRadioButtonMenuItem mDark, mBright;
 	private JLabel lPrecision, lMaxFreq;
@@ -38,7 +38,7 @@ public class MicAnalysisWindow extends JFrame implements ActionListener {
 		lMaxFreq = new JLabel("Current Loudest Frequency: -");
 		p.add(lMaxFreq);
 		this.add(p, BorderLayout.NORTH);
-		signalDisplay = new AudioFrequencyDisplay(startPrecision, startMinFrequency, startMaxFrequency, 800, 600);
+		signalDisplay = new MicFrequencyDisplay(startPrecision, startMinFrequency, startMaxFrequency, 800, 600);
 		signalDisplay.setMaxAmplitude(0.1f);
 		signalDisplay.setDarkColorTheme();
 		this.add(signalDisplay, BorderLayout.CENTER);

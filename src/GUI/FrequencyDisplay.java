@@ -15,7 +15,7 @@ import FourierTransformation.FourierTransform;
 
 //support for AudioFormats 16-bit signed and 8-bit signed
 @SuppressWarnings("serial")
-public abstract class AudioFrequencyDisplay<T> extends JPanel {
+public abstract class FrequencyDisplay<T> extends JPanel {
 
 	protected volatile boolean isAnalysing = false;
 
@@ -45,7 +45,7 @@ public abstract class AudioFrequencyDisplay<T> extends JPanel {
 	
 	protected AudioUpdater audioUpdaterThread;
 
-	public AudioFrequencyDisplay(float precision, int minFrequency, int maxFrequency, int width, int height) {
+	public FrequencyDisplay(float precision, int minFrequency, int maxFrequency, int width, int height) {
 		super();
 		this.minFreq = minFrequency;
 		this.maxFreq = maxFrequency;
