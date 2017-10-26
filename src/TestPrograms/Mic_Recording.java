@@ -1,4 +1,4 @@
-package testing_and_notes;
+package TestPrograms;
 
 
 import javax.sound.sampled.*;

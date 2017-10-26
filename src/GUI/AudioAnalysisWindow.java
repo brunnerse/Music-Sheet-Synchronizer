@@ -18,30 +18,36 @@ import javax.swing.JTextField;
 import Music.FrequencyAnalyzer;
 
 @SuppressWarnings("serial")
-public class MicAnalysisWindow extends JFrame implements ActionListener {
+public class AudioAnalysisWindow extends JFrame implements ActionListener {
 	
-	private FrequencyDisplay  signalDisplay;
+	private FrequencyDisplay signalDisplay;
 	private JButton toggleButton, clearButton;
 	private JRadioButtonMenuItem mDark, mBright;
 	private JLabel lPrecision, lMaxFreq;
 	JTextField inMaxFreq, inMinFreq, inMaxAmp, inPrecision;
-	private final int startMinFrequency = 100, startMaxFrequency = 2000;
-	private final float startPrecision = 3f, startAmplitude = 0.1f;
+	private static final int startMinFrequency = 100, startMaxFrequency = 2000;
+	private static final float startPrecision = 3f, startAmplitude = 0.1f;
 	
 	
-	public MicAnalysisWindow() {
+	public AudioAnalysisWindow () {
+		this(new MicFrequencyDisplay(startPrecision, startMinFrequency, startMaxFrequency, 800, 600));
+	}
+	
+	public AudioAnalysisWindow(FrequencyDisplay display) {
 		super("Mikrophon Audioanalyse");
-		lPrecision = new JLabel("  Precision: -");
-		JPanel p = new JPanel();
-		p.setLayout(new GridLayout(1, 2));
-		p.add(lPrecision);
-		lMaxFreq = new JLabel("Current Loudest Frequency: -");
-		p.add(lMaxFreq);
-		this.add(p, BorderLayout.NORTH);
-		signalDisplay = new MicFrequencyDisplay(startPrecision, startMinFrequency, startMaxFrequency, 800, 600);
+		
+		this.signalDisplay = display;
 		signalDisplay.setMaxAmplitude(0.1f);
 		signalDisplay.setDarkColorTheme();
 		this.add(signalDisplay, BorderLayout.CENTER);
+		
+		lPrecision = new JLabel("");
+		JPanel p = new JPanel();
+		p.setLayout(new GridLayout(1, 2));
+		p.add(lPrecision);
+		lMaxFreq = new JLabel("");
+		p.add(lMaxFreq);
+		this.add(p, BorderLayout.NORTH);
 		
 		JPanel controlButtons = new JPanel();
 		controlButtons.setLayout(new GridLayout(6, 1));

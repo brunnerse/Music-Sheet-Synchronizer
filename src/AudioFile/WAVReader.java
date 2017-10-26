@@ -120,6 +120,10 @@ public class WAVReader {
 		return (short)(raf.read() | raf.read() << 8);
 	}
 	
+	public void resetToStart() throws IOException {
+		raf.seek(dataIdx);
+	}
+	
 	public String getArtist() {
 		for (Chunk c : chunks)
 			if (c.getTag().compareTo("IART") == 0)

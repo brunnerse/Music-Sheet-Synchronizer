@@ -7,7 +7,7 @@ import javax.sound.sampled.TargetDataLine;
 
 //support for AudioFormats 16-bit signed and 8-bit signed
 @SuppressWarnings("serial")
-public class MicFrequencyDisplay extends FrequencyDisplay<TargetDataLine> {
+public class MicFrequencyDisplay extends AbstractFrequencyDisplay<TargetDataLine> {
 
 	//if Constructor is called without giving a line, it will use the TargetDataLine of the AudioSystem
 	public MicFrequencyDisplay(float precision, int minFrequency, int maxFrequency, int width, int height) {
@@ -15,7 +15,7 @@ public class MicFrequencyDisplay extends FrequencyDisplay<TargetDataLine> {
 	}
 
 	@Override
-	protected void setupLineAndFormat() {
+	protected void setupLineAndFormat() throws RuntimeException {
 		System.out.println("Finding supported audio format...");
 		boolean formatFound = false;
 		AudioFormat format;
@@ -34,7 +34,7 @@ public class MicFrequencyDisplay extends FrequencyDisplay<TargetDataLine> {
 			}
 		}
 		if (!formatFound)
-			throw new IllegalArgumentException("The system doesn't support any known AudioFormat");
+			throw new RuntimeException("The system doesn't support any known AudioFormat");
 	}
 	
 	private TargetDataLine testAudioFormat(AudioFormat format) {
