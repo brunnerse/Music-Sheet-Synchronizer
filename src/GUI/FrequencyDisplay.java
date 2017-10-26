@@ -180,21 +180,17 @@ public abstract class FrequencyDisplay<T> extends JPanel {
 				return;
 			}
 			
-			//bData always points to the array which is supposed to be processed, the other array is being read into
+			//bData always points to the array which is supposed to be processed,
+			//the other array is being read into
 			bData = bData1;
 			tRead = new LineReader(bData2);
-			tRead.start();
+			tRead.run();
 			while (isAnalysing) {
-				try {
-					tRead.join();
-				} catch (InterruptedException e) {}
+				tRead = new LineReader(bData);
+				tRead.start();
 				if (bData == bData1) {
-					tRead = new LineReader(bData1);
-					tRead.start();
 					bData = bData2;
 				} else {
-					tRead = new LineReader(bData2);
-					tRead.start();
 					bData = bData1;
 				}
 				for (int i = 0; i < fReal.length; ++i) {
@@ -204,6 +200,9 @@ public abstract class FrequencyDisplay<T> extends JPanel {
 				FourierTransform.FFT(fReal,  fImag);
 				FourierTransform.GetAmplitudes(fReal,  fReal, amps);
 				repaint();
+				try {
+					tRead.join();
+				} catch (InterruptedException e) {}
 			}
 			try {
 				tRead.join();
@@ -221,7 +220,7 @@ public abstract class FrequencyDisplay<T> extends JPanel {
 
 		@Override
 		public void run() {
-			readLine( data);
+			readLine(data);
 		}
 
 	}

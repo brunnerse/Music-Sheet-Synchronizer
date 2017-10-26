@@ -20,7 +20,7 @@ import Music.FrequencyAnalyzer;
 @SuppressWarnings("serial")
 public class MicAnalysisWindow extends JFrame implements ActionListener {
 	
-	private MicFrequencyDisplay  signalDisplay;
+	private FrequencyDisplay  signalDisplay;
 	private JButton toggleButton, clearButton;
 	private JRadioButtonMenuItem mDark, mBright;
 	private JLabel lPrecision, lMaxFreq;
