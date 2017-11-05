@@ -62,19 +62,24 @@ public class WAVWriter implements Closeable {
 		writeIntToFile(0);
 		writeStringToFile("INFO", false);
 		
-		writeStringToFile("IART", false);
-		writeIntToFile(artist.length() + 1);
-		writeStringToFile(artist, true);
+		if (artist != null) {
+			writeStringToFile("IART", false);
+			writeIntToFile(artist.length() + 1);
+			writeStringToFile(artist, true);
+		}
 
 		String comment = "created with WAVWriter from TheGadgeteer";
 		writeStringToFile("ICMT", false);
 		writeIntToFile(comment.length() + 1);
 		writeStringToFile(comment, true);
 		raf.write(0);
-		writeStringToFile("INAM", false);
-		writeIntToFile(name.length() + 1);
-		writeStringToFile(name, true);
-		raf.write(0);
+		
+		if (name != null) {
+			writeStringToFile("INAM", false);
+			writeIntToFile(name.length() + 1);
+			writeStringToFile(name, true);
+			raf.write(0);
+		}
 		//Write the list Size
 		int listSize = (int) (raf.getFilePointer() - listSizeIdx - 4);
 		raf.seek(listSizeIdx);
