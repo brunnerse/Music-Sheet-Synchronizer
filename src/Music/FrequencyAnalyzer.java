@@ -30,7 +30,7 @@ public abstract class FrequencyAnalyzer {
 			for (int x = 0; x < numOctaves - 3; ++x) {
 				noteFreq[notesPerOctave * (3 + x) + i] = 
 						new FrequencyNotePair(baseNotes[i].replace("1", String.valueOf(numOctaves - 4 + x)),
-								baseFrequencies[i] * 2 * (x + 1));
+								baseFrequencies[i] * (1 << x));
 			}
 		}
 		isInitiated = true;

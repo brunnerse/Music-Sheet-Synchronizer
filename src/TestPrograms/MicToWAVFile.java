@@ -53,8 +53,6 @@ public class MicToWAVFile {
 		line.start();
 		writer.open();
 		
-		line.read(b1, 0, b1.length);
-		
 		isOpen = true;	
 	}
 	
@@ -105,19 +103,21 @@ public class MicToWAVFile {
 	
 	//record 1/4th of a second, then checks if stopRecording() has been called.
 	private static class RecorderThread extends Thread {
-		private volatile boolean stop;
-		
+		private volatile boolean stop = true;
 		public void stopRecording() {
+			//wait shortly stop is true; it might mean that run() hasn't been executed yet
+			if(stop) {
+				try { Thread.sleep(50); } catch (InterruptedException e) {}
+			}
 			this.stop = true;
 		}
 		
 		@Override
-		public void run() {
+		public void run() {;
 			stop = false;
 			
 			byte[] b = b1;
 			Thread tWriter = new Thread();
-			
 			while (!stop) {
 				line.read(b, 0, b.length);
 				try {
@@ -134,6 +134,7 @@ public class MicToWAVFile {
 				tWriter.join();
 			} catch (InterruptedException e) {}
 		}
+		
 	}
 	
 	private static class WriteToWAV implements Runnable {

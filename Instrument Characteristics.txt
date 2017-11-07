@@ -1,0 +1,11 @@
+PIANO
+	a1 (440hz)		- 438.1Hz (0.0083),	880Hz (0.003), 1320Hz (0.004), 2220Hz (0.001), 3100 Hz(0.0003)
+	c2 (523.26hz)	- 520.8Hz (0.0117), 1046Hz (0.0022), 1572Hz (0.003), 2025 (0.0007), 2640( 0.0012)
+	
+	Assumption: f = base frequency
+		Frequencies:  	f with Amplitude a
+						f * 2 with a / 3
+						f * 3 with a / 2
+						f * 4 with a / 12
+						f * 5 with a / 9
+						f * 6 with a / 27

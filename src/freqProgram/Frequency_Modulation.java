@@ -227,12 +227,19 @@ implements ActionListener, AdjustmentListener, ItemListener {
 				numActiveWaves += 1;
 		}
 		int idx = 0;
+		double freq, amp;
 		WaveManager[] wm = new WaveManager[numActiveWaves];
 		for (int i = 0; i < numWaves; ++i) {
 			if (!channelCheckbox[i].getState())
 				continue;
-			double freq = Double.parseDouble(freqTextField[i].getText());
-			wm[idx++] = new WaveManager(freq, Double.parseDouble(ampTextField[i].getText()) / 100d, sampleRate);
+			try {
+				freq = Double.parseDouble(freqTextField[i].getText());
+				amp = Double.parseDouble(ampTextField[i].getText()) / 100d;
+			} catch (NumberFormatException e) {
+				freq = 0d;
+				amp = 0d;
+			}
+			wm[idx++] = new WaveManager(freq, amp, sampleRate);
 		}
 		return wm;
 	}

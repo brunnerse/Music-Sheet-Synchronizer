@@ -40,7 +40,7 @@ public class Frequency_Scrollbar extends Frame implements ActionListener, Adjust
 		amplLabel = new Label();
 		heightLabel = new Label();
 		updateLabels();
-		this.setLayout(new GridLayout(7,1, 10, 10));
+		this.setLayout(new GridLayout(8,1, 10, 10));
 		this.add(switchButton);
 		this.add(amplitude);
 		this.add(amplLabel);
@@ -49,6 +49,7 @@ public class Frequency_Scrollbar extends Frame implements ActionListener, Adjust
 		this.add(frequency);
 		this.add(amplitude);
 		this.add(height);
+		this.add(new Label("Note: After changing a value, wait shortly until the signal was fully calculated and sounds clear"));
 		
 		this.addWindowListener(new WindowAdapter() {
 			@Override

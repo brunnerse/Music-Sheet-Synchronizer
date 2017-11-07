@@ -93,7 +93,15 @@ public abstract class AbstractFrequencyDisplay<T> extends FrequencyDisplay {
 		
 		this.axisLenX = this.getWidth() - scaleTextOffsetX - scaleArrowOffset;
 		this.axisLenY = this.getHeight() - scaleTextOffsetY - scaleArrowOffset;
+		
+		//try to make the Amp Axis always show two digits
+		if (maxAmp * maxAmpFactor >= 100)
+			maxAmpFactor /= 10;
+		else if (maxAmp * maxAmpFactor < 20)
+			maxAmpFactor *= 10;
 		this.maxAmplitudeLetters = String.valueOf((int)(maxAmp * maxAmpFactor)).length();
+		
+		
 		this.scaleTextOffsetY = fontSize + 4;
 		this.scaleTextOffsetX = dotsPerLetter * maxAmplitudeLetters + 9;	
 		
@@ -235,12 +243,14 @@ public abstract class AbstractFrequencyDisplay<T> extends FrequencyDisplay {
 	protected abstract void closeLine();
 
 	public float getLoudestFreq() {
-		int LoudestFreq = 1;
-		for (int i = 2; i < amps.length; ++i) {
-			if (amps[i] > amps[LoudestFreq])
-				LoudestFreq = i;
+		if (amps == null)
+			return 0f;
+		int LoudestFreqIdx = 10;
+		for (int i = LoudestFreqIdx + 1; i < amps.length; ++i) {
+			if (amps[i] > amps[LoudestFreqIdx])
+				LoudestFreqIdx = i;
 		}
-		return LoudestFreq * precision;
+		return LoudestFreqIdx * precision;
 	}
 	
 	public float getAmpFromFreq(float freq) {
