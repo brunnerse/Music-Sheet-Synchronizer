@@ -59,6 +59,14 @@ public abstract class AbstractFrequencyDisplay<T> extends FrequencyDisplay {
 		this.setVisible(true);
 	}
 
+	//abstract functions
+	//This function is suppoed to fill the data array from the data of T
+	protected abstract void readLine(byte[] data);
+	protected abstract void openLine() throws Exception;
+	protected abstract void closeLine();
+	//This method is supposed to initialise T this.line and AudioFormat this.format
+	protected abstract void setupLineAndFormat() throws Exception;
+	
 	public final void startAnalysis() {
 		try {
 			setupLineAndFormat();
@@ -76,8 +84,6 @@ public abstract class AbstractFrequencyDisplay<T> extends FrequencyDisplay {
 		isAnalysing = true;
 	}
 	
-	//This method is supposed to initialise T this.line and AudioFormat this.format
-	protected abstract void setupLineAndFormat() throws Exception;
 	
 	public final void stopAnalysis() {
 		isAnalysing = false;
@@ -237,10 +243,6 @@ public abstract class AbstractFrequencyDisplay<T> extends FrequencyDisplay {
 
 	}
 	
-	//This function is suppoed to fill the data array from the data of T
-	protected abstract void readLine(byte[] data);
-	protected abstract void openLine() throws Exception;
-	protected abstract void closeLine();
 
 	public float getLoudestFreq() {
 		if (amps == null)
