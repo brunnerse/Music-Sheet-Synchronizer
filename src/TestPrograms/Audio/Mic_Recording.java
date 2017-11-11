@@ -1,4 +1,4 @@
-package TestPrograms;
+package TestPrograms.Audio;
 
 
 import javax.sound.sampled.*;

@@ -1,4 +1,4 @@
-package TestPrograms;
+package TestPrograms.Audio;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

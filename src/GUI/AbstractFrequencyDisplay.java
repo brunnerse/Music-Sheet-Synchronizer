@@ -101,9 +101,10 @@ public abstract class AbstractFrequencyDisplay<T> extends FrequencyDisplay {
 		this.axisLenY = this.getHeight() - scaleTextOffsetY - scaleArrowOffset;
 		
 		//try to make the Amp Axis always show two digits
-		if (maxAmp * maxAmpFactor >= 100)
+		final int switchVal = 25;
+		if (maxAmp * maxAmpFactor >= switchVal * 10)
 			maxAmpFactor /= 10;
-		else if (maxAmp * maxAmpFactor < 20)
+		else if (maxAmp * maxAmpFactor < switchVal)
 			maxAmpFactor *= 10;
 		this.maxAmplitudeLetters = String.valueOf((int)(maxAmp * maxAmpFactor)).length();
 		
@@ -342,7 +343,6 @@ public abstract class AbstractFrequencyDisplay<T> extends FrequencyDisplay {
 		this.maxAmp = amp;
 		//TODO: set maxAmpFactor so that most numbers between 0 and maxAmp have 2 decimals
 		//this.maxAmpFactor = (int)Math.pow(10, String.valueOf((int)(maxAmp * 2000)).length()); //350 was chosen empirically
-		this.maxAmpFactor = 1000;
 		repaint();
 	}
 				
