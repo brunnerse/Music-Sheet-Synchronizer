@@ -24,7 +24,7 @@ public class MainEntryPoint {
 			is.addImage(ImageIO.read(new File("emily.jpg")));
 		} catch (IOException e) {}
 
-		JScrollBar scaleScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 100, 50, 100, 300);
+		JScrollBar scaleScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 100, 50, 0, 300);
 		scaleScrollBar.addAdjustmentListener((AdjustmentEvent e) -> is.scaleImages(e.getValue() / 100f));
 
 		f.add(scaleScrollBar, BorderLayout.NORTH);

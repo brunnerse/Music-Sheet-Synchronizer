@@ -70,12 +70,13 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 			int yPos = 0;
 			for (BufferedImage img : images) {
 				int dy2 = yPos + img.getHeight() * (int)(this.getWidth() * scaleFactor) / img.getWidth();
-				g.drawImage(img, (this.getWidth() - (int)(this.getWidth() * scaleFactor)) / 2 - xOffset, yPos - scaledUpperYVal,
-						(this.getWidth() + (int)(this.getWidth() * scaleFactor)) / 2 - xOffset, dy2 - scaledUpperYVal,
+				g.drawImage(img, (int)(this.getWidth() * (1f - scaleFactor)) / 2 - xOffset, yPos - scaledUpperYVal,
+						(int)(this.getWidth() * (1f + scaleFactor)) / 2 - xOffset, dy2 - scaledUpperYVal,
 						0, 0, img.getWidth(), img.getHeight(), null);
 				yPos = dy2;
 			}
 			dstAllSize = yPos;
+			
 		}
 		
 		public void addImage(BufferedImage img) {
@@ -88,14 +89,14 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		}
 		
 		public void scale(float factor) {
-			if (factor >= 1) {
+			if (factor >= 0) {
 				this.scaleFactor = factor;
 				repaint();
 			}
 		}
 		//Function used to scroll through the images vertically.
 		public void setUpperYValue(int y) {
-			if (0 <= y && y <= dstAllSize - this.getHeight()) {
+			if (0 <= y && (y < this.upperYVal || y <= (dstAllSize  - this.getHeight()) / scaleFactor)) {
 				this.upperYVal = y;
 				repaint();
 			}
@@ -103,14 +104,15 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		
 		//Function used to scroll through the images horizontally.
 		public void setXOffset(int x) {
-			if (true) {
+			if ( Math.abs(x) < Math.abs(xOffset) || ( this.getWidth() * (1f - scaleFactor) <= 2 * x &&
+					this.getWidth() * (scaleFactor - 1f) >= 2 * x )	) {
 				this.xOffset = x;
 				repaint();
 			}
 		}
 		
-		public int getUpperYCap() {
-			return Math.min(0, dstAllSize - this.getHeight());
+		public int getMaximumUpperY() {
+			return (int)Math.min(0f, (dstAllSize - this.getHeight()) / scaleFactor);
 		}
 		
 		public int getXCap() {
