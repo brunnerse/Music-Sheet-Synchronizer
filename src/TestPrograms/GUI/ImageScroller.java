@@ -7,13 +7,15 @@ import java.awt.Graphics;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
+
+
+//
+//TODO: Change Scrollbar dimensions depending on scaleFactor
+//TODO: Cap upperYVal and xOffset values so the image always fills to the borders
 
 @SuppressWarnings("serial")
 public class ImageScroller extends JPanel implements AdjustmentListener {
@@ -21,57 +23,38 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 	private JScrollBar vertScrollBar, horiScrollBar;
 	private MultiImagePanel imgPanel;
 	
-	private final int scrollBarSize = 10;
-	
-	public static void main(String[] args) throws Exception {
-		JFrame f = new JFrame("ImageScroller");
-
-		ImageScroller is = new ImageScroller(600, 600);
-		is.addImage(ImageIO.read(new File("alyssa arce.jpg")));
-		is.addImage(ImageIO.read(new File("emily.jpg")));
-		
-		JScrollBar scaleScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 100, 50, 100, 300);
-		scaleScrollBar.addAdjustmentListener( (AdjustmentEvent e) -> is.scaleImages(e.getValue() / 100f) );
-		
-		f.add(scaleScrollBar, BorderLayout.NORTH);
-		f.add(is, BorderLayout.SOUTH);
-
-		f.pack();
-		f.setVisible(true);
-		System.out.println(f.getWidth() + "\t" + f.getHeight());
-		System.out.println(is.getWidth() + "\t" + is.getHeight());
-	}
-	
+	private final int scrollBarSize = 16;
 	
 	public ImageScroller(int width, int height) {
 		super();
 		this.setPreferredSize(new Dimension(width, height));
 		this.setLayout(new BorderLayout());
 		
-		horiScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 0, 20, 0, 100);
-		vertScrollBar = new JScrollBar(JScrollBar.VERTICAL, 0, 20, 0, 100);
+		horiScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 500, 50, 0, 1000);
+		vertScrollBar = new JScrollBar(JScrollBar.VERTICAL, 0, 100, 0, 2000);
 		imgPanel = new MultiImagePanel(width - scrollBarSize, height - scrollBarSize);
+		
+		horiScrollBar.addAdjustmentListener(this);
+		vertScrollBar.addAdjustmentListener(this);
 		
 		this.add(horiScrollBar, BorderLayout.SOUTH);
 		this.add(vertScrollBar, BorderLayout.EAST);
 		this.add(imgPanel, BorderLayout.CENTER);
-		
-		//scrollBar[0].setSize(width - scrollBarSize, scrollBarSize);
-		//scrollBar[1].setSize(scrollBarSize, height);
 	}
 	
 	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(new Color(255, 255, 255));
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
-		
 	}
 	
 	private class MultiImagePanel extends JPanel {
 		
 		private ArrayList<BufferedImage> images = new ArrayList<>();
 		private float scaleFactor = 1;
-		private int upperYVal = 0, upperXVal = 0;
+		private int upperYVal = 0, xOffset = 0;
+		private int dstAllSize = 0;
+		
 		
 		public MultiImagePanel(int width, int height) {
 			this.setPreferredSize(new Dimension(width, height));
@@ -82,15 +65,17 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 			g.setColor(new Color(255, 255, 255));
 			g.fillRect(0,  0,  this.getWidth(),  this.getHeight());
 			
+			
+			int scaledUpperYVal = (int)(upperYVal * scaleFactor);
 			int yPos = 0;
 			for (BufferedImage img : images) {
-				int dy2 = yPos + img.getHeight() * this.getWidth() / img.getWidth();
-				int srcWidth = (int)(img.getWidth() / scaleFactor);
-				int srcHeight = (int)(img.getHeight() / scaleFactor);
-				g.drawImage(img, 0, yPos, this.getWidth(), dy2, (img.getWidth() - srcWidth) / 2,
-						(img.getHeight() - srcHeight) / 2, (img.getWidth() + srcWidth) / 2, (img.getHeight() + srcHeight) / 2, null);
-				yPos = dy2 + 1;
+				int dy2 = yPos + img.getHeight() * (int)(this.getWidth() * scaleFactor) / img.getWidth();
+				g.drawImage(img, (this.getWidth() - (int)(this.getWidth() * scaleFactor)) / 2 - xOffset, yPos - scaledUpperYVal,
+						(this.getWidth() + (int)(this.getWidth() * scaleFactor)) / 2 - xOffset, dy2 - scaledUpperYVal,
+						0, 0, img.getWidth(), img.getHeight(), null);
+				yPos = dy2;
 			}
+			dstAllSize = yPos;
 		}
 		
 		public void addImage(BufferedImage img) {
@@ -99,6 +84,7 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		
 		public void addImage(BufferedImage img, int pos) {
 			images.add(pos, img);
+			repaint();
 		}
 		
 		public void scale(float factor) {
@@ -109,15 +95,28 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		}
 		//Function used to scroll through the images vertically.
 		public void setUpperYValue(int y) {
-			if (y >= 0)
+			if (0 <= y && y <= dstAllSize - this.getHeight()) {
 				this.upperYVal = y;
+				repaint();
+			}
 		}
 		
 		//Function used to scroll through the images horizontally.
-		public void setUpperXValue(int x) {
-			if (x >= 0)
-				this.upperXVal = x;
+		public void setXOffset(int x) {
+			if (true) {
+				this.xOffset = x;
+				repaint();
+			}
 		}
+		
+		public int getUpperYCap() {
+			return Math.min(0, dstAllSize - this.getHeight());
+		}
+		
+		public int getXCap() {
+			return (int)(this.getWidth() * (1f - scaleFactor) / 2);
+		}
+		
 	}
 	
 	public void scaleImages(float factor) {
@@ -131,15 +130,24 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 	public void addImage(BufferedImage img, int pos) {
 		this.imgPanel.addImage(img, pos);
 	}
+	
+	public void setScrollBarDimensions() {
+		//horiScrollBar.setMaximum(this.imgPanel.getXCap());
+		horiScrollBar.setVisibleAmount(20);
+		
+		
+	}
 
 
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent e) {
 		if (e.getSource() == horiScrollBar) {
-			imgPanel.setUpperXValue(e.getValue());
+			imgPanel.setXOffset(horiScrollBar.getValue() - horiScrollBar.getMaximum() / 2); //horiScrollBar.getMinimum() is assumed zero 
 		} else if (e.getSource() == vertScrollBar) {
 			imgPanel.setUpperYValue(e.getValue());
 		}
+		
+		setScrollBarDimensions();
 	}
 	
 	

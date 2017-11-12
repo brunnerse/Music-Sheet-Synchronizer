@@ -14,6 +14,8 @@ draw image:
 		int srcx1, srcy1, srcx2, srcy2, ImageObserver observer)
 		//dst : Destionation corners x1, y1, x2, y2
 		//src : Source(image) corners x1, y1, x2, y2
+		
+		Mirror the image by swapping the src values (e.g. x1 with x2)
 
 write image:
 	static boolean ImageIO.write(RenderedImage im, String formatName, File output) throws IOException
