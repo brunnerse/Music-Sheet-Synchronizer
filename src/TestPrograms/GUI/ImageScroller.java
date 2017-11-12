@@ -14,8 +14,8 @@ import javax.swing.JScrollBar;
 
 
 //
-//TODO: Change Scrollbar dimensions depending on scaleFactor
-//TODO: Cap upperYVal and xOffset values so the image always fills to the borders
+//TODO: When decreasing image size, make sure the image still is in the borders
+//TODO: Try to get JScrollbar to update when its values change. 
 
 @SuppressWarnings("serial")
 public class ImageScroller extends JPanel implements AdjustmentListener {
@@ -25,17 +25,20 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 	
 	private final int scrollBarSize = 16;
 	
-	public ImageScroller(int width, int height) {
+	
+	public ImageScroller(int width, int height, boolean allowMinimizing) {
 		super();
 		this.setPreferredSize(new Dimension(width, height));
 		this.setLayout(new BorderLayout());
 		
-		horiScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 500, 50, 0, 1000);
-		vertScrollBar = new JScrollBar(JScrollBar.VERTICAL, 0, 100, 0, 2000);
-		imgPanel = new MultiImagePanel(width - scrollBarSize, height - scrollBarSize);
+		horiScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 150, 100, 0, 300);
+		vertScrollBar = new JScrollBar(JScrollBar.VERTICAL, 0, 200, 0, 1000);
+		imgPanel = new MultiImagePanel(width - scrollBarSize, height - scrollBarSize, 
+				allowMinimizing ? 0f : 1f);
 		
 		horiScrollBar.addAdjustmentListener(this);
 		vertScrollBar.addAdjustmentListener(this);
+		
 		
 		this.add(horiScrollBar, BorderLayout.SOUTH);
 		this.add(vertScrollBar, BorderLayout.EAST);
@@ -54,10 +57,16 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		private float scaleFactor = 1;
 		private int upperYVal = 0, xOffset = 0;
 		private int dstAllSize = 0;
+		private float minScale;
 		
 		
 		public MultiImagePanel(int width, int height) {
+			this(width, height, 0f);
+		}
+		
+		public MultiImagePanel(int width, int height, float minScale) {
 			this.setPreferredSize(new Dimension(width, height));
+			this.minScale = minScale;
 		}
 		
 		@Override
@@ -89,7 +98,7 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		}
 		
 		public void scale(float factor) {
-			if (factor >= 0) {
+			if (factor >= minScale) {
 				this.scaleFactor = factor;
 				repaint();
 			}
@@ -112,11 +121,15 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		}
 		
 		public int getMaximumUpperY() {
-			return (int)Math.min(0f, (dstAllSize - this.getHeight()) / scaleFactor);
+			return (int)Math.max(0f, (dstAllSize - this.getHeight()) / scaleFactor);
 		}
 		
 		public int getXCap() {
-			return (int)(this.getWidth() * (1f - scaleFactor) / 2);
+			return (int)Math.max(0f, (this.getWidth() * (scaleFactor -1) / 2));
+		}
+		
+		public float getScale() {
+			return this.scaleFactor;
 		}
 		
 	}
@@ -134,17 +147,24 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 	}
 	
 	public void setScrollBarDimensions() {
-		//horiScrollBar.setMaximum(this.imgPanel.getXCap());
-		horiScrollBar.setVisibleAmount(20);
+		int maximum = this.imgPanel.getXCap();
+		horiScrollBar.setMinimum(- maximum);
+		int visibleAmount = (int)(maximum * 2 / this.imgPanel.getScale());
+		horiScrollBar.setMaximum(maximum + visibleAmount);
+		horiScrollBar.setVisibleAmount(visibleAmount);
 		
-		
+		maximum = this.imgPanel.getMaximumUpperY();
+		//vertScrollBar.setMinimum(0); This is always assumed
+		visibleAmount = maximum > 0 ? imgPanel.getHeight() * imgPanel.getHeight() / maximum : 0;		
+		vertScrollBar.setMaximum(maximum + visibleAmount);
+		vertScrollBar.setVisibleAmount(visibleAmount);
 	}
 
 
 	@Override
 	public void adjustmentValueChanged(AdjustmentEvent e) {
 		if (e.getSource() == horiScrollBar) {
-			imgPanel.setXOffset(horiScrollBar.getValue() - horiScrollBar.getMaximum() / 2); //horiScrollBar.getMinimum() is assumed zero 
+			imgPanel.setXOffset(horiScrollBar.getValue()); //horiScrollBar.getMinimum() is assumed zero 
 		} else if (e.getSource() == vertScrollBar) {
 			imgPanel.setUpperYValue(e.getValue());
 		}
