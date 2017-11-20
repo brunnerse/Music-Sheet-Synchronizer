@@ -18,7 +18,7 @@ public class MainEntryPoint {
 	public static void startImageScroller() {
 		JFrame f = new JFrame("ImageScroller");
 
-		ImageScroller is = new ImageScroller(800, 700, false);
+		ImageScroller is = new ImageScroller(800, 700, true);
 		try {
 			is.addImage(ImageIO.read(new File("alyssa arce.jpg")));
 			is.addImage(ImageIO.read(new File("emily.jpg")));	
