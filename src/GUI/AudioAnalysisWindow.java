@@ -183,5 +183,9 @@ public class AudioAnalysisWindow extends JFrame implements ActionListener {
 	private void createWarningDialog(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
+
+	public FrequencyDisplay getFrequencyDisplay() {
+		return this.signalDisplay;
+	}
 	
 }
