@@ -111,7 +111,7 @@ public class AudioAnalysisWindow extends JFrame implements ActionListener {
 					}
 					if (prevFreq != (freq = signalDisplay.getLoudestFreq())) {
 						lMaxFreq.setText(String.format("\t\tLoudest Frequency: %.1f Hz (Note: %s), Amp %.4f",
-								freq, FrequencyAnalyzer.getNoteFromFreq(freq), signalDisplay.getAmpFromFreq(freq)));
+								freq, FrequencyAnalyzer.getPitchFromFreq(freq), signalDisplay.getAmpFromFreq(freq)));
 					}
 					
 					
