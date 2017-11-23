@@ -48,12 +48,10 @@ public abstract class FrequencyAnalyzer {
 				nextMargin = Math.abs(freq - pitches[idx - 1].frequency);
 			else
 				break;
-			
 			if (nextMargin < margin)
 				maxIdx = idx;
 			else
 				minIdx = idx;
-				
 		}
 		return pitches[idx].pitch;
 	}

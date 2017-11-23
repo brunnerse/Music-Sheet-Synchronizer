@@ -1,17 +1,23 @@
 package Music;
 
 public class Note {
-	private final float volume; //should be value between 0 and 1
-	private final byte duration; //should be multiples of 1/64 (which is seen as the lowest duration possible) 
+	private final byte volume; //0 corresponding to lowest volume, 127 highest volume
+	private final byte duration; //should be multiples of 1/64 (which is seen as the lowest duration possible)
+	private final byte time; //should be a value between 0 and 127, showing which duration (in 1/64) has passed until the note is played
 	
 	private final Pitch p;
 	private final byte articulation; //is in format from Articulation
 	
-	public Note(Pitch p, float volume, byte duration, byte articulation) {
+	public Note(Pitch p, byte volume, byte duration, byte articulation, byte time) {
 		this.p = p;
 		this.volume = volume;
 		this.duration = duration;
 		this.articulation = articulation;
+		this.time = time;
+	}
+	
+	public Note(Pitch p, float volume, byte duration, byte articulation, byte time) {
+		this(p, (byte)(volume * Byte.MAX_VALUE), duration, articulation, time);
 	}
 	
 	public float getVolume() {
@@ -30,6 +36,9 @@ public class Note {
 		return articulation;
 	}
 
+	public byte getTime() {
+		return time;
+	}
 
 	
 	//not using enumerations as they take too much memory
@@ -55,5 +64,4 @@ public class Note {
 			throw new IllegalArgumentException("The Volume " + vol + " isnt a denotation for volume.");
 		}
 	}
-	
 }
