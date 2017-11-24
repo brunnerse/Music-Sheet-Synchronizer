@@ -10,7 +10,9 @@ public class MusicSheetTesting {
 		MusicSheet sheet = new MusicSheet(null);
 		ArrayList<Bar> bars = sheet.getBars();
 		sheet.setTempo(60);
-		for (int i = 0; i < 5; ++i) {
+		ArrayList<Note> notes;
+		Bar b = new Bar(new Beat(4, 4));
+		for (int i = 0; i < 2; ++i) {
 			bars.add(new Bar(new Beat(4, 4)));
 		}
 		

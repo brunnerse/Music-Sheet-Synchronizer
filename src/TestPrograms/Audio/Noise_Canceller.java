@@ -24,7 +24,7 @@ public class Noise_Canceller {
 			tLine.start();
 			sLine.start();
 			
-			float DCOffset = getDCOffset(tLine);
+			//float DCOffset = getDCOffset(tLine);
 			
 			b = b1;
 			tLine.read(b, 0, b.length);
