@@ -21,7 +21,7 @@ public class PDFExtractor {
 	private static ArrayList<BufferedImage> images;
 
 	public static BufferedImage[] getScreenshotsFromFile(String fileName) throws IOException {
-		return getImagesFromFile(new File(fileName));
+		return getScreenshotsFromFile(new File(fileName));
 	}
 
 	public static BufferedImage[] getScreenshotsFromFile(File file) throws IOException {

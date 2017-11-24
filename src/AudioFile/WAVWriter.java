@@ -21,6 +21,10 @@ public class WAVWriter implements Closeable {
 		setArtist(artist);
 		this.format = format;
 	}
+	
+	public WAVWriter(String fileName, AudioFormat format) {
+		this(fileName, format, null, null);
+	}
 
 	
 	public void open() throws IOException {

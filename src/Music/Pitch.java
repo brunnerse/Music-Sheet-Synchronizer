@@ -77,4 +77,15 @@ public class Pitch {
 		}
 		return s;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o.getClass() != this.getClass())
+			return false;
+		return this.equals((Pitch)o);	
+	}
+	
+	public boolean equals(Pitch p) {
+		return p.note == this.note && p.vorzeichen == this.vorzeichen && p.octave == this.octave;
+	}
 }

@@ -1,5 +1,9 @@
 package Music;
 
+import java.io.IOException;
+
+import AudioFile.WAVReader;
+
 public abstract class FrequencyAnalyzer {
 	
 	private static final int numOctaves = 7;
@@ -9,7 +13,7 @@ public abstract class FrequencyAnalyzer {
 	private static boolean isInitiated = false;
 	
 	//fills the array noteFreq; calculates all frequencies from the base octave
-	private static void initiateNotePair() {
+	private static void initiatePitches() {
 		pitches = new FrequencyPitch[numOctaves * notesPerOctave]; //7 octaves, 7 notes per octave, 3 vorzeichen per note
 		
 		float []baseFrequencies = {261.63f, 277.18f, 293.66f, 311.13f, 329.63f, 349.23f, 370f, 392f, 415.3f,
@@ -37,7 +41,7 @@ public abstract class FrequencyAnalyzer {
 	//returns the Note whose Frequency is the closest to the argument freq.
 	public static Pitch getPitchFromFreq(float freq) {
 		if (!isInitiated)
-			initiateNotePair();
+			initiatePitches();
 		int idx = 0;
 		int minIdx = 0, maxIdx = pitches.length - 1;
 		float margin, nextMargin;
@@ -56,13 +60,81 @@ public abstract class FrequencyAnalyzer {
 		return pitches[idx].pitch;
 	}
 	
+	public static FrequencyPitch getFrequencyPitch(Pitch p) {
+		if (!isInitiated)
+			initiatePitches();
+		int idx = 0;
+		int minIdx = 0, maxIdx = pitches.length - 1;
+		while (maxIdx > minIdx) {
+			idx = (maxIdx - minIdx) / 2 + minIdx;
+			Pitch p2 = pitches[idx].pitch;
+			//lexikographische Ordnung: Octave - Note - Vorzeichen
+			if (p.getOctave() > p2.getOctave() || 
+					(p.getOctave() == p2.getOctave() && (p.getNote() > p2.getNote() || (
+							p.getNote() == p2.getNote() && (p.getVorzeichen() == p2.getVorzeichen()))))) {
+				minIdx = idx + 1; //p > p2
+			} else if (p.equals(p2)) //p == p2, gefunden
+				break;
+			else //p < p2
+				maxIdx = idx - 1;
+		}
+		return pitches[idx];
+	}
+	
+	public static float getFrequencyFromPitch(Pitch p) {
+		return getFrequencyPitch(p).frequency;
+	}
+	
+	public static void closePitches() {
+		if (pitches == null)
+			return;
+		for (FrequencyPitch p : pitches) {
+			p.close();
+		}
+	}
+	
 	private static class FrequencyPitch {
-		public float frequency;
-		public Pitch pitch;
+		public final float frequency;
+		public final Pitch pitch;
+		private int curIdx;
+		private WAVReader reader;
+		private String fileName;
 		
 		public FrequencyPitch(Pitch p, float freq) {
 			this.pitch = p;
 			this.frequency = freq;
 		}
+		
+		public void read(byte[] b, int length, boolean fromStart) {
+			readRaw(b, length, fromStart);
+			int a;
+			if ((a = 1) == 1)
+				return;
+			if (reader == null) {
+				reader = new WAVReader(fileName);
+			}
+		}
+		//function used for raw signal
+		private void readRaw(byte[] b, int length, boolean fromStart) {
+			int numVals = length / 2;
+			int amplitude = numVals / 2;
+			int frameRate = 44100;
+			if (fromStart)
+				curIdx = 0;
+			for (; curIdx < numVals; ++curIdx) {
+				short val = (short)(amplitude * Math.cos(2 *  curIdx * frequency * Math.PI / frameRate));
+				b[curIdx * 2] = (byte)val;
+				b[curIdx * 2 + 1] = (byte)(val >> 8);
+			}
+		}
+
+		public void close() {
+			try {
+				if (reader != null)
+					reader.close();
+			} catch (IOException e) {}
+			reader = null;
+		}
+
 	}
 }

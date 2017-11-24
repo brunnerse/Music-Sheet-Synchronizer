@@ -1,12 +1,17 @@
 package Music;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+import AudioFile.WAVWriter;
+import AudioFile.WAVPlayer;
+import javax.sound.sampled.AudioFormat;
 
 public class MusicSheet {
 
 	private ArrayList<Bar> bars = new ArrayList<>();
-	private int tempo = 60; //tempo in quarters per minute
+	//tempo in Quarters per minute
+	private int tempo = 60; 
 	
 	public MusicSheet(BufferedImage[] images) {
 		this.scanSheet(images);
@@ -16,14 +21,57 @@ public class MusicSheet {
 		
 	}
 	
-	public void playSheet() {
+	//Creates a WAV file and writes into it.
+	public void playSheet() throws Exception{
+		final int sampleRate = 44100;
+		final String fileName = "temp - sheetfile.wav";
+		WAVWriter writer = new WAVWriter(fileName, new AudioFormat(sampleRate, 16, 1, true, false));
+		//enough space for 1/16 of time
+		short []sArray = new short[sampleRate  * 60 / tempo / 4]; //tempo / 60 = quarters per second,
+																// 1/4 = 1/16 per quarter
+		byte []bArray = new byte[sArray.length * 2];
+		try {
+			writer.open();
+			ArrayList<Note> currentPlayedNotes;
+			for (Bar bar : bars) {
+				//notes in bar are assumed to be sorted
+				//steps in 1/16, 1 time means 1/64
+				for (int time = 0; time < bar.getBeat().beatsPerBar * 64; time += 4) {
+					for (int i = 0; i < sArray.length; ++i)
+						sArray[i] = 0;
+					
+					
+					
+					for (int i = 0; i < sArray.length; ++i) {
+						bArray[i * 2] = (byte)sArray[i];
+						bArray[i * 2 + 1] = (byte)(sArray[i] >> 8);
+					}
+					writer.write(bArray, 0, bArray.length);
+				}
+				
+			}
+			
+			writer.close();
+			WAVPlayer.play(fileName);
+		} catch (IOException e) {
+			throw new Exception(((Exception)e).getMessage());
+		} finally {
+			writer.close();
+		}
+		
 		
 	}
 	
+	/**
+	 * @return tempo which is saved in quarters per minute
+	 */
 	public int getTempo() {
 		return tempo;
 	}
 
+	/**
+	 * @param tempo in quarters per minute
+	 */
 	public void setTempo(int tempo) {
 		this.tempo = tempo;
 	}
@@ -32,22 +80,30 @@ public class MusicSheet {
 		return bars;
 	}
 
-	public class Bar {
+	public static class Bar {
+		private ArrayList<Note> notes;
+		private Beat takt;
 		
-		//There's no way to make the warning go away, and it doesnt make error, so its alright
-		private ArrayList<Note> notes = new ArrayList<Note>();
-		Takt takt;
-		
-		public Bar(Takt t, ArrayList<Note> notes) {
-				
+		public Bar(Beat t, ArrayList<Note> notes) {
+				this.takt = t;
+				this.notes = notes;
 		}
+		
+		public Bar(Beat t) {
+			this(t, new ArrayList<Note>());
+	}
 		
 		public ArrayList<Note> getNotes() {
 			return notes;
 		}
 
-		//function to sort the Note Array by the time the notes come
-		//needed to work with the Bar
+		public Beat getBeat() {
+			return takt;
+		}
+		
+		/**
+		 * sorts the Notes in the Note Array by time
+		 */
 		public void sortNotes() {
 			//using insertion sort
 			Note n;
@@ -65,16 +121,18 @@ public class MusicSheet {
 		}
 	}
 	
-	//class to represent 4/4 Takt or sth like that
-	public static class Takt {
+	public static class Beat {
 		int first, scnd;
 		float beatsPerBar;
-		public Takt(int n, int divisor) {
+		public Beat(int n, int divisor) {
 			this.first = n;
 			this.scnd = divisor;
 			this.beatsPerBar = first/scnd;
 		}
 		
+		/**
+		 * @return the number of beats in one bar as Ones (e.g. 4/4 returns 1, 3/4 return 0.75)
+		 */
 		public float getBeatsPerBar() {
 			return beatsPerBar;
 		}
