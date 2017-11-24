@@ -24,6 +24,9 @@ public class MusicSheet {
 
 	// Creates a WAV file and writes into it.
 	public void playSheet() throws Exception {
+		if (notes.isEmpty())
+			return;
+		sortNotes(); //TODO: Avoid this if possible
 		final int sampleRate = 44100;
 		final String fileName = "temp - sheetfile.wav";
 		WAVWriter writer = new WAVWriter(fileName, new AudioFormat(sampleRate, 16, 1, true, false));
@@ -31,21 +34,43 @@ public class MusicSheet {
 		short[] sArray = new short[sampleRate * 60 / tempo / 4]; // tempo / 60 = quarters per second,
 																	// 1/4 = 1/16 per quarter
 		byte[] bArray = new byte[sArray.length * 2];
+		byte[] bArray2 = new byte[sArray.length * 2];
+		
 		try {
 			writer.open();
-			ArrayList<Note> currentPlayedNotes;
-				// notes in bar are assumed to be sorted
-				// steps in 1/16, 1 time means 1/64
-				for (int time = 0; time < 600; time += 4) { //TODO
-					for (int i = 0; i < sArray.length; ++i)
-						sArray[i] = 0;
-
-					for (int i = 0; i < sArray.length; ++i) {
-						bArray[i * 2] = (byte) sArray[i];
-						bArray[i * 2 + 1] = (byte) (sArray[i] >> 8);
-					}
-					writer.write(bArray, 0, bArray.length);
+			ArrayList<Note> currentPlayedNotes = new ArrayList<Note>();
+			// steps in 1/16, 1 time means 1/64
+			Note lastNote = notes.get(notes.size() - 1);
+			int endTime = lastNote.getTime() + lastNote.getDuration();
+			int timeIdx = 0;
+			for (int time = 0; time < endTime; time += 4) { //TODO
+				for (int x = 0; x < currentPlayedNotes.size(); ++x) {
+					int noteTime = currentPlayedNotes.get(x).getTime() - 4;
+					if (noteTime <= 0)
+						currentPlayedNotes.remove(x);
+					else
+						currentPlayedNotes.get(x).setTime(noteTime);
 				}
+				
+				for (int i = 0; i < sArray.length; ++i)
+					sArray[i] = 0;
+				for (Note n : currentPlayedNotes) {
+					FrequencyAnalyzer.getFrequencyPitch(n.getPitch()).read(bArray2, bArray2.length, n); 
+					/*
+					 * TODO: Idea: Instead of every note having its own pitch, you link each Note one pitch,
+					 * so you dont have to search for the right pitch everytime.
+					 */
+					for (int x = 0; x < sArray.length; ++x) {
+						sArray[x] += (short)(n.getVolume() * (bArray2[x * 2] | (bArray2[x * 2 + 1] << 8)));
+					}
+				}
+				
+				for (int i = 0; i < sArray.length; ++i) {
+					bArray[i * 2] = (byte) sArray[i];
+					bArray[i * 2 + 1] = (byte) (sArray[i] >> 8);
+				}
+				writer.write(bArray, 0, bArray.length);
+			}
 			writer.close();
 			WAVPlayer.play(fileName);
 		} catch (IOException e) {
@@ -64,7 +89,8 @@ public class MusicSheet {
 	}
 
 	/**
-	 * @param tempo in quarters per minute
+	 * @param tempo
+	 *            in quarters per minute
 	 */
 	public void setTempo(int tempo) {
 		this.tempo = tempo;
@@ -73,11 +99,31 @@ public class MusicSheet {
 	public ArrayList<Bar> getBars() {
 		return bars;
 	}
-	
+
 	public ArrayList<Note> getNotes() {
 		return notes;
 	}
-	
+
+	/**
+	 * 
+	 * @param n:
+	 *            Note to be added to the note-Array
+	 * @param setTime:
+	 *            if true, Note.time will be set when the previous note ends,
+	 *            otherwise, Note.time will stay at its current value
+	 */
+	public void addNote(Note n, boolean setTime) {
+		if (setTime) {
+			if (notes.isEmpty())
+				n.setTime(0);
+			else {
+				Note prevNote = notes.get(notes.size() - 1);
+				n.setTime(prevNote.getTime() + prevNote.getDuration());
+			}
+		}
+		notes.add(n);
+	}
+
 	/**
 	 * sorts the Notes in the Note Array by time
 	 */
@@ -87,9 +133,11 @@ public class MusicSheet {
 		for (int i = 1; i < notes.size(); ++i) {
 			for (int k = i; k > 0; --k) {
 				n = notes.get(k - 1);
-				if (notes.get(k).getTime() < n.getTime()) {
-					notes.set(k - 1, notes.get(k));
-					notes.set(k, n);
+				if (notes.get(k).getTime() <= n.getTime()) {
+					if (notes.get(k).getTime() < n.getTime() || notes.get(k).getDuration() < n.getDuration()) {
+						notes.set(k - 1, notes.get(k));
+						notes.set(k, n);
+					}
 				} else {
 					break;
 				}
@@ -102,8 +150,10 @@ public class MusicSheet {
 		private Beat takt;
 
 		/**
-		 * @param t: Beat of the Bar
-		 * @param startIdx: Idx of the first note of the Bar in the note-Array
+		 * @param t:
+		 *            Beat of the Bar
+		 * @param startIdx:
+		 *            Idx of the first note of the Bar in the note-Array
 		 */
 		public Bar(Beat t, int startIdx) {
 			this.takt = t;

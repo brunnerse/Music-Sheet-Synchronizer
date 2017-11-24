@@ -93,20 +93,22 @@ public abstract class FrequencyAnalyzer {
 		}
 	}
 	
-	private static class FrequencyPitch {
+	public static class FrequencyPitch {
 		public final float frequency;
 		public final Pitch pitch;
 		private int curIdx;
 		private WAVReader reader;
 		private String fileName;
+		private Note lastNote = null;
 		
 		public FrequencyPitch(Pitch p, float freq) {
 			this.pitch = p;
 			this.frequency = freq;
 		}
 		
-		public void read(byte[] b, int length, boolean fromStart) {
-			readRaw(b, length, fromStart);
+		//TODO: dont forget to take Staccato and Legato into consideration!
+		public void read(byte[] b, int length, Note n) {
+			readRaw(b, length, n);
 			int a;
 			if ((a = 1) == 1)
 				return;
@@ -115,12 +117,14 @@ public abstract class FrequencyAnalyzer {
 			}
 		}
 		//function used for raw signal
-		private void readRaw(byte[] b, int length, boolean fromStart) {
+		private void readRaw(byte[] b, int length, Note n) {
 			int numVals = length / 2;
 			int amplitude = numVals / 2;
 			int frameRate = 44100;
-			if (fromStart)
+			if (n != lastNote) {
 				curIdx = 0;
+				lastNote = n;
+			}
 			for (; curIdx < numVals; ++curIdx) {
 				short val = (short)(amplitude * Math.cos(2 *  curIdx * frequency * Math.PI / frameRate));
 				b[curIdx * 2] = (byte)val;

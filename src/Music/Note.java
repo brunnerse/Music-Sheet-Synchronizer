@@ -2,26 +2,33 @@ package Music;
 
 public class Note {
 	private final byte volume; //0 corresponding to lowest volume, 127 highest volume
-	private final byte duration; //should be multiples of 1/64 (which is seen as the lowest duration possible)
-	private final byte time; //should be a value between 0 and 127, showing which duration (in 1/64) has passed until the note is played
+	private byte duration; //should be multiples of 1/64 (which is seen as the lowest duration possible)
+	private int time; //duration (in 1/64) which has passed from the start until the note is played
 	
 	private final Pitch p;
 	private final byte articulation; //is in format from Articulation
 	
-	public Note(Pitch p, byte volume, byte duration, byte articulation, byte time) {
+	public Note(Pitch p, float volume, int duration, byte articulation, int time) {
 		this.p = p;
-		this.volume = volume;
-		this.duration = duration;
+		this.volume = (byte)(volume * Byte.MAX_VALUE);
+		this.duration = (byte)duration;
 		this.articulation = articulation;
 		this.time = time;
 	}
 	
-	public Note(Pitch p, float volume, byte duration, byte articulation, byte time) {
-		this(p, (byte)(volume * Byte.MAX_VALUE), duration, articulation, time);
+	/**
+	 * to be used when the time of the Note is automatically set by MusicSheet
+	 */
+	public Note(Pitch p, float volume, int duration, byte articulation) {
+		this(p, (byte)(volume * Byte.MAX_VALUE), duration, articulation, 0);
+	}
+	
+	public Note(Pitch p, float volume, int duration) {
+		this(p, (byte)(volume * Byte.MAX_VALUE), duration, Articulation.PLAIN, 0);
 	}
 	
 	public float getVolume() {
-		return volume;
+		return (float)volume / Byte.MAX_VALUE;
 	}
 
 	public byte getDuration() {
@@ -36,8 +43,16 @@ public class Note {
 		return articulation;
 	}
 
-	public byte getTime() {
+	public int getTime() {
 		return time;
+	}
+	
+	public void setTime(int time) {
+		this.time = time;
+	}
+	
+	public void setDuration(int duration) {
+		this.duration = (byte)duration;
 	}
 
 	

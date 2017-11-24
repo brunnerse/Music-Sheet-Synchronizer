@@ -1,24 +1,30 @@
 package testing_and_notes;
-import java.util.ArrayList;
 
-import Music.*;
-import Music.MusicSheet.*;
+import Music.Note;
+import Music.MusicSheet;
+import Music.Pitch;
 
 
 public class MusicSheetTesting {
 	public static void main(String []args) {
 		MusicSheet sheet = new MusicSheet(null);
-		ArrayList<Bar> bars = sheet.getBars();
 		sheet.setTempo(60);
-		ArrayList<Note> notes;
-		Bar b = new Bar(new Beat(4, 4));
-		for (int i = 0; i < 2; ++i) {
-			bars.add(new Bar(new Beat(4, 4)));
-		}
-		
+		ForElise(sheet);
 		try {
 			sheet.playSheet();
 		} catch (Exception e) {
 		}
+	}
+	
+	private static void ForElise(MusicSheet sheet) {
+		sheet.addNote(new Note(new Pitch('e', 2), 1f, 8), true);
+		sheet.addNote(new Note(new Pitch('d', 2), 1f, 8, Pitch.Vorzeichen.SHARP), true);
+		sheet.addNote(new Note(new Pitch('e', 2), 1f, 8), true);
+		sheet.addNote(new Note(new Pitch('d', 2), 1f, 8, Pitch.Vorzeichen.SHARP), true);
+		sheet.addNote(new Note(new Pitch('e', 2), 1f, 8), true);
+		sheet.addNote(new Note(new Pitch('h', 1), 1f, 8), true);
+		sheet.addNote(new Note(new Pitch('d', 2), 1f, 8), true);
+		sheet.addNote(new Note(new Pitch('c', 2), 1f, 8), true);
+		sheet.addNote(new Note(new Pitch('a', 1), 1f, 32), true);
 	}
 }

@@ -8,8 +8,12 @@ public class Pitch {
 
 	public static final char[] notes = {'c', 'd', 'e', 'f', 'g', 'a', 'h'} ;
 	
+	public Pitch(char note, int octave) {
+		this(note, octave, Vorzeichen.PLAIN);
+	}
+	
 	//Convention to simplify things: if vorzeichen is B, it gets reduced to the lower note with vorzeichen sharp
-	public Pitch(char note, byte octave, byte vorzeichen) {
+	public Pitch(char note, int octave, byte vorzeichen) {
 		note = Character.toLowerCase(note);
 		/*
 		 * if (note < 'a' || note > 'h') throw new
@@ -39,7 +43,7 @@ public class Pitch {
 		}	
 		
 		this.note = note;
-		this.octave = octave;
+		this.octave = (byte)octave;
 		this.vorzeichen = vorzeichen;
 	}
 
