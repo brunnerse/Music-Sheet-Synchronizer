@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import AudioFile.WAVWriter;
 import AudioFile.WAVPlayer;
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.SourceDataLine;
 
 public class MusicSheet {
 
@@ -34,7 +36,6 @@ public class MusicSheet {
 		short[] sArray = new short[sampleRate * 60 / tempo / 4]; // tempo / 60 = quarters per second,
 																	// 1/4 = 1/16 per quarter
 		byte[] bArray = new byte[sArray.length * 2];
-		byte[] bArray2 = new byte[sArray.length * 2];
 		
 		try {
 			writer.open();
@@ -42,8 +43,14 @@ public class MusicSheet {
 			// steps in 1/16, 1 time means 1/64
 			Note lastNote = notes.get(notes.size() - 1);
 			int endTime = lastNote.getTime() + lastNote.getDuration();
+			int nextTime;
 			int timeIdx = 0;
-			for (int time = 0; time < endTime; time += 4) { //TODO
+			SourceDataLine line = AudioSystem.getSourceDataLine(new AudioFormat(sampleRate, 16, 1, true, false));
+			line.open();
+			line.start();
+			for (int time = 0; time < endTime; time = nextTime) { //TODO
+				nextTime = time + 4;
+				//Remove the notes from the last iteration
 				for (int x = 0; x < currentPlayedNotes.size(); ++x) {
 					int noteTime = currentPlayedNotes.get(x).getTime() - 4;
 					if (noteTime <= 0)
@@ -52,16 +59,22 @@ public class MusicSheet {
 						currentPlayedNotes.get(x).setTime(noteTime);
 				}
 				
+				while (notes.get(timeIdx).getTime() < nextTime) {
+					currentPlayedNotes.add(notes.get(timeIdx));
+					timeIdx++;
+				}
+				
 				for (int i = 0; i < sArray.length; ++i)
 					sArray[i] = 0;
 				for (Note n : currentPlayedNotes) {
-					FrequencyAnalyzer.getFrequencyPitch(n.getPitch()).read(bArray2, bArray2.length, n); 
+					FrequencyAnalyzer.getFrequencyPitch(n.getPitch()).read(bArray, bArray.length, n); 
 					/*
 					 * TODO: Idea: Instead of every note having its own pitch, you link each Note one pitch,
 					 * so you dont have to search for the right pitch everytime.
 					 */
+					line.write(bArray,  0,  bArray.length);
 					for (int x = 0; x < sArray.length; ++x) {
-						sArray[x] += (short)(n.getVolume() * (bArray2[x * 2] | (bArray2[x * 2 + 1] << 8)));
+						sArray[x] += (short)(n.getVolume() * (bArray[x * 2] | (bArray[x * 2 + 1] << 8)));
 					}
 				}
 				
@@ -71,14 +84,17 @@ public class MusicSheet {
 				}
 				writer.write(bArray, 0, bArray.length);
 			}
+			line.stop();
+			line.close();
 			writer.close();
+			System.out.println("playing..");
 			WAVPlayer.play(fileName);
 		} catch (IOException e) {
 			throw new Exception(((Exception) e).getMessage());
 		} finally {
 			writer.close();
 		}
-
+		
 	}
 
 	/**
