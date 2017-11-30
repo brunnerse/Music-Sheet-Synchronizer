@@ -32,7 +32,7 @@ public class Note {
 	}
 	
 	public Note(Pitch p, float volume, int duration) {
-		this(p, (byte)(volume * Byte.MAX_VALUE), duration, Articulation.PLAIN, 0);
+		this(p, volume, duration, Articulation.PLAIN, 0);
 	}
 	
 	public float getVolume() {

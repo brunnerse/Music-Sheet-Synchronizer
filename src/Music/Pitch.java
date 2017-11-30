@@ -194,6 +194,7 @@ public class Pitch {
 		public static final byte PLAIN = 0, B = 1, SHARP = -1;
 	};
 	
+	
 	private static class AudioPitch {
 		public static boolean onlyRawData = true;
 		private WAVReader reader;
@@ -238,9 +239,9 @@ public class Pitch {
 		
 		//function used for raw signal
 		private void readRaw(byte[] b, int length) {
-			System.out.println(frequency);
+			//System.out.println(frequency);
 			int numVals = length / 2;
-			double amplitude = 1000;
+			double amplitude = numVals / 4;
 			int idx;
 			for (idx = 0; idx < numVals; ++idx) {
 				short val = (short)(amplitude * Math.cos(2 *  (idx + curIdx) * frequency * Math.PI / sampleRate));

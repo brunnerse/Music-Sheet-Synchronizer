@@ -213,7 +213,9 @@ public abstract class AbstractFrequencyDisplay<T> extends FrequencyDisplay {
 					bData = bData1;
 				}
 				for (int i = 0; i < fReal.length; ++i) {
-					fReal[i] = (float)(bData[2*i] | (bData[2*i + 1] << 8));
+					int iVal = (bData[2 * i + 1] << 8) & 0xff00;
+					iVal |= bData[2 * i] & 0xff;
+					fReal[i] = (float)(short)(iVal);
 					fImag[i] = 0f;
 				}
 				FourierTransform.FFT(fReal,  fImag);

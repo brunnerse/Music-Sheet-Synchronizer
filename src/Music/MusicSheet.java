@@ -32,7 +32,7 @@ public class MusicSheet {
 		SourceDataLine line = AudioSystem.getSourceDataLine(Pitch.getAudioFormat());
 		
 		//number of 1/64 between each iteration, 4 means 4/64 = 1/16
-		final int stepTime = 4;
+		final int stepTime = 8;
 		
 		// enough space for stepTime/64 time
 		//tempo * 64 / 60 / 4  1/64 per sec =>> t = stepTime * 60 * 4 / tempo / 64 
@@ -55,12 +55,14 @@ public class MusicSheet {
 			for (int time = 0; time < endTime; time = nextTime) {
 				nextTime = time + stepTime;
 				//Remove the notes from the last iteration
+				System.out.print(currentPlayedNotes.size() + " -\t");
 				for (int x = 0; x < currentPlayedNotes.size(); ++x) {
-					int noteTime = currentPlayedNotes.get(x).getTime() - stepTime;
+					int noteTime = currentPlayedNotes.get(x).getDuration() - stepTime;
+					System.out.println("\t" + currentPlayedNotes.get(x) + "\t" + noteTime);
 					if (noteTime <= 0)
-						currentPlayedNotes.remove(x);
+						currentPlayedNotes.remove(x--); //x-- because the next element has index x
 					else
-						currentPlayedNotes.get(x).setTime(noteTime);
+						currentPlayedNotes.get(x).setDuration(noteTime);
 				}
 				//add new Notes that start at the current time
 				while (timeIdx < notes.size() && notes.get(timeIdx).getTime() < nextTime) {
@@ -70,11 +72,18 @@ public class MusicSheet {
 				
 				for (int i = 0; i < sArray.length; ++i)
 					sArray[i] = 0;
+				
 				for (Note n : currentPlayedNotes) {
 					n.getPitch().read(bArray, bArray.length, n); 
 					line.write(bArray,  0,  bArray.length);
 					for (int x = 0; x < sArray.length; ++x) {
-						sArray[x] += (short)(n.getVolume() * (bArray[x * 2] | (bArray[x * 2 + 1] << 8)));
+						int i = (bArray[x * 2 + 1] << 8) & 0xff00;
+						i = i | ((int)bArray[x * 2] & 0xff);
+						short sVal = (short)i;
+						sVal = (short)(sVal * n.getVolume());
+						sArray[x] +=  sVal; //TODO: to make Volume and  multiple notes possible, you have to take the DC OFFSET into consideration
+						//System.out.printf("%x - %x, %x\n",sVal , bArray[x * 2], bArray[x * 2 + 1]);
+						//TODO: Make that ugly jump between two notes go away
 					}
 				}
 				
@@ -85,7 +94,6 @@ public class MusicSheet {
 				}
 				writer.write(bArray, 0, bArray.length);
 			}
-			//System.out.println("passed this mark");
 		} finally {
 			line.stop();
 			line.close();
@@ -139,8 +147,15 @@ public class MusicSheet {
 		notes.add(n);
 	}
 	
+	/**
+	 * 
+	 * @param n: Note to be added to the note-Array
+	 * CAREFUL: The correct time in the note must already be set.
+	 * If the function should set it automatically to the next position, 
+	 * call MusicSheet.addNote(Note n, true);
+	 */
 	public void addNote(Note n) {
-		this.addNote(n, true);
+		this.addNote(n, false);
 	}
 
 	/**
