@@ -1,11 +1,9 @@
 package Music;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import AudioFile.WAVWriter;
 import AudioFile.WAVPlayer;
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.SourceDataLine;
 
@@ -29,12 +27,17 @@ public class MusicSheet {
 		if (notes.isEmpty())
 			return;
 		sortNotes(); //TODO: Avoid this if possible
-		final int sampleRate = 44100;
 		final String fileName = "temp - sheetfile.wav";
-		WAVWriter writer = new WAVWriter(fileName, new AudioFormat(sampleRate, 16, 1, true, false));
-		// enough space for 1/16 of time
-		short[] sArray = new short[sampleRate * 60 / tempo / 4]; // tempo / 60 = quarters per second,
-																	// 1/4 = 1/16 per quarter
+		WAVWriter writer = new WAVWriter(fileName, Pitch.getAudioFormat());
+		SourceDataLine line = AudioSystem.getSourceDataLine(Pitch.getAudioFormat());
+		
+		//number of 1/64 between each iteration, 4 means 4/64 = 1/16
+		final int stepTime = 4;
+		
+		// enough space for stepTime/64 time
+		//tempo * 64 / 60 / 4  1/64 per sec =>> t = stepTime * 60 * 4 / tempo / 64 
+		//number of samples = sampleRate * t = sampleRate * stepTime * 60 * 4 / 64 / temp0
+		short[] sArray = new short[(int)Pitch.getAudioFormat().getSampleRate() * stepTime * 60 * 4 / 64 / tempo]; // 
 		byte[] bArray = new byte[sArray.length * 2];
 		
 		try {
@@ -42,24 +45,25 @@ public class MusicSheet {
 			ArrayList<Note> currentPlayedNotes = new ArrayList<Note>();
 			// steps in 1/16, 1 time means 1/64
 			Note lastNote = notes.get(notes.size() - 1);
-			int endTime = lastNote.getTime() + lastNote.getDuration();
+			final int endTime = lastNote.getTime() + lastNote.getDuration();
 			int nextTime;
+			//current idx in the notelist where the note starts at the current time
 			int timeIdx = 0;
-			SourceDataLine line = AudioSystem.getSourceDataLine(new AudioFormat(sampleRate, 16, 1, true, false));
+			
 			line.open();
 			line.start();
-			for (int time = 0; time < endTime; time = nextTime) { //TODO
-				nextTime = time + 4;
+			for (int time = 0; time < endTime; time = nextTime) {
+				nextTime = time + stepTime;
 				//Remove the notes from the last iteration
 				for (int x = 0; x < currentPlayedNotes.size(); ++x) {
-					int noteTime = currentPlayedNotes.get(x).getTime() - 4;
+					int noteTime = currentPlayedNotes.get(x).getTime() - stepTime;
 					if (noteTime <= 0)
 						currentPlayedNotes.remove(x);
 					else
 						currentPlayedNotes.get(x).setTime(noteTime);
 				}
-				
-				while (notes.get(timeIdx).getTime() < nextTime) {
+				//add new Notes that start at the current time
+				while (timeIdx < notes.size() && notes.get(timeIdx).getTime() < nextTime) {
 					currentPlayedNotes.add(notes.get(timeIdx));
 					timeIdx++;
 				}
@@ -67,34 +71,29 @@ public class MusicSheet {
 				for (int i = 0; i < sArray.length; ++i)
 					sArray[i] = 0;
 				for (Note n : currentPlayedNotes) {
-					FrequencyAnalyzer.getFrequencyPitch(n.getPitch()).read(bArray, bArray.length, n); 
-					/*
-					 * TODO: Idea: Instead of every note having its own pitch, you link each Note one pitch,
-					 * so you dont have to search for the right pitch everytime.
-					 */
+					n.getPitch().read(bArray, bArray.length, n); 
 					line.write(bArray,  0,  bArray.length);
 					for (int x = 0; x < sArray.length; ++x) {
 						sArray[x] += (short)(n.getVolume() * (bArray[x * 2] | (bArray[x * 2 + 1] << 8)));
 					}
 				}
 				
+				//convert the short Array into the byte Array
 				for (int i = 0; i < sArray.length; ++i) {
 					bArray[i * 2] = (byte) sArray[i];
 					bArray[i * 2 + 1] = (byte) (sArray[i] >> 8);
 				}
 				writer.write(bArray, 0, bArray.length);
 			}
+			//System.out.println("passed this mark");
+		} finally {
 			line.stop();
 			line.close();
 			writer.close();
-			System.out.println("playing..");
-			WAVPlayer.play(fileName);
-		} catch (IOException e) {
-			throw new Exception(((Exception) e).getMessage());
-		} finally {
-			writer.close();
 		}
-		
+		System.out.println("playing..");
+		WAVPlayer.play(fileName);
+		System.out.println("stopped playing.");
 	}
 
 	/**
@@ -139,9 +138,13 @@ public class MusicSheet {
 		}
 		notes.add(n);
 	}
+	
+	public void addNote(Note n) {
+		this.addNote(n, true);
+	}
 
 	/**
-	 * sorts the Notes in the Note Array by time
+	 * sorts the Notes in the Note Array by time and duration
 	 */
 	public void sortNotes() {
 		// using insertion sort

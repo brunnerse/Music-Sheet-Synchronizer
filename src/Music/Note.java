@@ -8,6 +8,14 @@ public class Note {
 	private final Pitch p;
 	private final byte articulation; //is in format from Articulation
 	
+	/**
+	 * 
+	 * @param p Pitch of the Note
+	 * @param volume Value between 0 and 1
+	 * @param duration in 1/64, e.g. 16 = 1/4
+	 * @param articulation from Note.Articulation
+	 * @param time in 1/64 from the start
+	 */
 	public Note(Pitch p, float volume, int duration, byte articulation, int time) {
 		this.p = p;
 		this.volume = (byte)(volume * Byte.MAX_VALUE);

@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
 
-import Music.FrequencyAnalyzer;
+import Music.Pitch;
 
 @SuppressWarnings("serial")
 public class AudioAnalysisWindow extends JFrame implements ActionListener {
@@ -111,7 +111,7 @@ public class AudioAnalysisWindow extends JFrame implements ActionListener {
 					}
 					if (prevFreq != (freq = signalDisplay.getLoudestFreq())) {
 						lMaxFreq.setText(String.format("\t\tLoudest Frequency: %.1f Hz (Note: %s), Amp %.4f",
-								freq, FrequencyAnalyzer.getPitchFromFreq(freq), signalDisplay.getAmpFromFreq(freq)));
+								freq, Pitch.getPitchFromFreq(freq), signalDisplay.getAmpFromFreq(freq)));
 					}
 					
 					
