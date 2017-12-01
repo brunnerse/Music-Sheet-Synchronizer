@@ -32,6 +32,7 @@ public class MusicSheet {
 		SourceDataLine line = AudioSystem.getSourceDataLine(Pitch.getAudioFormat());
 		
 		//number of 1/64 between each iteration, 4 means 4/64 = 1/16
+		//is the lowest accuracy, for perfect results set to 1
 		final int stepTime = 8;
 		
 		// enough space for stepTime/64 time
@@ -57,25 +58,24 @@ public class MusicSheet {
 				//Remove the notes from the last iteration
 				System.out.print(currentPlayedNotes.size() + " -\t");
 				for (int x = 0; x < currentPlayedNotes.size(); ++x) {
-					int noteTime = currentPlayedNotes.get(x).getDuration() - stepTime;
-					System.out.println("\t" + currentPlayedNotes.get(x) + "\t" + noteTime);
-					if (noteTime <= 0)
+					int noteDuration = currentPlayedNotes.get(x).getDuration() - stepTime;
+					System.out.println("\t" + currentPlayedNotes.get(x) + "\t" + noteDuration);
+					if (noteDuration <= 0)
 						currentPlayedNotes.remove(x--); //x-- because the next element has index x
 					else
-						currentPlayedNotes.get(x).setDuration(noteTime);
+						currentPlayedNotes.get(x).setDuration(noteDuration);
 				}
 				//add new Notes that start at the current time
 				while (timeIdx < notes.size() && notes.get(timeIdx).getTime() < nextTime) {
 					currentPlayedNotes.add(notes.get(timeIdx));
 					timeIdx++;
 				}
-				
 				for (int i = 0; i < sArray.length; ++i)
 					sArray[i] = 0;
 				
 				for (Note n : currentPlayedNotes) {
 					n.getPitch().read(bArray, bArray.length, n); 
-					line.write(bArray,  0,  bArray.length);
+					//line.write(bArray,  0,  bArray.length);
 					for (int x = 0; x < sArray.length; ++x) {
 						int i = (bArray[x * 2 + 1] << 8) & 0xff00;
 						i = i | ((int)bArray[x * 2] & 0xff);
@@ -83,7 +83,7 @@ public class MusicSheet {
 						sVal = (short)(sVal * n.getVolume());
 						sArray[x] +=  sVal; //TODO: to make Volume and  multiple notes possible, you have to take the DC OFFSET into consideration
 						//System.out.printf("%x - %x, %x\n",sVal , bArray[x * 2], bArray[x * 2 + 1]);
-						//TODO: Make that ugly jump between two notes go away
+						//TODO: Make ugly jump go away, see: Note_Frequency_Playback.java
 					}
 				}
 				
@@ -94,6 +94,27 @@ public class MusicSheet {
 				}
 				writer.write(bArray, 0, bArray.length);
 			}
+			
+			int sampleRate = 44100;
+	        byte[] b = new byte[sampleRate * 4];
+	        short[] s = new short[sampleRate * 2];
+	        
+	        int freq1 = 440, freq2 = 220;
+	        
+	        for (int i = 0; i < sampleRate; ++i) {
+	        	s[i] = (short)(10000 * Math.cos(2 * Math.PI * freq1 * i / sampleRate));
+	        }
+	        for (int i = 0; i < sampleRate; ++i) {
+	        	s[i + sampleRate] = (short)(10000 * Math.cos(2 * Math.PI * i * freq2 / sampleRate));
+	        }
+
+	        for (int i = 0; i < s.length; ++i) {
+	        	b[2 * i] = (byte)s[i];
+	        	b[2 * i + 1] = (byte)(s[i] >> 8);
+	        }
+	        
+	        writer.write(b, 0, b.length / 2);
+	        writer.write(b, b.length / 2, b.length / 2);
 		} finally {
 			line.stop();
 			line.close();

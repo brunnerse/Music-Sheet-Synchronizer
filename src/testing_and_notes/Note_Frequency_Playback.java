@@ -5,50 +5,46 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
+/**
+ * NOTE: The ugly jump between two notes is when two consecutive PCM Values are too far apart, e.g. 10000 and 1000
+ *TODO: Make one note fastly more silent and then the consecutive one fastly more loud to get a fluent transition
+ * see the current example in main()
+ */
 public class Note_Frequency_Playback {
 
     public static void main(String[] args) throws LineUnavailableException {
-        final AudioFormat af =
-            new AudioFormat(Note.SAMPLE_RATE, 8, 1, true, true);
+    	int sampleRate = 44100;
+        final AudioFormat af =  new AudioFormat(sampleRate, 16, 1, true, false);
         SourceDataLine line = AudioSystem.getSourceDataLine(af);
-        line.open(af, Note.SAMPLE_RATE);
+        line.open(af, 44100);
         line.start();
-        for  (Note n : Note.values()) {
-            play(line, n, 500);
-            play(line, Note.REST, 10);
+        
+        byte[] b = new byte[sampleRate * 4];
+        short[] s = new short[sampleRate * 2];
+        
+        int freq1 = 440, freq2 = 220;
+        
+        for (int i = 0; i < sampleRate; ++i) {
+        	s[i] = (short)(10000 * Math.cos(2 * Math.PI * freq1 * i / sampleRate));
         }
-        line.drain();
+       
+        s[sampleRate] = -10000;
+        
+        for (int i = 1; i < sampleRate; ++i) {
+        	s[i + sampleRate] = (short)(10000 * Math.cos(2 * i * freq2 * Math.PI / sampleRate));
+        }
+        System.out.println(s[sampleRate - 1] + "\t" + s[sampleRate]);
+        
+        for (int i = 0; i < s.length; ++i) {
+        	b[2 * i] = (byte)s[i];
+        	b[2 * i + 1] = (byte)(s[i] >> 8);
+        }
+        
+        line.write(b, 0, b.length / 2);
+        line.write(b, b.length / 2, b.length / 2);
+        line.stop();
         line.close();
     }
 
-    private static void play(SourceDataLine line, Note note, int ms) {
-        ms = Math.min(ms, Note.SECONDS * 1000);
-        int length = Note.SAMPLE_RATE * ms / 1000;
-        line.write(note.data(), 0, length);
-    }
 }
 
-enum Note {
-
-    REST, A4, A4$, B4, C4, C4$, D4, D4$, E4, F4, F4$, G4, G4$, A5;
-    public static final int SAMPLE_RATE = 16 * 1024; // ~16KHz
-    public static final int SECONDS = 2;
-    private byte[] sin = new byte[SECONDS * SAMPLE_RATE];
-
-    Note() {
-        int n = this.ordinal();
-        if (n > 0) {
-            double exp = ((double) n - 1) / 12d;
-            double f = 440d * Math.pow(2d, exp);
-            for (int i = 0; i < sin.length; i++) {
-                double period = (double)SAMPLE_RATE / f;
-                double angle = 2.0 * Math.PI * i / period;
-                sin[i] = (byte)(Math.sin(angle) * 127f);
-            }
-        }
-    }
-
-    public byte[] data() {
-        return sin;
-    }
-}

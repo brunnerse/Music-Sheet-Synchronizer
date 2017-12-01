@@ -241,7 +241,7 @@ public class Pitch {
 		private void readRaw(byte[] b, int length) {
 			//System.out.println(frequency);
 			int numVals = length / 2;
-			double amplitude = numVals / 4;
+			double amplitude = 10000;
 			int idx;
 			for (idx = 0; idx < numVals; ++idx) {
 				short val = (short)(amplitude * Math.cos(2 *  (idx + curIdx) * frequency * Math.PI / sampleRate));

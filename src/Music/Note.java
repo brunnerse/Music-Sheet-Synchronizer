@@ -28,11 +28,15 @@ public class Note {
 	 * to be used when the time of the Note is automatically set by MusicSheet
 	 */
 	public Note(Pitch p, float volume, int duration, byte articulation) {
-		this(p, (byte)(volume * Byte.MAX_VALUE), duration, articulation, 0);
+		this(p, volume, duration, articulation, 0);
 	}
 	
 	public Note(Pitch p, float volume, int duration) {
 		this(p, volume, duration, Articulation.PLAIN, 0);
+	}
+	
+	public Note(Pitch p, float volume, int duration, int time) {
+		this(p, volume, duration, Articulation.PLAIN, time);
 	}
 	
 	public float getVolume() {
