@@ -24,14 +24,15 @@ public class Note_Frequency_Playback {
         
         int freq1 = 440, freq2 = 220;
         
+        //Sin Wave is better because it doesnt make a step at the start
         for (int i = 0; i < sampleRate; ++i) {
-        	s[i] = (short)(10000 * Math.cos(2 * Math.PI * freq1 * i / sampleRate));
+        	s[i] = (short)(10000 * Math.sin(2 * Math.PI * freq1 * i / sampleRate));
         }
-       
-        s[sampleRate] = -10000;
+       //s[sampleRate - 1] is 10000, s[sampleRate + 1] is 10000
+        s[sampleRate] = 0; //difference between two points should be max. 500
         
         for (int i = 1; i < sampleRate; ++i) {
-        	s[i + sampleRate] = (short)(10000 * Math.cos(2 * i * freq2 * Math.PI / sampleRate));
+        	s[i + sampleRate] = (short)(10000 * Math.sin(2 * i * freq2 * Math.PI / sampleRate));
         }
         System.out.println(s[sampleRate - 1] + "\t" + s[sampleRate]);
         

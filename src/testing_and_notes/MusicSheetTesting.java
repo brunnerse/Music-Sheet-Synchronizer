@@ -16,6 +16,7 @@ public class MusicSheetTesting {
 			sheet.playSheet();
 		} catch (Exception e) {
 			System.err.println("something went wrong: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	

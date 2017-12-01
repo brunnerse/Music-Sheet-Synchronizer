@@ -4,8 +4,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import AudioFile.WAVWriter;
 import AudioFile.WAVPlayer;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.SourceDataLine;
+//import javax.sound.sampled.AudioSystem;
+//import javax.sound.sampled.SourceDataLine;
+import Tools.ArrayConversion;
 
 public class MusicSheet {
 
@@ -24,107 +25,14 @@ public class MusicSheet {
 
 	// Creates a WAV file and writes into it.
 	public void playSheet() throws Exception {
-		if (notes.isEmpty())
-			return;
-		sortNotes(); //TODO: Avoid this if possible
-		final String fileName = "temp - sheetfile.wav";
-		WAVWriter writer = new WAVWriter(fileName, Pitch.getAudioFormat());
-		SourceDataLine line = AudioSystem.getSourceDataLine(Pitch.getAudioFormat());
+		String fileName = "temp - sheetfile.wav";
+		SheetToWAV.WriteSheetToWAV(this, fileName);
 		
-		//number of 1/64 between each iteration, 4 means 4/64 = 1/16
-		//is the lowest accuracy, for perfect results set to 1
-		final int stepTime = 8;
-		
-		// enough space for stepTime/64 time
-		//tempo * 64 / 60 / 4  1/64 per sec =>> t = stepTime * 60 * 4 / tempo / 64 
-		//number of samples = sampleRate * t = sampleRate * stepTime * 60 * 4 / 64 / temp0
-		short[] sArray = new short[(int)Pitch.getAudioFormat().getSampleRate() * stepTime * 60 * 4 / 64 / tempo]; // 
-		byte[] bArray = new byte[sArray.length * 2];
-		
-		try {
-			writer.open();
-			ArrayList<Note> currentPlayedNotes = new ArrayList<Note>();
-			// steps in 1/16, 1 time means 1/64
-			Note lastNote = notes.get(notes.size() - 1);
-			final int endTime = lastNote.getTime() + lastNote.getDuration();
-			int nextTime;
-			//current idx in the notelist where the note starts at the current time
-			int timeIdx = 0;
-			
-			line.open();
-			line.start();
-			for (int time = 0; time < endTime; time = nextTime) {
-				nextTime = time + stepTime;
-				//Remove the notes from the last iteration
-				System.out.print(currentPlayedNotes.size() + " -\t");
-				for (int x = 0; x < currentPlayedNotes.size(); ++x) {
-					int noteDuration = currentPlayedNotes.get(x).getDuration() - stepTime;
-					System.out.println("\t" + currentPlayedNotes.get(x) + "\t" + noteDuration);
-					if (noteDuration <= 0)
-						currentPlayedNotes.remove(x--); //x-- because the next element has index x
-					else
-						currentPlayedNotes.get(x).setDuration(noteDuration);
-				}
-				//add new Notes that start at the current time
-				while (timeIdx < notes.size() && notes.get(timeIdx).getTime() < nextTime) {
-					currentPlayedNotes.add(notes.get(timeIdx));
-					timeIdx++;
-				}
-				for (int i = 0; i < sArray.length; ++i)
-					sArray[i] = 0;
-				
-				for (Note n : currentPlayedNotes) {
-					n.getPitch().read(bArray, bArray.length, n); 
-					//line.write(bArray,  0,  bArray.length);
-					for (int x = 0; x < sArray.length; ++x) {
-						int i = (bArray[x * 2 + 1] << 8) & 0xff00;
-						i = i | ((int)bArray[x * 2] & 0xff);
-						short sVal = (short)i;
-						sVal = (short)(sVal * n.getVolume());
-						sArray[x] +=  sVal; //TODO: to make Volume and  multiple notes possible, you have to take the DC OFFSET into consideration
-						//System.out.printf("%x - %x, %x\n",sVal , bArray[x * 2], bArray[x * 2 + 1]);
-						//TODO: Make ugly jump go away, see: Note_Frequency_Playback.java
-					}
-				}
-				
-				//convert the short Array into the byte Array
-				for (int i = 0; i < sArray.length; ++i) {
-					bArray[i * 2] = (byte) sArray[i];
-					bArray[i * 2 + 1] = (byte) (sArray[i] >> 8);
-				}
-				writer.write(bArray, 0, bArray.length);
-			}
-			
-			int sampleRate = 44100;
-	        byte[] b = new byte[sampleRate * 4];
-	        short[] s = new short[sampleRate * 2];
-	        
-	        int freq1 = 440, freq2 = 220;
-	        
-	        for (int i = 0; i < sampleRate; ++i) {
-	        	s[i] = (short)(10000 * Math.cos(2 * Math.PI * freq1 * i / sampleRate));
-	        }
-	        for (int i = 0; i < sampleRate; ++i) {
-	        	s[i + sampleRate] = (short)(10000 * Math.cos(2 * Math.PI * i * freq2 / sampleRate));
-	        }
-
-	        for (int i = 0; i < s.length; ++i) {
-	        	b[2 * i] = (byte)s[i];
-	        	b[2 * i + 1] = (byte)(s[i] >> 8);
-	        }
-	        
-	        writer.write(b, 0, b.length / 2);
-	        writer.write(b, b.length / 2, b.length / 2);
-		} finally {
-			line.stop();
-			line.close();
-			writer.close();
-		}
 		System.out.println("playing..");
 		WAVPlayer.play(fileName);
 		System.out.println("stopped playing.");
 	}
-
+	
 	/**
 	 * @return tempo which is saved in quarters per minute
 	 */
@@ -259,4 +167,122 @@ public class MusicSheet {
 		}
 	}
 
+	private static abstract class SheetToWAV {
+		
+		//the slope value at which the volume is decreasing at the end of the note
+		private static final short step = 200;
+		//how long the note plays if it's stacatto, plain or legato in parts of the full length
+		private static final float []stopArticulation = {0.95f, 0.1f, 0.99f}; //PLAIN = 0.95, STACCATO = 0.1, LEGATO = 0.99
+		
+		private static short DCOffset = 0; //TODO: Check when implementing audio
+		
+		public static void WriteSheetToWAV(MusicSheet sheet, String fileName) throws Exception {
+			
+			if (sheet.notes.isEmpty())
+				return;
+			sheet.sortNotes(); //TODO: Avoid this if possible
+			WAVWriter writer = new WAVWriter(fileName, Pitch.getAudioFormat());
+			//SourceDataLine line = AudioSystem.getSourceDataLine(Pitch.getAudioFormat());
+			
+			//number of 1/64 between each iteration, 4 means 4/64 = 1/16
+			//is the lowest accuracy, for perfect results set to 1
+			final int stepTime = 4;
+			
+			// enough space for stepTime/64 time
+			//tempo * 64 / 60 / 4  1/64 per sec =>> t = stepTime * 60 * 4 / tempo / 64 
+			//number of samples = sampleRate * t = sampleRate * stepTime * 60 * 4 / 64 / temp0
+			short[] sArray = new short[(int)Pitch.getAudioFormat().getSampleRate() * stepTime * 60 * 4 / 64 / sheet.tempo]; // 
+			byte[] bArray = new byte[sArray.length * 2];
+			
+			try {
+				writer.open();
+				//currentNoteDurations has same size as currentPlayedNotes, the idx of a note corresponds to the duration left
+				ArrayList<NoteDurationPair> currentPlayedNotes = new ArrayList<NoteDurationPair>();
+				// steps in 1/16, 1 time means 1/64
+				Note lastNote = sheet.notes.get(sheet.notes.size() - 1);
+				final int endTime = lastNote.getTime() + lastNote.getDuration();
+				int nextTime;
+				//current idx in the notelist where the note starts at the current time
+				int timeIdx = 0;
+				
+				//line.open();
+				//line.start();
+				for (int time = 0; time < endTime; time = nextTime) {
+					nextTime = time + stepTime;
+					//Remove the notes from the last iteration
+					System.out.print(currentPlayedNotes.size() + " -\t");
+					for (int x = 0; x < currentPlayedNotes.size(); ++x) {
+						int noteDuration = currentPlayedNotes.get(x).duration - stepTime;
+						System.out.println("\t" + currentPlayedNotes.get(x) + "\t" + noteDuration);
+						if (noteDuration <= 0)
+							currentPlayedNotes.remove(x--); //x-- because the next element has index x
+						else
+							currentPlayedNotes.get(x).duration = noteDuration;
+					}
+					//add new Notes that start at the current time
+					while (timeIdx < sheet.notes.size() && sheet.notes.get(timeIdx).getTime() < nextTime) {
+						currentPlayedNotes.add(new NoteDurationPair(sheet.notes.get(timeIdx), sheet.notes.get(timeIdx).getDuration()));
+						timeIdx++;
+					}
+					for (int i = 0; i < sArray.length; ++i)
+						sArray[i] = 0;
+					
+					for (NoteDurationPair pair : currentPlayedNotes) {
+						Note n = pair.note;
+						n.getPitch().read(bArray, bArray.length, n);
+						applyArticulation(bArray, pair);
+						//line.write(bArray,  0,  bArray.length);
+						for (int x = 0; x < sArray.length; ++x) {
+							short sVal = ArrayConversion.reinterpByteToShort(bArray[x * 2], bArray[x * 2 + 1]);
+							sVal = (short)(sVal * n.getVolume());
+							sArray[x] +=  sVal; //TODO: to make Volume and  multiple notes possible, you have to take the DC OFFSET into consideration
+							//TODO: Make ugly jump go away, see: Note_Frequency_Playback.java
+						}
+					}
+					
+					//convert the short Array into the byte Array
+					ArrayConversion.reinterpShortToByte(sArray,  bArray);
+					writer.write(bArray, 0, bArray.length);
+				}
+			} finally {
+				//line.stop();
+				//line.close();
+				writer.close();
+			}
+		}
+		
+		/**
+		 * Function to be used by playSheet 
+		 */
+		private static void applyArticulation(byte[] b, NoteDurationPair p) {
+			//TODO
+			//modify audio data to make the note legato or staccato
+			int i = (int)(stopArticulation[p.note.getArticulation()] * b.length);
+			if (i % 2 == 1)
+				--i;
+			boolean reachedZero = false;
+			short s;
+			for (;i < b.length; i += 2) {
+				if (reachedZero) {
+					s = DCOffset;
+				} else {
+					s = ArrayConversion.reinterpByteToShort(b[i], b[i + 1]);
+					if (Math.abs(s - DCOffset) <= step)
+						reachedZero = true;
+				}
+				ArrayConversion.reinterpShortToByte(s, b, i);
+			}
+		}
+		
+		private static class NoteDurationPair {
+			public Note note;
+			public int duration;
+			
+			public NoteDurationPair(Note note, int duration) {
+				this.note = note;
+				this.duration = duration;
+			}
+		}
+		
+	}
 }

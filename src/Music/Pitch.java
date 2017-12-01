@@ -1,10 +1,9 @@
 package Music;
 
 import java.io.IOException;
-
 import javax.sound.sampled.AudioFormat;
-
 import AudioFile.WAVReader;
+import Tools.ArrayConversion;
 
 /**
  * 
@@ -244,9 +243,8 @@ public class Pitch {
 			double amplitude = 10000;
 			int idx;
 			for (idx = 0; idx < numVals; ++idx) {
-				short val = (short)(amplitude * Math.cos(2 *  (idx + curIdx) * frequency * Math.PI / sampleRate));
-				b[idx * 2] = (byte)val;
-				b[idx * 2 + 1] = (byte)(val >> 8);
+				ArrayConversion.reinterpShortToByte((short)(amplitude * Math.sin(2 *  (idx + curIdx) * frequency * Math.PI / sampleRate)), 
+						b, idx * 2);
 			}
 			curIdx += idx;
 		}
