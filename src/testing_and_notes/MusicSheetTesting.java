@@ -29,11 +29,14 @@ public class MusicSheetTesting {
 		sheet.addNote(new Note(Pitch.getPitch('h', 1), 0.5f, 8, Note.Articulation.STACCATO), true);
 		sheet.addNote(new Note(Pitch.getPitch('d', 2), 1f, 8), true);
 		sheet.addNote(new Note(Pitch.getPitch('c', 2), 0.5f, 8), true);
-		sheet.addNote(new Note(Pitch.getPitch('a', 1), 1f, 64), true);
-		
+		sheet.addNote(new Note(Pitch.getPitch('a', 1), 1f, 32), true);
+		sheet.addNote(new Note(Pitch.getPitch('a', 0), 1f, 8, 64));
+		sheet.addNote(new Note(Pitch.getPitch('e', 1), 1f, 8), true);
+		sheet.addNote(new Note(Pitch.getPitch('a', 1), 1f, 8), true);
+		sheet.addNote(new Note(Pitch.getPitch('c',  1), 1f, 8), true); //TODO ERROR: Last note doesnt get played
 		//notes that play parallel
 		sheet.addNote(new Note(Pitch.getPitch('e', 1), 0.5f, 32, 0));
-		sheet.addNote(new Note(Pitch.getPitch('a', 0), 1f, 64, 64));
-		sheet.addNote(new Note(Pitch.getPitch('a', -1), 1f, 64, 64));
+		sheet.addNote(new Note(Pitch.getPitch('a', -1), 1f, 32, 64));
+		sheet.addNote(new Note(Pitch.getPitch('a',  -2), 1f, 32, 64));
 	}
 }

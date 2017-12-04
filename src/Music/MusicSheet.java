@@ -16,10 +16,10 @@ public class MusicSheet {
 	private int tempo = 60;
 
 	public MusicSheet(BufferedImage[] images) {
-		this.scanSheet(images);
+		//this.analyseSheet(images);
 	}
 
-	public void scanSheet(BufferedImage[] images) {
+	public void analyseSheet(BufferedImage[] images) {
 
 	}
 
@@ -214,6 +214,7 @@ public class MusicSheet {
 				// steps in 1/16, 1 time means 1/64
 				Note lastNote = sheet.notes.get(sheet.notes.size() - 1);
 				final int endTime = lastNote.getTime() + lastNote.getDuration();
+				System.out.println(lastNote + "\t" + endTime);
 				int nextTime;
 				// current idx in the notelist where the note starts at the current time
 				int timeIdx = 0;
@@ -223,21 +224,22 @@ public class MusicSheet {
 				for (int time = 0; time < endTime; time = nextTime) {
 					nextTime = time + stepTime;
 					// Remove the notes from the last iteration
-					System.out.print(currentPlayedNotes.size() + " -\t");
+					//System.out.print(currentPlayedNotes.size() + " -\t");
 					for (int x = 0; x < currentPlayedNotes.size(); ++x) {
 						int noteDuration = currentPlayedNotes.get(x).duration - stepTime;
-						System.out.println("\t" + currentPlayedNotes.get(x) + "\t" + noteDuration);
+						//System.out.println("\t" + currentPlayedNotes.get(x) + "\t" + noteDuration);
 						if (noteDuration <= 0)
 							currentPlayedNotes.remove(x--); // x-- because the next element has index x
 						else
 							currentPlayedNotes.get(x).duration = noteDuration;
 					}
-					// add new Notes that start at the current time
+					// add new Notes that start in the current period (between time and nextTime)
 					while (timeIdx < sheet.notes.size() && sheet.notes.get(timeIdx).getTime() < nextTime) {
 						currentPlayedNotes.add(
 								new NoteDurationPair(sheet.notes.get(timeIdx), sheet.notes.get(timeIdx).getDuration()));
 						timeIdx++;
 					}
+					
 					for (int i = 0; i < sArray.length; ++i)
 						sArray[i] = 0;
 
@@ -285,7 +287,7 @@ public class MusicSheet {
 
 			if (i > b.length) { // the point at where the note ends comes in a later cicle
 				return;
-			} else if (i < 0) { // the point at where the note ends already passed
+			} else if (i < -100) { // the point at where the note ends already passed
 				byte []bDCOff = new byte[2];
 				ArrayConversion.reinterpShortToByte(DCOffset, bDCOff);
 				for (int idx = 0; idx < b.length; idx += 2) {
@@ -293,6 +295,7 @@ public class MusicSheet {
 					b[idx + 1] = bDCOff[1];
 				}
 			} else {
+				float volume = 1f, volStep = 0.01f;
 				boolean reachedZero = false;
 				short s;
 				for (; i < b.length; i += 2) {
@@ -300,7 +303,9 @@ public class MusicSheet {
 						s = DCOffset;
 					} else {
 						s = ArrayConversion.reinterpByteToShort(b[i], b[i + 1]);
-						if (Math.abs(s - DCOffset) <= step)
+						volume -= volStep;
+						s = (short)(volume * s);
+						if (volume <= 0f)
 							reachedZero = true;
 					}
 					ArrayConversion.reinterpShortToByte(s, b, i);
@@ -318,5 +323,9 @@ public class MusicSheet {
 			}
 		}
 
+	}
+
+	private static abstract class SheetAnalyser {
+		
 	}
 }

@@ -73,6 +73,10 @@ public class Note {
 		public static final byte PLAIN = 0, STACCATO = 1, LEGATO = 2;
 	};
 	
+	@Override
+	public String toString() {
+		return this.p.toString() + " - time: " + time + " - duration: " + duration;
+	}
 	
 	public static float getVolumefromNotation(String vol) throws IllegalArgumentException {
 		if (vol.compareToIgnoreCase("ff") == 0) {
