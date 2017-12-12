@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.image.BufferedImage;
@@ -64,12 +66,21 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		public void paintComponent(Graphics g) {
 			g.setColor(new Color(255, 255, 255));
 			g.fillRect(0, 0, this.getWidth(), this.getHeight());
-
+			
 			int scaledUpperYVal = (int) (upperYVal * scaleFactor);
 			int yPos = 0;
+			
+			 Graphics2D g2d = (Graphics2D) g;
+			 g2d.setRenderingHint(
+                     RenderingHints.KEY_ANTIALIASING,
+                     RenderingHints.VALUE_ANTIALIAS_ON);
+			 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+					 RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+			 
 			for (BufferedImage img : images) {
 				int dy2 = yPos + img.getHeight() * (int) (this.getWidth() * scaleFactor) / img.getWidth();
-				g.drawImage(img, (int) (this.getWidth() * (1f - scaleFactor)) / 2 - xOffset, yPos - scaledUpperYVal,
+				
+				g2d.drawImage(img, (int) (this.getWidth() * (1f - scaleFactor)) / 2 - xOffset, yPos - scaledUpperYVal,
 						(int) (this.getWidth() * (1f + scaleFactor)) / 2 - xOffset, dy2 - scaledUpperYVal, 0, 0,
 						img.getWidth(), img.getHeight(), null);
 				yPos = dy2;

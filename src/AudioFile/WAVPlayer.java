@@ -35,6 +35,7 @@ public class WAVPlayer {
 			} catch (InterruptedException e) {
 			}
 		}
+		line.drain();
 		System.out.println("Song finished.");
 		line.close();
 		wp.close();

@@ -16,7 +16,7 @@ public class MainEntryPoint {
 		startImageScroller();
 	}
 
-	public static void startImageScroller() {
+	public static BufferedImage[] startImageScroller() {
 		JFrame f = new JFrame("ImageScroller");
 
 		ImageScroller is = new ImageScroller(800, 700, true);
@@ -25,7 +25,7 @@ public class MainEntryPoint {
 			images = PDFExtractor.getScreenshotsFromFile("PDF-Files/Arrival to Earth.pdf");
 		} catch (IOException e) {
 			System.err.println("Couldnt extract images from PDF File: " + e.getMessage());
-			return;
+			return null;
 		}
 		for (BufferedImage i : images) {
 			is.addImage(i);
@@ -39,5 +39,7 @@ public class MainEntryPoint {
 		f.add(is);
 		f.pack();
 		f.setVisible(true);
+		
+		return images;
 	}
 }

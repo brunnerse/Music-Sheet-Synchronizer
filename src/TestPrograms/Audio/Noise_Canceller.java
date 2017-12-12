@@ -9,10 +9,11 @@ import javax.sound.sampled.TargetDataLine;
 //This doesnt work yet because the input signal is too delayed.
 public class Noise_Canceller {
 
+	private static int sampleNum = 3000;
 	public static void main(String args[]) {
 		final int sampleSize = 2;
 		AudioFormat format = new AudioFormat(44100, sampleSize * 8, 1, true, false);
-		byte b[], b1[] = new byte[sampleSize * 50], b2[] = new byte[sampleSize * 50];
+		byte b[], b1[] = new byte[sampleSize * sampleNum], b2[] = new byte[sampleSize * sampleNum];
 		int i;
 		try {
 			TargetDataLine tLine = AudioSystem.getTargetDataLine(format);
@@ -24,7 +25,6 @@ public class Noise_Canceller {
 			tLine.start();
 			sLine.start();
 			
-			//float DCOffset = getDCOffset(tLine);
 			
 			b = b1;
 			tLine.read(b, 0, b.length);
@@ -39,7 +39,6 @@ public class Noise_Canceller {
 				
 				for (int idx = 0; idx < b.length; idx += sampleSize) {
 					i = b[idx] | (b[idx + 1] << 8);
-					//i = 2 * (int)(DCOffset * b.length / sampleSize) - i; //DCOffset - (i - DCOffset)
 					i = -i;
 					b[0] = (byte)(i & 0xff);
 					b[1] = (byte)((i & 0xff00) >> 8);

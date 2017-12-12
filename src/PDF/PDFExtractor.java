@@ -31,7 +31,7 @@ public class PDFExtractor {
 
 		PDFRenderer renderer = new PDFRenderer(document);
 		for (int i = 0; i < document.getNumberOfPages(); ++i) {
-			images.add(renderer.renderImage(i, 3f));
+			images.add(renderer.renderImage(i, 4f));
 		}
 		BufferedImage[] imgArray = new BufferedImage[images.size()];
 		for (int i = 0; i < imgArray.length; ++i) {

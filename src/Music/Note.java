@@ -1,5 +1,13 @@
 package Music;
 
+/**
+ * @author Severin
+ * Constructors:
+ * 	Note(Pitch p, float volume, int duration, byte articulation, int time)
+ * 	Note(Pitch p, float volume, int duration, byte articulation)
+ *	Note(Pitch p, float volume, int duration)
+ *	Note(Pitch p, float volume, int duration, int time)
+ */
 public class Note {
 	private final byte volume; //0 corresponding to lowest volume, 127 highest volume
 	private byte duration; //should be multiples of 1/64 (which is seen as the lowest duration possible)
