@@ -219,7 +219,7 @@ public abstract class AbstractFrequencyDisplay<T> extends FrequencyDisplay {
 					fImag[i] = 0f;
 				}
 				FourierTransform.FFT(fReal,  fImag);
-				FourierTransform.GetAmplitudes(fReal,  fReal, amps);
+				FourierTransform.GetAmplitudes(fReal,  fImag, amps);
 				repaint();
 				try {
 					tRead.join();
