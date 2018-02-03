@@ -42,26 +42,39 @@ public abstract class AbstractFrequencyDisplay<T> extends FrequencyDisplay {
 	private int maxAmplitudeLetters;  //The Number of letters maxAmp has
 	private int axisLenX, axisLenY;
 	
-	protected AudioUpdater audioUpdaterThread;
+	protected LineReader lineReaderThread;
+	
+	private float timeInterval;
+	private int sampleInterval;
+	public enum INTERVAL { SHORTEST, LONGEST, DEFAULT};
+	
+	private float[][] realArrays, imgArrays;
+	int nextArrayIdx = 0;
+	byte[] audioData;
+	int audioDataIdx;
 
-	public AbstractFrequencyDisplay(float precision, int minFrequency, int maxFrequency, int width, int height) {
+	public AbstractFrequencyDisplay(float precision, int minFrequency, int maxFrequency, float timeInterval, int width, int height) {
 		super();
 		this.minFreq = minFrequency;
 		this.maxFreq = maxFrequency;
+		this.timeInterval = timeInterval;
 		this.setBackground(bgColor);
 		this.setPrecision(precision);
 		this.setBrightColorTheme();
 		this.setPreferredSize(new Dimension(width, height));
-		
 		MouseDragManager m = new MouseDragManager();
 		this.addMouseMotionListener(m);
 		this.addMouseListener(m);
 		this.setVisible(true);
 	}
+	public AbstractFrequencyDisplay(float precision, int minFrequency, int maxFrequency, INTERVAL timeInterval, int width, int height) {
+		this(precision, minFrequency, maxFrequency, 
+				timeInterval == INTERVAL.SHORTEST ? 0.1f : (timeInterval == INTERVAL.LONGEST ? Float.MAX_VALUE : 0.5f), width, height);
+	}
 
 	//abstract functions
 	//This function is suppoed to fill the data array from the data of T
-	protected abstract void readLine(byte[] data);
+	protected abstract void readLine(byte[] data, int off, int len);
 	protected abstract void openLine() throws Exception;
 	protected abstract void closeLine();
 	//This method is supposed to initialise T this.line and AudioFormat this.format
@@ -78,16 +91,37 @@ public abstract class AbstractFrequencyDisplay<T> extends FrequencyDisplay {
 			throw new RuntimeException("setupLineAndFormat() doesn't initialise the format and the line");
 		int dataSize = getDataSizeByPrecision(this.precision);
 		this.precision = this.format.getSampleRate() / dataSize;
-		amps = new float[dataSize / 2 + 1];
-		this.audioUpdaterThread = new AudioUpdater(dataSize);
-		this.audioUpdaterThread.start();
+		
+		
+		//setup Array size for Fourier Arrays real and imag
+		sampleInterval = (int)Math.min(dataSize / 2, Math.ceil(this.format.getSampleRate() * timeInterval)); //cannot be zero because timeInterval > 0
+		int ratio = (int)Math.floor(dataSize / 2 / sampleInterval);
+		sampleInterval = dataSize / 2 / ratio;
+		realArrays = new float[ratio][];
+		imgArrays = new float[ratio][];
+		for (int i = 0; i < ratio; ++i) {
+			realArrays[i] = new float[dataSize / 2];
+			imgArrays[i] = new float[dataSize / 2];
+		}
+		nextArrayIdx = 0;
+		
+		//setup Size for audio input array
+		audioData = new byte[(int)(dataSize * 0.55) * 2]; //0.55 * 2 = 1.1: Make the Array big enough so the AnalyserThread can copy the values before they are overwritten
+						//Also, make sure audioData.length is divisible by two
+		
+		amps = new float[dataSize / 2];
+		
+		this.lineReaderThread = new LineReader(audioData, dataSize, sampleInterval * 2);
+		this.lineReaderThread.start();
 		isAnalysing = true;
 	}
 	
 	
 	public final void stopAnalysis() {
 		isAnalysing = false;
-		try { this.audioUpdaterThread.join(); } catch (InterruptedException e) {}
+		try {
+			this.lineReaderThread.join();
+			} catch (InterruptedException e) {}
 		this.line = null;
 	}
 
@@ -177,16 +211,50 @@ public abstract class AbstractFrequencyDisplay<T> extends FrequencyDisplay {
 		}
 	}
 	
-	private class AudioUpdater extends Thread {
-		protected float[] fReal, fImag;
-		protected byte[] bData1, bData2, bData;
-		protected LineReader tRead;
+	//TODO: AudioAnalysis shows half of the actual frequency. WHY AND FIX IT!!
+	private class AudioAnalyser extends Thread {
+		float[] fReal, fImag;
+		byte[] data;
+		int off;
+		int len;
+		public AudioAnalyser(byte[] data, int off, int len) { //will analyse bytes from [off] to [off + len - 1] in data array
+			fReal = realArrays[nextArrayIdx];
+			fImag = imgArrays[nextArrayIdx];
+			nextArrayIdx++;
+			nextArrayIdx %= realArrays.length;
+			
+			this.data = data;
+			this.off = off;
+			this.len = len;
+		}
 
-		public AudioUpdater(int numData) {
-			fReal = new float[numData];
-			fImag = new float[numData];
-			bData1 = new byte[numData * 2];
-			bData2 = new byte[numData * 2];
+		@Override
+		public void run() {
+				len /= 2;
+				System.out.println("len: " + len + "\tfReal.length: " + fReal.length);
+				if (fReal.length < len)
+					len = fReal.length;
+				for (int i = 0; i < len; ++i) {
+					int iVal = (data[(off + 2 * i + 1) % data.length] << 8) & 0xff00;
+					iVal |= data[(off + 2 * i) % data.length] & 0xff;
+					fReal[i] = (float)(short)(iVal);
+					fImag[i] = 0f;
+				}
+				FourierTransform.FFT(fReal,  fImag);
+				FourierTransform.GetAmplitudes(fReal,  fImag, amps);
+				repaint();
+		}
+		
+	}
+
+	private class LineReader extends Thread {
+		byte[] data;
+		int curIdx, nextIdx;
+		int lenAnalysis, lenInterval;
+		public LineReader(byte[] data, int numBytesPerAnalysis, int numBytesInterval) { //CONSTRAINT: data.length must be bigger than numBytesPerAnalysis and bigger than numBytesInterval
+			this.data = data;
+			this.lenAnalysis = numBytesPerAnalysis;
+			this.lenInterval = numBytesInterval;
 		}
 
 		@Override
@@ -198,55 +266,40 @@ public abstract class AbstractFrequencyDisplay<T> extends FrequencyDisplay {
 				stopAnalysis();
 				return;
 			}
-			
-			//bData always points to the array which is supposed to be processed,
-			//the other array is being read into
-			bData = bData1;
-			tRead = new LineReader(bData2);
-			tRead.run();
-			while (isAnalysing) {
-				tRead = new LineReader(bData);
-				tRead.start();
-				if (bData == bData1) {
-					bData = bData2;
-				} else {
-					bData = bData1;
-				}
-				for (int i = 0; i < fReal.length; ++i) {
-					int iVal = (bData[2 * i + 1] << 8) & 0xff00;
-					iVal |= bData[2 * i] & 0xff;
-					fReal[i] = (float)(short)(iVal);
-					fImag[i] = 0f;
-				}
-				FourierTransform.FFT(fReal,  fImag);
-				FourierTransform.GetAmplitudes(fReal,  fReal, amps);
-				repaint();
-				try {
-					tRead.join();
-				} catch (InterruptedException e) {}
+			//init: read initBytes into array
+			curIdx = 0;
+			nextIdx = readBytesIntoArray(data, curIdx, lenAnalysis);
+			startAnalysisThread(data, curIdx, lenAnalysis);
+			curIdx = nextIdx;
+			while(isAnalysing) {
+				nextIdx = readBytesIntoArray(data, nextIdx, lenInterval);
+				startAnalysisThread(data, curIdx, lenAnalysis);
+				curIdx = nextIdx;			
 			}
-			try {
-				tRead.join();
-			} catch (InterruptedException e) {}
 			closeLine();
 		}
-	}
-
-	protected class LineReader extends Thread {
-		byte[] data;
-
-		public LineReader(byte[] data) {
-			this.data = data;
+		
+		/**
+		 * reads len bytes into data, starting at Index off. If array overflows, it starts writing from data[0].
+		 * @return the next free Index in the array that hasn't been written into
+		 */
+		public int readBytesIntoArray(byte[] data, int off, int len) {
+			while (len > 0) {
+				int bytesToRead = Math.min(data.length - off, len);
+				readLine(data, off, bytesToRead);
+				off += bytesToRead;
+				off %= data.length;
+				len -= bytesToRead;
+			}
+			return off;
 		}
-
-		@Override
-		public void run() {
-			readLine(data);
+		
+		public void startAnalysisThread(byte[] data, int off, int len) {
+			AudioAnalyser anal = new AudioAnalyser(data, off, len);
+			anal.start();
 		}
-
 	}
 	
-
 	public float getLoudestFreq() {
 		if (amps == null)
 			return 0f;

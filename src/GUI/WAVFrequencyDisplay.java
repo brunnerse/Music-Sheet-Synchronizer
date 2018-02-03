@@ -23,7 +23,7 @@ public class WAVFrequencyDisplay extends AbstractFrequencyDisplay<WAVReader> {
 	// boolean play: Set whether the file should be played during the analyis or not
 	public WAVFrequencyDisplay(String file, boolean play, float precision, int minFrequency, int maxFrequency,
 			int width, int height) {
-		super(precision, minFrequency, maxFrequency, width, height);
+		super(precision, minFrequency, maxFrequency, AbstractFrequencyDisplay.INTERVAL.DEFAULT, width, height);
 		setFile(file);
 		this.play = play;
 	}
@@ -47,7 +47,7 @@ public class WAVFrequencyDisplay extends AbstractFrequencyDisplay<WAVReader> {
 	}
 
 	@Override
-	protected void readLine(byte[] data) {
+	protected void readLine(byte[] data, int off, int len) {
 
 		long time, end, start = System.currentTimeMillis();
 		int channels = format.getChannels();
@@ -57,7 +57,7 @@ public class WAVFrequencyDisplay extends AbstractFrequencyDisplay<WAVReader> {
 		//as data should only contain data of one channel
 		try {
 			int offset = 0;
-			for (int i = 0; i < data.length; i += sampleSize) {
+			for (int i = off; i < off + len; i += sampleSize) {
 				if (line.read(data, offset, sampleSize) < sampleSize) // If file reached end, reset file to start
 					line.resetToStart();
 				offset += sampleSize;

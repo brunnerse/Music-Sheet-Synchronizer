@@ -11,7 +11,7 @@ public class MicFrequencyDisplay extends AbstractFrequencyDisplay<TargetDataLine
 
 	//if Constructor is called without giving a line, it will use the TargetDataLine of the AudioSystem
 	public MicFrequencyDisplay(float precision, int minFrequency, int maxFrequency, int width, int height) {
-		super(precision, minFrequency, maxFrequency, width, height);
+		super(precision, minFrequency, maxFrequency, AbstractFrequencyDisplay.INTERVAL.DEFAULT, width, height);
 	}
 
 	@Override
@@ -64,8 +64,8 @@ public class MicFrequencyDisplay extends AbstractFrequencyDisplay<TargetDataLine
 	}
 
 	@Override
-	protected void readLine(byte[] data) {
-		this.line.read(data, 0, data.length);
+	protected void readLine(byte[] data, int off, int len) {
+		this.line.read(data, off, len);
 	}
 
 	@Override

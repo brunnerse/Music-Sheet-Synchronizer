@@ -32,4 +32,5 @@ public abstract class FrequencyDisplay extends JPanel {
 	public abstract void setMaxAmplitude(float amp);
 	public abstract void setMaxFrequency(int freq);
 	public abstract void setMinFrequency(int freq);
+
 }

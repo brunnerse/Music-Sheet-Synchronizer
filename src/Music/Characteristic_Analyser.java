@@ -127,18 +127,20 @@ public class Characteristic_Analyser {
 
 		public StaticFrequencyDisplay(float precision, int minFrequency, int maxFrequency, int width, int height,
 				byte[] b, AudioFormat f) {
-			super(precision, minFrequency, maxFrequency, width, height);
+			super(precision, minFrequency, maxFrequency, AbstractFrequencyDisplay.INTERVAL.LONGEST, width, height);
 			this.line = b;
 			this.format = f;
 		}
 
 		@Override
-		protected void readLine(byte[] data) {
-			for (int i = 0; i < data.length; ++i, ++dataIdx) {
+		protected void readLine(byte[] data, int off, int len) {
+			for (int i = 0; i < len; ++i, ++dataIdx) {
 				if (dataIdx >= line.length) {
 					dataIdx = 0;
 				}
-				data[i] = line[dataIdx];
+				if (i + off >= line.length)
+					off = -i;
+				data[i + off] = line[dataIdx];
 			}
 			try {
 				Thread.sleep(250);
@@ -157,6 +159,7 @@ public class Characteristic_Analyser {
 		@Override
 		protected void setupLineAndFormat() throws Exception {
 		}
+
 
 	}
 }
