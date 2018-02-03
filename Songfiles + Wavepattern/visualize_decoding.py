@@ -144,4 +144,4 @@ for i in range(numValues):
 file.close()
 mainloop()
 
-
+input()
