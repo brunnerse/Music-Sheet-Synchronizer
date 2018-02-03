@@ -120,6 +120,7 @@ public class Characteristic_Analyser {
 		sLine.close();
 	}
 
+	@SuppressWarnings("serial")
 	private static class StaticFrequencyDisplay extends AbstractFrequencyDisplay<byte[]> {
 
 		int dataIdx = 0;

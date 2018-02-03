@@ -33,6 +33,7 @@ public class MusicSheetTesting {
 		
 	}
 	
+	@SuppressWarnings("unused")
 	private static void testPlay() {
 		MusicSheet sheet = new MusicSheet(null);
 		sheet.setTempo(120);

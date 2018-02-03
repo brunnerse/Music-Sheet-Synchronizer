@@ -5,6 +5,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.*;
 import javax.swing.JLabel;
@@ -18,16 +19,17 @@ import javax.swing.JTextField;
 import Music.Pitch;
 
 @SuppressWarnings("serial")
-public class AudioAnalysisWindow extends JFrame implements ActionListener {
+public class AudioAnalysisWindow extends JFrame implements ActionListener, KeyListener {
 	
 	private FrequencyDisplay signalDisplay;
 	private JButton toggleButton, clearButton;
 	private JRadioButtonMenuItem mDark, mBright;
 	private JLabel lPrecision, lMaxFreq;
 	JTextField inMaxFreq, inMinFreq, inMaxAmp, inPrecision;
+	
 	private static final int startMinFrequency = 100, startMaxFrequency = 2000;
 	private static final float startPrecision = 3f, startAmplitude = 0.1f;
-	
+
 	
 	public AudioAnalysisWindow () {
 		this(new MicFrequencyDisplay(startPrecision, startMinFrequency, startMaxFrequency, 800, 600));
@@ -35,7 +37,6 @@ public class AudioAnalysisWindow extends JFrame implements ActionListener {
 	
 	public AudioAnalysisWindow(FrequencyDisplay display) {
 		super("Mikrophon Audioanalyse");
-		
 		this.signalDisplay = display;
 		signalDisplay.setMaxAmplitude(0.1f);
 		signalDisplay.setDarkColorTheme();
@@ -79,6 +80,16 @@ public class AudioAnalysisWindow extends JFrame implements ActionListener {
 		group.add(mBright);
 		mDark.setSelected(true);
 		
+		
+		this.addKeyListener(this);
+
+		this.setFocusable(true);
+		this.requestFocus();
+		this.signalDisplay.addKeyListener(this);
+		for (Component c : this.getComponents()) {
+			
+			c.addKeyListener(this);
+		}
 		
 		this.addWindowListener(new WindowAdapter() {
 			@Override
@@ -135,6 +146,28 @@ public class AudioAnalysisWindow extends JFrame implements ActionListener {
 		inPrecision.setText(String.format("Precision: %.2f Hz", this.signalDisplay.getPrecision()));
 	}
 	
+	
+	private void createWarningDialog(String message) {
+		JOptionPane.showMessageDialog(this, message);
+	}
+
+	public FrequencyDisplay getFrequencyDisplay() {
+		return this.signalDisplay;
+	}
+	
+	public void setFullScreen(boolean b) {
+		dispose();
+		if (b) {
+			this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			this.setUndecorated(true);
+		} else {
+			this.setUndecorated(false);
+			this.setExtendedState(JFrame.NORMAL);
+		}
+		this.setVisible(true);
+	}
+
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(toggleButton)) {
@@ -180,12 +213,21 @@ public class AudioAnalysisWindow extends JFrame implements ActionListener {
 		updateControlButtonText();
 	}
 	
-	private void createWarningDialog(String message) {
-		JOptionPane.showMessageDialog(this, message);
+	@Override
+	public void keyPressed(KeyEvent e) {
 	}
 
-	public FrequencyDisplay getFrequencyDisplay() {
-		return this.signalDisplay;
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			this.setFullScreen(false);
+		} else if (e.getKeyCode() == KeyEvent.VK_F11) {
+			this.setFullScreen(true);
+		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
 	}
 	
 }
