@@ -8,7 +8,6 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.TargetDataLine;
 import GUI.AbstractFrequencyDisplay;
 import GUI.AudioAnalysisWindow;
 import AudioFile.WAVReader;

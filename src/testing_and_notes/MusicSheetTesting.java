@@ -14,19 +14,14 @@ import TestPrograms.GUI.MainEntryPoint;
 
 public class MusicSheetTesting {
 	public static void main(String []args) {
-		testAnalyse();
+		//testAnalyse();
 		
-		//testPlay();
+		testPlay();
 	}
 	
 	private static void testAnalyse() {
 		BufferedImage[] images = MainEntryPoint.startImageScroller();
 		Graphics2D g = images[0].createGraphics();
-		g.setRenderingHint(
-			    RenderingHints.KEY_ANTIALIASING,
-			    RenderingHints.VALUE_ANTIALIAS_ON);
-		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, 
-				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g.clearRect(50,  50,  50,  50);
 		MusicSheet sheet = new MusicSheet(images);
 		sheet.analyseSheet();
@@ -69,8 +64,10 @@ public class MusicSheetTesting {
 		sheet.addNote(new Note(Pitch.getPitch('e', 1), 0.5f, 32, 0));
 		sheet.addNote(new Note(Pitch.getPitch('a', 0), 0.5f, 8, 64));
 		sheet.addNote(new Note(Pitch.getPitch('e', 1), 0.5f, 8,72));
-		sheet.addNote(new Note(Pitch.getPitch('a', 1), 0.5f, 8, Note.Articulation.LEGATO, 80));
+		//sheet.addNote(new Note(Pitch.getPitch('a', 1), 0.5f, 8, Note.Articulation.STACCATO, 80));
 		sheet.addNote(new Note(Pitch.getPitch('h', 0), 0.5f, 24, 112));
+		sheet.addNote(new Note(Pitch.getPitch('e', 1), 0.5f, 8, 120));
+		sheet.addNote(new Note(Pitch.getPitch('g', 1, Vorzeichen.SHARP), 0.5f, 8, 128));
 		sheet.addNote(new Note(Pitch.getPitch('a', -1), 1f, 32, 160));
 		sheet.addNote(new Note(Pitch.getPitch('a', 0), 1f, 32, 160));
 		sheet.addNote(new Note(Pitch.getPitch('a', -2), 1f, 32, 160));

@@ -5,7 +5,7 @@ import java.nio.file.*;
 
 import javax.sound.sampled.*;
 
-public class WMVDecoder {
+public class WAVDecoder {
 
 	public static boolean setTimeStamp = false;
 	public static double startSecond = 5;

@@ -108,7 +108,6 @@ public class WavePattern_Decoder {
 	}
 	
 	public static class WaveManager {
-		@SuppressWarnings("unused")
 		public double frequency;
 		public double amplitude;
 		public double samplesPerPeriod;

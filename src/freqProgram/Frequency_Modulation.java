@@ -15,7 +15,7 @@ implements ActionListener, AdjustmentListener, ItemListener {
 	private Label leftLabel, rightLabel;
 	private SourceDataLine dataLine;
 	private byte[] sampleList;
-	private final int sampleRate = 44100; //Vorbild andere WAV- Datei
+	private final int sampleRate = 96000; //Vorbild andere WAV- Datei
 	private final int sampleSizeinBits = 16;
 	private final int sampleSize = (int)Math.ceil(sampleSizeinBits / 8);
 	private final int playMS = 5000;
@@ -25,7 +25,7 @@ implements ActionListener, AdjustmentListener, ItemListener {
 	public Frequency_Modulation() {
 		super("Frequenzmodulation : Sinuswellenüberlagerung");
 		AudioFormat af = new AudioFormat(sampleRate, sampleSizeinBits, channels, true, false);
-		sampleList = new byte[sampleRate * sampleSize * channels * playMS / 1000];
+		sampleList = new byte[sampleRate * sampleSize * channels / 1000 * playMS];
 		System.out.println("Audioformat: " + af.toString());
 		try {
 			dataLine = AudioSystem.getSourceDataLine(af);

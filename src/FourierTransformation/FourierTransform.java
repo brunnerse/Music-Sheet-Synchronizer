@@ -27,10 +27,14 @@ public class FourierTransform {
 
 	public static void ComplexDFT(float in_Rex[], float in_Imx[], float out_ReX[], float out_ImX[]) {
 		int N = in_Rex.length;
-		if (in_Imx.length != N || out_ReX.length < N || out_ImX.length < N) {
-			System.err.println("ERROR: The array don't have the same size.");
-			return;
-		}
+		if (in_Imx.length != N || out_ReX.length < N || out_ImX.length < N) 
+			throw new IllegalArgumentException("Mismatched lengths");
+		ComplexDFT(in_Rex, in_Imx, out_ReX, out_ImX, N);
+			
+	}
+	public static void ComplexDFT(float in_Rex[], float in_Imx[], float out_ReX[], float out_ImX[], int N) {
+		if (in_Rex.length < N || in_Imx.length < N || out_ReX.length < N || out_ImX.length < N)
+			throw new IllegalArgumentException("Lengths of the arrays are smaller than N");
 		for (int i = 0; i < N; ++i) {
 			out_ReX[i] = 0f;
 			out_ImX[i] = 0f;
@@ -65,14 +69,18 @@ public class FourierTransform {
 
 	}
 
+	
 	public static void InverseComplexDFT(float in_ReX[], float in_ImX[], float out_Rex[], float out_Imx[]) {
-		// convert the amplitudes into the right scale, then perform a Complex DFT.
 		int N = in_ReX.length;
-		if (in_ImX.length != N || out_Rex.length < N || out_Imx.length < N) {
-			System.err.println("ERROR: Arrays got an invalid size.");
-			return;
-		}
-
+		if (in_ImX.length != N || out_Rex.length < N || out_Imx.length < N)
+			throw new IllegalArgumentException("Mismatched lengths");
+		InverseComplexDFT(in_ReX, in_ImX, out_Rex, out_Imx, N);
+	}
+	
+	public static void InverseComplexDFT(float in_ReX[], float in_ImX[], float out_Rex[], float out_Imx[], int N) {
+		// convert the amplitudes into the right scale, then perform a Complex DFT.
+		if (in_ReX.length < N || in_ImX.length < N || out_Rex.length < N || out_Imx.length < N)
+			throw new IllegalArgumentException("Lengths of the arrays are smaller than N");
 		for (int i = 0; i < N; ++i) {
 			out_Rex[i] = 0f;
 			out_Imx[i] = 0f;
@@ -91,10 +99,15 @@ public class FourierTransform {
 	// CREDIT: https://www.nayuki.io/page/free-small-fft-in-multiple-languages
 	// This FFT is using the Cooley-Tukey algorithm
 	public static void FFT(float[] real, float[] imag) {
-		// Length variables
 		int n = real.length;
 		if (n != imag.length)
 			throw new IllegalArgumentException("Mismatched lengths");
+		FFT(real, imag, n);
+	}
+	public static void FFT(float[] real, float[] imag, int n) {
+		// Length variables
+		if (real.length < n || imag.length < n)
+			throw new IllegalArgumentException("Argument n is bigger than the given arrays");
 		int levels = 31 - Integer.numberOfLeadingZeros(n); // Equal to floor(log2(n))
 		if (1 << levels != n)
 			throw new IllegalArgumentException("Length is not a power of 2");

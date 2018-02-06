@@ -17,8 +17,7 @@ public class FourierTesting {
 		//SpeedTesting();
 	}
 
-	@SuppressWarnings("unused")
-	private static void SpeedTesting() {
+	static void SpeedTesting() {
 		final int backupN = N;
 		float valueList[];
 		float imaginaryVals[];
@@ -54,8 +53,7 @@ public class FourierTesting {
 		N = backupN;
 	}
 	
-	@SuppressWarnings("unused")
-	private static void FunctionTesting() {
+	static void FunctionTesting() {
 		float[] valueList = FourierTesting.analyse_FrequencySpectrum();
 		System.out.println("Testing Fourier Transformation for wave 12 hz / 8hz ...");
 		System.out.print("values: ");
@@ -108,16 +106,14 @@ public class FourierTesting {
 		*/
 	}
 	
-	@SuppressWarnings("unused")
-	private static ArrayList<Double> analyse_PDFSample() {
+	static ArrayList<Double> analyse_PDFSample() {
 		List<Double> valueListasObjects = Arrays.asList(1.0000, 0.3804, 0.8090, 0.2351, 0.3090, -0.0000, -0.3090,
 				-0.2351, -0.8090, -0.3804, -1.0000, -0.3804, -0.8090, -0.2351, -0.3090, 0.0000, 0.3090, 0.2351, 0.8090,
 				0.3804);
 		return new ArrayList<Double>(valueListasObjects);
 	}
 
-	@SuppressWarnings("unused")
-	private static ArrayList<Double> analyse_AudioFile() {
+	static ArrayList<Double> analyse_AudioFile() {
 		double valueSize = Math.pow(2d, 15) - 1;
 		ArrayList<Double> valueListasObjects = new ArrayList<Double>(1000);
 		try {
