@@ -7,8 +7,14 @@ import AudioFile.WAVWriter;
 import FourierTransformation.FourierTransform;
 import Tools.ArrayConversion;
 
+
+/**
+ * TODO: current problem: music is also slowered/fastened by factor pitchFactor
+ * @author Severin
+ *
+ */
 public class WAVPitcher {
-	static float pitchFactor = 1.2f;
+	static float pitchFactor = 2f;
 
 	public static void main(String args[]) {
 		try {
@@ -18,7 +24,7 @@ public class WAVPitcher {
 			System.out.println(r.getFormat());
 			WAVWriter w = new WAVWriter("brain mire - pitched.wav", r.getFormat());
 			w.open();
-			int samples = 1 << 18;
+			int samples = 1 << 23;
 			int numChannels = r.getFormat().getChannels();
 			int sampleSize = r.getFormat().getSampleSizeInBits() / 8;
 			byte b[] = new byte[numChannels * sampleSize * samples];
@@ -116,10 +122,11 @@ public class WAVPitcher {
 				}
 				w.write(b, 0, n);
 				n = r.read(b, 0, b.length);
+				w.close();
+				r.close();
 			} while (n > 0);
 			System.out.println("Terminating...");
-			r.close();
-			w.close();
+
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}

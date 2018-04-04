@@ -17,6 +17,34 @@ public class FourierTesting {
 		//SpeedTesting();
 	}
 
+	public static void testFFT(float[] real, float[] imag, int n) {
+		int levels = 31 - Integer.numberOfLeadingZeros(n); //Equal to floor(log2(n))
+		int size = 1 << levels;
+		if (size == n) {  //if n is power of 2, do nothing
+			FourierTransform.FFT(real, imag, n);
+			return;
+		}
+		size *= 2;  //size is now roof(log2(n))
+		float new_real[] = new float[size];
+		float new_imag[] = new float[size];
+		
+		for (int i = 0; i < n; ++i) {
+			new_real[i] = real[i];
+			new_imag[i] = imag[i];
+		}
+		for (int i = n; i < size; ++i) {
+			new_real[i] = real[i - n];
+			new_imag[i] = imag[i - n];
+		}
+		
+		printDomain(new_real, new_imag, size);
+		
+		FourierTransform.FFT(new_real, new_imag, size);
+		
+		printDomain(new_real, new_imag, size);
+	
+	}
+	
 	static void SpeedTesting() {
 		final int backupN = N;
 		float valueList[];
@@ -160,7 +188,7 @@ public class FourierTesting {
 		for (int i = 0; i < len; ++i) {
 			if (i % 7 == 0)
 				System.out.println("");
-			System.out.printf("%3d : ( %7.4f; %7.4f)\t",i,  real[i], img[i]);
+			System.out.printf("%3d : ( %7.2f; %7.2f)\t",i,  real[i], img[i]);
 
 		}
 		System.out.println("\n\t]");
@@ -171,7 +199,7 @@ public class FourierTesting {
 		for (int i = 0; i < array.length; ++i) {
 			if (i % 14 == 0)
 				System.out.println("");
-			System.out.printf("%8.4f\t", array[i]);
+			System.out.printf("%8.2f\t", array[i]);
 		}
 		System.out.println("\n\t]");
 	}

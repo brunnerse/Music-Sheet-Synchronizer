@@ -96,6 +96,9 @@ public class FourierTransform {
 		}
 	}
 
+	
+
+	
 	// CREDIT: https://www.nayuki.io/page/free-small-fft-in-multiple-languages
 	// This FFT is using the Cooley-Tukey algorithm
 	public static void FFT(float[] real, float[] imag) {
@@ -104,6 +107,7 @@ public class FourierTransform {
 			throw new IllegalArgumentException("Mismatched lengths");
 		FFT(real, imag, n);
 	}
+	
 	public static void FFT(float[] real, float[] imag, int n) {
 		// Length variables
 		if (real.length < n || imag.length < n)

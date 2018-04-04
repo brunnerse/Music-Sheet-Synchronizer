@@ -3,7 +3,6 @@ package testing_and_notes;
 import Music.Note;
 
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 import Music.MusicSheet;
@@ -19,6 +18,7 @@ public class MusicSheetTesting {
 		testPlay();
 	}
 	
+	@SuppressWarnings("unused")
 	private static void testAnalyse() {
 		BufferedImage[] images = MainEntryPoint.startImageScroller();
 		Graphics2D g = images[0].createGraphics();
@@ -28,7 +28,7 @@ public class MusicSheetTesting {
 		
 	}
 	
-	@SuppressWarnings("unused")
+	//@SuppressWarnings("unused")
 	private static void testPlay() {
 		MusicSheet sheet = new MusicSheet(null);
 		sheet.setTempo(120);
