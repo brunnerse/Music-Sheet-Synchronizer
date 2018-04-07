@@ -13,16 +13,15 @@ import TestPrograms.GUI.MainEntryPoint;
 
 public class MusicSheetTesting {
 	public static void main(String []args) {
-		//testAnalyse();
+		testAnalyse();
 		
-		testPlay();
+		//testPlay();
 	}
 	
 	@SuppressWarnings("unused")
 	private static void testAnalyse() {
 		BufferedImage[] images = MainEntryPoint.startImageScroller();
 		Graphics2D g = images[0].createGraphics();
-		g.clearRect(50,  50,  50,  50);
 		MusicSheet sheet = new MusicSheet(images);
 		sheet.analyseSheet();
 		

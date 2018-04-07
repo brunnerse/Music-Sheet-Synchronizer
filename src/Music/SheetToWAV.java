@@ -116,7 +116,7 @@ abstract class SheetToWAV {
 		 * the Index at which the note ends = step * b.length / stepTime 	because b.length / stepTime is the length of the byte array per step
 		 */
 
-		// i muss gerade sein
+		// i has to be even
 		i -= i % 2;
 
 		if (i > b.length) { // the point at where the note ends comes in a later cicle

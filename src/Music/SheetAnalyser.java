@@ -8,7 +8,8 @@ abstract class SheetAnalyser {
 	private static final int blackMaxValue = 100;
 
 	public static void analyse(MusicSheet sheet) {
-		markPoint(sheet.getImages()[0], 200, 200, new Color(blackMaxValue, blackMaxValue, blackMaxValue));
+
+		markPoint(sheet.getImages()[0], 500, 500, Color.green);
 	}
 
 	private static boolean isBlack(Color c) {
@@ -16,10 +17,15 @@ abstract class SheetAnalyser {
 	}
 
 	private static void markPoint(BufferedImage img, int x, int y, Color c) {
-		final int dotSize = 50;
-		for (int i = -dotSize; i < dotSize; ++i) {
-			for (int h = -dotSize; h < dotSize; ++h)
-				img.setRGB(x + h, y + i, c.getRGB());
+		final int dotRadius = 15;
+		for (int posY = 0; posY < dotRadius; ++posY) {
+			int maxX = (int)(Math.sin(Math.acos((double)posY / dotRadius)) * dotRadius);
+			for (int posX = 0; posX <= maxX; ++posX) {
+				img.setRGB(x + posX, y + posY, c.getRGB());
+				img.setRGB(x + posX, y - posY, c.getRGB());
+				img.setRGB(x - posX, y + posY, c.getRGB());
+				img.setRGB(x - posX, y - posY, c.getRGB());
+			}
 		}
 		System.out.println("set img colors.");
 	}
