@@ -14,7 +14,6 @@ public class MainEntryPoint {
 
 	public static void main(String[] args) throws Exception {
 		startImageScroller();
-
 	}
 
 	public static BufferedImage[] startImageScroller() {

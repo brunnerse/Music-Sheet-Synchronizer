@@ -1,3 +1,4 @@
 *.wav
 !/piano*
 PDF-Files/Everglow - Coldplay Images
+.idea/*

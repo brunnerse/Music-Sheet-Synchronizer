@@ -4,11 +4,18 @@ import Music.Note;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import Music.MusicSheet;
 import Music.Pitch;
 import Music.Pitch.Vorzeichen;
+import PDF.PDFExtractor;
+import TestPrograms.GUI.ImageScroller;
 import TestPrograms.GUI.MainEntryPoint;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 
 public class MusicSheetTesting {
@@ -20,11 +27,26 @@ public class MusicSheetTesting {
 	
 	@SuppressWarnings("unused")
 	private static void testAnalyse() {
-		BufferedImage[] images = MainEntryPoint.startImageScroller();
-		Graphics2D g = images[0].createGraphics();
+		BufferedImage[] images;
+		try {
+			images = new BufferedImage[]{ImageIO.read(new File("PDF-Files/img.jpg"))};
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println(e.getMessage());
+			return;
+		}
+
+		JFrame f = new JFrame("ImageScroller");
+
+		ImageScroller is = new ImageScroller(800, 700, true);
+		for (BufferedImage i : images) {
+			is.addImage(i);
+		}
+		f.add(is);
+		f.setSize(900, 1000);
+		f.setVisible(true);
 		MusicSheet sheet = new MusicSheet(images);
 		sheet.analyseSheet();
-		
 	}
 	
 	//@SuppressWarnings("unused")
