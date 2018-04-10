@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class ImagePanel extends JPanel {
 	BufferedImage img;
-	int dstx1, dsty1, dstx2, dsty2, srcx1, srcy1, srcx2, srcy2;
+	private int dstx1, dsty1, dstx2, dsty2, srcx1, srcy1, srcx2, srcy2;
 	
 	public ImagePanel(BufferedImage img, int width, int height) {
 		super();

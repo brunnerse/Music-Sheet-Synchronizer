@@ -1,13 +1,7 @@
 package TestPrograms.GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -19,7 +13,7 @@ import javax.swing.JScrollBar;
 //TODO: Try to get JScrollbar to update when its values change. 
 
 @SuppressWarnings("serial")
-public class ImageScroller extends JPanel implements AdjustmentListener {
+public class ImageScroller extends JPanel implements AdjustmentListener, KeyListener, MouseWheelListener {
 
 	private JScrollBar vertScrollBar, horiScrollBar;
 	private MultiImagePanel imgPanel;
@@ -35,12 +29,21 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		vertScrollBar = new JScrollBar(JScrollBar.VERTICAL, 0, 200, 0, 1000);
 		imgPanel = new MultiImagePanel(width - scrollBarSize, height - scrollBarSize, allowMinimizing ? 0f : 1f);
 
-		horiScrollBar.addAdjustmentListener(this);
-		vertScrollBar.addAdjustmentListener(this);
+
 
 		this.add(horiScrollBar, BorderLayout.SOUTH);
 		this.add(vertScrollBar, BorderLayout.EAST);
 		this.add(imgPanel, BorderLayout.CENTER);
+
+        horiScrollBar.addAdjustmentListener(this);
+        vertScrollBar.addAdjustmentListener(this);
+        this.addMouseWheelListener(this);
+        this.addKeyListener(this);
+
+        imgPanel.addMouseWheelListener(this);
+        imgPanel.addKeyListener(this);
+        updateScrollBarDimensions();
+
 	}
 
 	@Override
@@ -49,7 +52,7 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 	}
 
-	private class MultiImagePanel extends JPanel {
+    private class MultiImagePanel extends JPanel {
 
 		private ArrayList<BufferedImage> images = new ArrayList<>();
 		private float scaleFactor = 1;
@@ -60,6 +63,8 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		public MultiImagePanel(int width, int height, float minScale) {
 			this.setPreferredSize(new Dimension(width, height));
 			this.minScale = minScale;
+			this.setFocusable(true);
+			this.requestFocus();
 		}
 
 		@Override
@@ -71,14 +76,14 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 			int yPos = 0;
 			
 			 Graphics2D g2d = (Graphics2D) g;
-			 
+
 			 g2d.setRenderingHint(
                      RenderingHints.KEY_ANTIALIASING,
                      RenderingHints.VALUE_ANTIALIAS_ON);
-			 
+
 			 g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
 					 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			 
+
 			 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, 
 					 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			 
@@ -141,24 +146,30 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 
 		// Function used to scroll through the images vertically.
 		public void setUpperYValue(int y) {
-			if (0 <= y && (y < this.upperYVal || y <= (dstAllSize - this.getHeight()) / scaleFactor)) {
-				this.upperYVal = y;
-				repaint();
-			}
+		    y = Math.max(0, Math.min(y, (int)((dstAllSize - this.getHeight()) / scaleFactor)));
+		    this.upperYVal = y;
+		    repaint();
+
 		}
 
-		// Function used to scroll through the images horizontally.
+		// Function used to scroll through the images horizontally. The XOffset 0 means the image is aligned in the center.
 		public void setXOffset(int x) {
-			if (Math.abs(x) < Math.abs(xOffset) || (this.getWidth() * (1f - scaleFactor) <= 2 * x
-					&& this.getWidth() * (scaleFactor - 1f) >= 2 * x)) {
-				this.xOffset = x;
-				repaint();
-			}
+		    x = (int)Math.max(this.getWidth() * (1f - scaleFactor) / 2, Math.min(x, this.getWidth() * (scaleFactor -1f) / 2));
+		    this.xOffset = x;
+		    repaint();
+
 		}
 
 		public int getMaximumUpperY() {
 			return (int) Math.max(0f, (dstAllSize - this.getHeight()) / scaleFactor);
 		}
+
+		public int getUpperYVal() {
+		    return this.upperYVal;
+        }
+        public int getXOffset() {
+		    return this.xOffset;
+        }
 
 		public int getXCap() {
 			return (int) Math.max(0f, (this.getWidth() * (scaleFactor - 1) / 2));
@@ -182,7 +193,12 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		this.imgPanel.addImage(img, pos);
 	}
 
-	public void setScrollBarDimensions() {
+	public void updateScrollBarPositions() {
+	    horiScrollBar.setValue(imgPanel.getXOffset());
+	    vertScrollBar.setValue(imgPanel.getUpperYVal());
+    }
+
+	public void updateScrollBarDimensions() {
 		int maximum = this.imgPanel.getXCap();
 		horiScrollBar.setMinimum(-maximum);
 		int visibleAmount = (int) (maximum * 2 / this.imgPanel.getScale());
@@ -194,6 +210,8 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		visibleAmount = maximum > 0 ? imgPanel.getHeight() * imgPanel.getHeight() / maximum : 0;
 		vertScrollBar.setMaximum(maximum + visibleAmount);
 		vertScrollBar.setVisibleAmount(visibleAmount);
+		updateScrollBarPositions();
+        vertScrollBar.invalidate();
 	}
 
 	@Override
@@ -203,8 +221,42 @@ public class ImageScroller extends JPanel implements AdjustmentListener {
 		} else if (e.getSource() == vertScrollBar) {
 			imgPanel.setUpperYValue(e.getValue());
 		}
-
-		setScrollBarDimensions();
+		updateScrollBarDimensions();
 	}
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+	    final int factor = 20;
+        imgPanel.setUpperYValue(imgPanel.getUpperYVal() + e.getUnitsToScroll() * factor);
+        updateScrollBarPositions();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        final int moveAmount = 50;
+        switch(e.getKeyCode()) {
+            case KeyEvent.VK_UP:
+                imgPanel.setUpperYValue(imgPanel.getUpperYVal() - moveAmount);
+                break;
+            case KeyEvent.VK_DOWN:
+                imgPanel.setUpperYValue(imgPanel.getUpperYVal() + moveAmount);
+                break;
+            case KeyEvent.VK_LEFT:
+                imgPanel.setXOffset(imgPanel.getXOffset() - moveAmount);
+                break;
+            case KeyEvent.VK_RIGHT:
+                imgPanel.setXOffset(imgPanel.getXOffset() + moveAmount);
+                break;
+        }
+        updateScrollBarPositions();
+    }
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
 
 }

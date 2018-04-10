@@ -80,16 +80,15 @@ abstract class SheetAnalyser {
 				int margin = dots[1].y - dots[0].y;
 				for (int a = 1; a < idx; ++a) {
 					//test if the margin isn't the same for 0.5cm, if so, delete first dot and continue
-					if (dots[a + 1].y - dots[a].y < margin + 0.5 * getDotsPerCm(i)) {
-						a = 0;
+					if (Math.abs(dots[a + 1].y - dots[a].y) - margin > 0.5 * getDotsPerCm(i)) {
 						DebuggingTools.printArray(dots);
-						while (a < idx) {
+						for(a = 0; a < idx; ++a) {
 							System.out.println(a + "\t" + idx);
 							dots[a] = dots[a + 1];
-							a++;
 						}
 						DebuggingTools.printArray(dots);
 						--idx;
+						break;
 					}
 				}
 			}
@@ -104,7 +103,7 @@ abstract class SheetAnalyser {
 			}
 			if (yVar % 50 == 0) {
 				markPoint(i, xVar, yVar, Color.magenta);
-				System.out.println(yVar + "\t" + idx);
+				System.out.println("Current pos: " + yVar + "\t" + idx);
 			}
 
 		} while (idx < dots.length - 1);  //Abort if array is full
