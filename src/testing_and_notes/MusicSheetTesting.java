@@ -2,7 +2,8 @@ package testing_and_notes;
 
 import Music.Note;
 
-import java.awt.Graphics2D;
+import java.awt.*;
+import java.awt.event.AdjustmentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class MusicSheetTesting {
 	private static void testAnalyse() {
 		BufferedImage[] images;
 		try {
-			images = new BufferedImage[]{ImageIO.read(new File("PDF-Files/img.jpg"))};
+			images = new BufferedImage[]{ImageIO.read(new File("PDF-Files/img - Kopie.jpg"))};
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
@@ -42,6 +43,10 @@ public class MusicSheetTesting {
 		for (BufferedImage i : images) {
 			is.addImage(i);
 		}
+        JScrollBar scaleScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 100, 50, 0, 300);
+        scaleScrollBar.addAdjustmentListener((AdjustmentEvent e) -> is.scaleImages(e.getValue() / 100f));
+
+        f.add(scaleScrollBar, BorderLayout.NORTH);
 		f.add(is);
 		f.setSize(900, 1000);
 		f.setVisible(true);
