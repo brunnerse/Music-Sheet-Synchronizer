@@ -5,12 +5,82 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c5cacf4-828f-464f-b20d-3d239918874d" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/bin/Music/SheetAnalyser$Line.class" afterPath="$PROJECT_DIR$/bin/Music/SheetAnalyser$Line.class" />
-      <change beforePath="$PROJECT_DIR$/bin/Music/SheetAnalyser.class" afterPath="$PROJECT_DIR$/bin/Music/SheetAnalyser.class" />
-      <change beforePath="$PROJECT_DIR$/bin/testing_and_notes/MusicSheetTesting.class" afterPath="$PROJECT_DIR$/bin/testing_and_notes/MusicSheetTesting.class" />
-      <change beforePath="$PROJECT_DIR$/src/Music/SheetAnalyser.java" afterPath="$PROJECT_DIR$/src/Music/SheetAnalyser.java" />
-      <change beforePath="$PROJECT_DIR$/src/testing_and_notes/MusicSheetTesting.java" afterPath="$PROJECT_DIR$/src/testing_and_notes/MusicSheetTesting.java" />
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/AudioFile/WAVDecoder.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/AudioFile/WAVDecoder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/AudioFile/WAVPlayer$LineWriterThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/AudioFile/WAVPlayer$LineWriterThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/AudioFile/WAVPlayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/AudioFile/WAVPlayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/AudioFile/WAVReader$Chunk.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/AudioFile/WAVReader$Chunk.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/AudioFile/WAVReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/AudioFile/WAVReader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/AudioFile/WAVWriter.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/AudioFile/WAVWriter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/AudioFile/WavePattern_Decoder$WaveManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/AudioFile/WavePattern_Decoder$WaveManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/AudioFile/WavePattern_Decoder.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/AudioFile/WavePattern_Decoder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/FourierTransformation/BitReversalSorting/test.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/FourierTransformation/BitReversalSorting/test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/FourierTransformation/FourierTesting.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/FourierTransformation/FourierTesting.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/FourierTransformation/FourierTransform.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/FourierTransformation/FourierTransform.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/GUI/AbstractFrequencyDisplay$AudioUpdater.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/GUI/AbstractFrequencyDisplay$AudioUpdater.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/GUI/AbstractFrequencyDisplay$LineReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/GUI/AbstractFrequencyDisplay$LineReader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/GUI/AbstractFrequencyDisplay$MouseDragManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/GUI/AbstractFrequencyDisplay$MouseDragManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/GUI/AbstractFrequencyDisplay.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/GUI/AbstractFrequencyDisplay.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/GUI/AudioAnalysisWindow$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/GUI/AudioAnalysisWindow$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/GUI/AudioAnalysisWindow$UpdateData.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/GUI/AudioAnalysisWindow$UpdateData.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/GUI/AudioAnalysisWindow.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/GUI/AudioAnalysisWindow.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/GUI/FrequencyDisplay.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/GUI/FrequencyDisplay.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/GUI/GUIStarter.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/GUI/GUIStarter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/GUI/MicFrequencyDisplay.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/GUI/MicFrequencyDisplay.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/GUI/WAVFrequencyDisplay.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/GUI/WAVFrequencyDisplay.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/Bar$Beat.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/Bar$Beat.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/Bar.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/Bar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/Characteristic_Analyser$StaticFrequencyDisplay.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/Characteristic_Analyser$StaticFrequencyDisplay.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/Characteristic_Analyser.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/Characteristic_Analyser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/MusicSheet.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/MusicSheet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/Note$Articulation.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/Note$Articulation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/Note.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/Note.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/Pause.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/Pause.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/Pitch$AudioPitch.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/Pitch$AudioPitch.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/Pitch$Vorzeichen.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/Pitch$Vorzeichen.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/Pitch.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/Pitch.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/SheetAnalyser$MusicLine.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/SheetAnalyser$MusicLine.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/SheetAnalyser.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/SheetAnalyser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/SheetToWAV$NoteDurationPair.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/SheetToWAV$NoteDurationPair.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Music/SheetToWAV.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Music/SheetToWAV.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/PDF/PDFExtractor$PDFImageExtractor.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/PDF/PDFExtractor$PDFImageExtractor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/PDF/PDFExtractor.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/PDF/PDFExtractor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/Audio/MainEntryPoint.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/Audio/MainEntryPoint.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/Audio/MicAnalysis$ReadTargetDataLine.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/Audio/MicAnalysis$ReadTargetDataLine.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/Audio/MicAnalysis.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/Audio/MicAnalysis.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/Audio/MicToWAVFile$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/Audio/MicToWAVFile$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/Audio/MicToWAVFile$RecorderThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/Audio/MicToWAVFile$RecorderThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/Audio/MicToWAVFile$WriteToWAV.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/Audio/MicToWAVFile$WriteToWAV.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/Audio/MicToWAVFile.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/Audio/MicToWAVFile.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/Audio/Mic_Recording.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/Audio/Mic_Recording.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/Audio/Noise_Canceller$LineWriter.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/Audio/Noise_Canceller$LineWriter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/Audio/Noise_Canceller.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/Audio/Noise_Canceller.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/Audio/VoicePitcher.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/Audio/VoicePitcher.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/Audio/WAVPitcher.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/Audio/WAVPitcher.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/GUI/ImageScroller$MultiImagePanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/GUI/ImageScroller$MultiImagePanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/GUI/ImageScroller.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/GUI/ImageScroller.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/GUI/ImageShower$MouseDragManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/GUI/ImageShower$MouseDragManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/GUI/ImageShower.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/GUI/ImageShower.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/TestPrograms/GUI/MainEntryPoint.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TestPrograms/GUI/MainEntryPoint.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Tools/ArrayConversion.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Tools/ArrayConversion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/freqProgram/FFTBase.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/freqProgram/FFTBase.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/freqProgram/FFTtester.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/freqProgram/FFTtester.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/freqProgram/Frequency_Modulation$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/freqProgram/Frequency_Modulation$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/freqProgram/Frequency_Modulation$PlaySound.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/freqProgram/Frequency_Modulation$PlaySound.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/freqProgram/Frequency_Modulation$WaveManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/freqProgram/Frequency_Modulation$WaveManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/freqProgram/Frequency_Modulation.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/freqProgram/Frequency_Modulation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/freqProgram/Frequency_Scrollbar$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/freqProgram/Frequency_Scrollbar$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/freqProgram/Frequency_Scrollbar$PlaySound.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/freqProgram/Frequency_Scrollbar$PlaySound.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/freqProgram/Frequency_Scrollbar.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/freqProgram/Frequency_Scrollbar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/testing_and_notes/MainTesting.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/testing_and_notes/MainTesting.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/testing_and_notes/MusicSheetTesting.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/testing_and_notes/MusicSheetTesting.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/testing_and_notes/Music_Playback$LineHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/testing_and_notes/Music_Playback$LineHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/testing_and_notes/Music_Playback.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/testing_and_notes/Music_Playback.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/testing_and_notes/Note_Frequency_Playback.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/testing_and_notes/Note_Frequency_Playback.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TestPrograms/Audio/MainEntryPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TestPrograms/Audio/MainEntryPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testing_and_notes/Frequency of Music Notes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/testing_and_notes/Frequency of Music Notes.txt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,9 +100,8 @@
       <file leaf-file-name="GUIStarter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GUI/GUIStarter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-              <folding />
+            <state relative-caret-position="120">
+              <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -40,8 +109,8 @@
       <file leaf-file-name="MusicSheetTesting.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/testing_and_notes/MusicSheetTesting.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="38" column="0" lean-forward="false" selection-start-line="37" selection-start-column="9" selection-end-line="38" selection-end-column="0" />
+            <state relative-caret-position="330">
+              <caret line="38" selection-start-line="37" selection-start-column="9" selection-end-line="38" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -49,21 +118,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SheetAnalyser.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SheetAnalyser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Music/SheetAnalyser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="220" column="102" lean-forward="false" selection-start-line="220" selection-start-column="102" selection-end-line="220" selection-end-column="102" />
+            <state relative-caret-position="150">
+              <caret line="10" column="79" selection-start-line="10" selection-start-column="79" selection-end-line="10" selection-end-column="79" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="method#isBlack#0;class#SheetAnalyser#0" expanded="false" />
+                <element signature="method#isBlack#0;class#SheetAnalyser#0" />
                 <element signature="e#802#803#0" expanded="true" />
                 <element signature="e#845#846#0" expanded="true" />
-                <element signature="method#markPoint#1;class#SheetAnalyser#0" expanded="false" />
-                <element signature="method#markLine#1;class#SheetAnalyser#0" expanded="false" />
+                <element signature="method#markPoint#1;class#SheetAnalyser#0" />
+                <element signature="method#markLine#1;class#SheetAnalyser#0" />
                 <element signature="e#9451#9452#0" expanded="true" />
                 <element signature="e#9502#9503#0" expanded="true" />
-                <element signature="class#MusicLine#0;class#SheetAnalyser#0" expanded="false" />
+                <element signature="class#MusicLine#0;class#SheetAnalyser#0" />
                 <element signature="e#10934#10935#0" expanded="true" />
                 <element signature="e#10968#10969#0" expanded="true" />
                 <element signature="e#11011#11012#0" expanded="true" />
@@ -75,12 +144,20 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="Frequency_Modulation.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/freqProgram/Frequency_Modulation.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="247">
+              <caret line="254" column="39" lean-forward="true" selection-start-line="254" selection-start-column="39" selection-end-line="254" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="SheetToWAV.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Music/SheetToWAV.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="918">
-              <caret line="57" column="27" lean-forward="false" selection-start-line="57" selection-start-column="27" selection-end-line="57" selection-end-column="27" />
-              <folding />
+            <state>
+              <caret line="56" lean-forward="true" selection-start-line="56" selection-end-line="56" />
             </state>
           </provider>
         </entry>
@@ -111,11 +188,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GradleLocalSettings">
-    <option name="externalProjectsViewState">
-      <projects_view />
-    </option>
-  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -129,69 +201,16 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-7" />
     <option name="width" value="1030" />
     <option name="height" value="1047" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
-      <flattenPackages />
-      <showMembers />
-      <showModules />
-      <showLibraryContents />
-      <hideEmptyPackages />
-      <abbreviatePackageNames />
-      <autoscrollToSource />
-      <autoscrollFromSource />
-      <sortByType />
-      <manualOrder />
+    <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="Music Sheet Synchroniser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Music Sheet Synchroniser" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Music Sheet Synchroniser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Music Sheet Synchroniser" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Music Sheet Synchroniser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Music Sheet Synchroniser" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Music" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Music Sheet Synchroniser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Music Sheet Synchroniser" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="TestPrograms" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Music Sheet Synchroniser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Music Sheet Synchroniser" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="TestPrograms" type="462c0819:PsiDirectoryNode" />
-              <item name="GUI" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Music Sheet Synchroniser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Music Sheet Synchroniser" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Tools" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
       <pane id="AndroidView">
         <subPane>
           <expand>
@@ -208,15 +227,38 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Music-Sheet-Synchronizer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Music-Sheet-Synchronizer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Music-Sheet-Synchronizer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Music-Sheet-Synchronizer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Music-Sheet-Synchronizer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Music-Sheet-Synchronizer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="freqProgram" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$USER_HOME$/eclipse/workspace/TestChamber" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode" />
+    <property name="settings.editor.selected.configurable" value="File.Encoding" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -230,68 +272,47 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.MusicSheetTesting">
+  <component name="RunManager" selected="Application.Frequency_Modulation">
     <configuration default="true" type="Applet" factoryName="Applet">
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <module />
+    </configuration>
+    <configuration name="Frequency_Modulation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="freqProgram.Frequency_Modulation" />
+      <module name="Music Sheet Synchroniser" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="freqProgram.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
     </configuration>
     <configuration name="MainEntryPoint" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+      <option name="MAIN_CLASS_NAME" value="TestPrograms.GUI.MainEntryPoint" />
+      <module name="Music Sheet Synchroniser" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="TestPrograms.GUI.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="TestPrograms.GUI.MainEntryPoint" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="Music Sheet Synchroniser" />
-      <envs />
     </configuration>
     <configuration name="MusicSheetTesting" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+      <option name="MAIN_CLASS_NAME" value="testing_and_notes.MusicSheetTesting" />
+      <module name="Music Sheet Synchroniser" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="testing_and_notes.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="testing_and_notes.MusicSheetTesting" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="Music Sheet Synchroniser" />
-      <envs />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="" />
-      <envs />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" />
@@ -301,24 +322,13 @@
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="singleModule" />
       </option>
-      <envs />
       <patterns />
     </configuration>
-    <configuration default="true" type="Remote" factoryName="Remote">
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
-    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="SUITE_NAME" />
@@ -331,37 +341,27 @@
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <option name="OUTPUT_DIRECTORY" />
-      <option name="ANNOTATION_TYPE" />
-      <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="singleModule" />
       </option>
       <option name="USE_DEFAULT_REPORTERS" value="false" />
       <option name="PROPERTIES_FILE" />
-      <envs />
       <properties />
       <listeners />
     </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
-      <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-      <option name="PROGRAM_PARAMETERS" />
-      <predefined_log_file id="idea.log" enabled="true" />
-    </configuration>
-    <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="Application.MainEntryPoint" />
-      <item index="1" class="java.lang.String" itemvalue="Application.MusicSheetTesting" />
+    <list>
+      <item itemvalue="Application.MainEntryPoint" />
+      <item itemvalue="Application.MusicSheetTesting" />
+      <item itemvalue="Application.Frequency_Modulation" />
     </list>
     <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Application.MusicSheetTesting" />
-        <item index="1" class="java.lang.String" itemvalue="Application.MainEntryPoint" />
+      <list>
+        <item itemvalue="Application.Frequency_Modulation" />
+        <item itemvalue="Application.MusicSheetTesting" />
+        <item itemvalue="Application.MainEntryPoint" />
       </list>
     </recent_temporary>
-  </component>
-  <component name="ShelveChangesManager" show_recycled="false">
-    <option name="remove_strategy" value="false" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -377,36 +377,36 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="0" y="-4" width="1366" height="772" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3244963" sideWeight="0.4921875" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32661718" sideWeight="0.353125" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32661718" sideWeight="0.646875" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11770833" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3993576" sideWeight="0.49013805" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296875" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.49048316" weight="0.32379517" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info id="Image Layers" order="2" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.35431919" side_tool="true" visible="true" weight="0.3253012" />
+      <window_info anchor="right" id="Maven Projects" order="3" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.64568084" weight="0.3253012" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info id="Capture Tool" order="2" />
+      <window_info id="Designer" order="2" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11713031" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info id="UI Designer" order="2" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49013805" weight="0.3993576" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Coverage" order="4" side_tool="true" weight="0.3296875" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -416,48 +416,22 @@
     <breakpoint-manager>
       <option name="time" value="7" />
     </breakpoint-manager>
-    <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/testing_and_notes/MusicSheetTesting.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
-          <caret line="64" column="52" lean-forward="false" selection-start-line="64" selection-start-column="52" selection-end-line="64" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tools/DebuggingTools.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="32" lean-forward="true" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Music/SheetToWAV.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2193">
-          <caret line="132" column="40" lean-forward="false" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Music/SheetAnalyser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1326">
           <caret line="78" column="48" lean-forward="true" selection-start-line="78" selection-start-column="48" selection-end-line="78" selection-end-column="48" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#isBlack#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#isBlack#0;class#SheetAnalyser#0" />
             <element signature="e#802#803#0" expanded="true" />
             <element signature="e#845#846#0" expanded="true" />
-            <element signature="method#markPoint#1;class#SheetAnalyser#0" expanded="false" />
-            <element signature="method#markLine#1;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#markPoint#1;class#SheetAnalyser#0" />
+            <element signature="method#markLine#1;class#SheetAnalyser#0" />
             <element signature="e#9451#9452#0" expanded="true" />
             <element signature="e#9502#9503#0" expanded="true" />
-            <element signature="class#MusicLine#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="class#MusicLine#0;class#SheetAnalyser#0" />
             <element signature="e#10934#10935#0" expanded="true" />
             <element signature="e#10968#10969#0" expanded="true" />
             <element signature="e#11011#11012#0" expanded="true" />
@@ -471,8 +445,7 @@
     <entry file="file://$PROJECT_DIR$/src/GUI/GUIStarter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-          <folding />
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -489,8 +462,7 @@
     <entry file="file://$PROJECT_DIR$/src/Music/SheetToWAV.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2193">
-          <caret line="132" column="40" lean-forward="false" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
-          <folding />
+          <caret line="132" column="40" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
         </state>
       </provider>
     </entry>
@@ -500,14 +472,14 @@
           <caret line="79" column="39" lean-forward="true" selection-start-line="79" selection-start-column="39" selection-end-line="79" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#isBlack#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#isBlack#0;class#SheetAnalyser#0" />
             <element signature="e#802#803#0" expanded="true" />
             <element signature="e#845#846#0" expanded="true" />
-            <element signature="method#markPoint#1;class#SheetAnalyser#0" expanded="false" />
-            <element signature="method#markLine#1;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#markPoint#1;class#SheetAnalyser#0" />
+            <element signature="method#markLine#1;class#SheetAnalyser#0" />
             <element signature="e#9451#9452#0" expanded="true" />
             <element signature="e#9502#9503#0" expanded="true" />
-            <element signature="class#MusicLine#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="class#MusicLine#0;class#SheetAnalyser#0" />
             <element signature="e#10934#10935#0" expanded="true" />
             <element signature="e#10968#10969#0" expanded="true" />
             <element signature="e#11011#11012#0" expanded="true" />
@@ -521,15 +493,14 @@
     <entry file="file://$PROJECT_DIR$/src/GUI/GUIStarter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-          <folding />
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/testing_and_notes/MusicSheetTesting.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -539,25 +510,24 @@
     <entry file="file://$PROJECT_DIR$/src/Music/SheetToWAV.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2193">
-          <caret line="132" column="40" lean-forward="false" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
-          <folding />
+          <caret line="132" column="40" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Music/SheetAnalyser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="697">
-          <caret line="55" column="6" lean-forward="false" selection-start-line="55" selection-start-column="6" selection-end-line="55" selection-end-column="6" />
+          <caret line="55" column="6" selection-start-line="55" selection-start-column="6" selection-end-line="55" selection-end-column="6" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#isBlack#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#isBlack#0;class#SheetAnalyser#0" />
             <element signature="e#802#803#0" expanded="true" />
             <element signature="e#845#846#0" expanded="true" />
-            <element signature="method#markPoint#1;class#SheetAnalyser#0" expanded="false" />
-            <element signature="method#markLine#1;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#markPoint#1;class#SheetAnalyser#0" />
+            <element signature="method#markLine#1;class#SheetAnalyser#0" />
             <element signature="e#9451#9452#0" expanded="true" />
             <element signature="e#9502#9503#0" expanded="true" />
-            <element signature="class#MusicLine#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="class#MusicLine#0;class#SheetAnalyser#0" />
             <element signature="e#10934#10935#0" expanded="true" />
             <element signature="e#10968#10969#0" expanded="true" />
             <element signature="e#11011#11012#0" expanded="true" />
@@ -571,15 +541,14 @@
     <entry file="file://$PROJECT_DIR$/src/GUI/GUIStarter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-          <folding />
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/testing_and_notes/MusicSheetTesting.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -589,25 +558,24 @@
     <entry file="file://$PROJECT_DIR$/src/Music/SheetToWAV.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2193">
-          <caret line="132" column="40" lean-forward="false" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
-          <folding />
+          <caret line="132" column="40" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Music/SheetAnalyser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#isBlack#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#isBlack#0;class#SheetAnalyser#0" />
             <element signature="e#802#803#0" expanded="true" />
             <element signature="e#845#846#0" expanded="true" />
-            <element signature="method#markPoint#1;class#SheetAnalyser#0" expanded="false" />
-            <element signature="method#markLine#1;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#markPoint#1;class#SheetAnalyser#0" />
+            <element signature="method#markLine#1;class#SheetAnalyser#0" />
             <element signature="e#9451#9452#0" expanded="true" />
             <element signature="e#9502#9503#0" expanded="true" />
-            <element signature="class#MusicLine#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="class#MusicLine#0;class#SheetAnalyser#0" />
             <element signature="e#10934#10935#0" expanded="true" />
             <element signature="e#10968#10969#0" expanded="true" />
             <element signature="e#11011#11012#0" expanded="true" />
@@ -621,15 +589,14 @@
     <entry file="file://$PROJECT_DIR$/src/GUI/GUIStarter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-          <folding />
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/testing_and_notes/MusicSheetTesting.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -639,25 +606,24 @@
     <entry file="file://$PROJECT_DIR$/src/Music/SheetToWAV.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2193">
-          <caret line="132" column="40" lean-forward="false" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
-          <folding />
+          <caret line="132" column="40" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Music/SheetAnalyser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
-          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#isBlack#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#isBlack#0;class#SheetAnalyser#0" />
             <element signature="e#802#803#0" expanded="true" />
             <element signature="e#845#846#0" expanded="true" />
-            <element signature="method#markPoint#1;class#SheetAnalyser#0" expanded="false" />
-            <element signature="method#markLine#1;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#markPoint#1;class#SheetAnalyser#0" />
+            <element signature="method#markLine#1;class#SheetAnalyser#0" />
             <element signature="e#9451#9452#0" expanded="true" />
             <element signature="e#9502#9503#0" expanded="true" />
-            <element signature="class#MusicLine#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="class#MusicLine#0;class#SheetAnalyser#0" />
             <element signature="e#10934#10935#0" expanded="true" />
             <element signature="e#10968#10969#0" expanded="true" />
             <element signature="e#11011#11012#0" expanded="true" />
@@ -671,15 +637,14 @@
     <entry file="file://$PROJECT_DIR$/src/GUI/GUIStarter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-          <folding />
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/testing_and_notes/MusicSheetTesting.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -689,8 +654,7 @@
     <entry file="file://$PROJECT_DIR$/src/Music/SheetToWAV.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2244">
-          <caret line="132" column="40" lean-forward="false" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
-          <folding />
+          <caret line="132" column="40" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
         </state>
       </provider>
     </entry>
@@ -700,14 +664,14 @@
           <caret line="22" column="54" lean-forward="true" selection-start-line="22" selection-start-column="54" selection-end-line="22" selection-end-column="54" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#isBlack#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#isBlack#0;class#SheetAnalyser#0" />
             <element signature="e#802#803#0" expanded="true" />
             <element signature="e#845#846#0" expanded="true" />
-            <element signature="method#markPoint#1;class#SheetAnalyser#0" expanded="false" />
-            <element signature="method#markLine#1;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#markPoint#1;class#SheetAnalyser#0" />
+            <element signature="method#markLine#1;class#SheetAnalyser#0" />
             <element signature="e#9451#9452#0" expanded="true" />
             <element signature="e#9502#9503#0" expanded="true" />
-            <element signature="class#MusicLine#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="class#MusicLine#0;class#SheetAnalyser#0" />
             <element signature="e#10934#10935#0" expanded="true" />
             <element signature="e#10968#10969#0" expanded="true" />
             <element signature="e#11011#11012#0" expanded="true" />
@@ -721,15 +685,14 @@
     <entry file="file://$PROJECT_DIR$/src/GUI/GUIStarter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-          <folding />
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/testing_and_notes/MusicSheetTesting.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -739,25 +702,24 @@
     <entry file="file://$PROJECT_DIR$/src/Music/SheetToWAV.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2193">
-          <caret line="132" column="40" lean-forward="false" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
-          <folding />
+          <caret line="132" column="40" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Music/SheetAnalyser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
-          <caret line="19" column="32" lean-forward="false" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="32" />
+          <caret line="19" column="32" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#isBlack#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#isBlack#0;class#SheetAnalyser#0" />
             <element signature="e#802#803#0" expanded="true" />
             <element signature="e#845#846#0" expanded="true" />
-            <element signature="method#markPoint#1;class#SheetAnalyser#0" expanded="false" />
-            <element signature="method#markLine#1;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#markPoint#1;class#SheetAnalyser#0" />
+            <element signature="method#markLine#1;class#SheetAnalyser#0" />
             <element signature="e#9451#9452#0" expanded="true" />
             <element signature="e#9502#9503#0" expanded="true" />
-            <element signature="class#MusicLine#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="class#MusicLine#0;class#SheetAnalyser#0" />
             <element signature="e#10934#10935#0" expanded="true" />
             <element signature="e#10968#10969#0" expanded="true" />
             <element signature="e#11011#11012#0" expanded="true" />
@@ -771,15 +733,14 @@
     <entry file="file://$PROJECT_DIR$/src/GUI/GUIStarter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-          <folding />
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/testing_and_notes/MusicSheetTesting.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
-          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -790,7 +751,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2193">
           <caret line="132" column="40" lean-forward="true" selection-start-line="132" selection-start-column="40" selection-end-line="132" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -800,14 +760,14 @@
           <caret line="14" column="45" lean-forward="true" selection-start-line="14" selection-start-column="45" selection-end-line="14" selection-end-column="45" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#isBlack#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#isBlack#0;class#SheetAnalyser#0" />
             <element signature="e#802#803#0" expanded="true" />
             <element signature="e#845#846#0" expanded="true" />
-            <element signature="method#markPoint#1;class#SheetAnalyser#0" expanded="false" />
-            <element signature="method#markLine#1;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#markPoint#1;class#SheetAnalyser#0" />
+            <element signature="method#markLine#1;class#SheetAnalyser#0" />
             <element signature="e#9451#9452#0" expanded="true" />
             <element signature="e#9502#9503#0" expanded="true" />
-            <element signature="class#MusicLine#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="class#MusicLine#0;class#SheetAnalyser#0" />
             <element signature="e#10934#10935#0" expanded="true" />
             <element signature="e#10968#10969#0" expanded="true" />
             <element signature="e#11011#11012#0" expanded="true" />
@@ -821,8 +781,7 @@
     <entry file="file://$PROJECT_DIR$/src/GUI/GUIStarter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-          <folding />
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -843,28 +802,24 @@
     <entry file="file://$PROJECT_DIR$/src/Music/Characteristic_Analyser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
-          <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Music/FrequencyAnalyzer.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Music/Pause.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TestPrograms/Audio/MainEntryPoint.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
-          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -878,21 +833,15 @@
     <entry file="file://$PROJECT_DIR$/src/Music/Note.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-795">
-          <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/awt/Color.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="601" column="15" lean-forward="false" selection-start-line="601" selection-start-column="15" selection-end-line="601" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/awt/Color.java" />
     <entry file="file://$PROJECT_DIR$/src/testing_and_notes/MainTesting.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -913,7 +862,7 @@
     <entry file="file://$PROJECT_DIR$/src/Tools/DebuggingTools.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
-          <caret line="5" column="32" lean-forward="false" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
+          <caret line="5" column="32" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -924,18 +873,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Music/SheetToWAV.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="918">
-          <caret line="57" column="27" lean-forward="false" selection-start-line="57" selection-start-column="27" selection-end-line="57" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/testing_and_notes/MusicSheetTesting.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="38" column="0" lean-forward="false" selection-start-line="37" selection-start-column="9" selection-end-line="38" selection-end-column="0" />
+        <state relative-caret-position="330">
+          <caret line="38" selection-start-line="37" selection-start-column="9" selection-end-line="38" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -944,26 +885,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GUI/GUIStarter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-          <folding />
+        <state relative-caret-position="120">
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/alyssa arce.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Music/SheetAnalyser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="220" column="102" lean-forward="false" selection-start-line="220" selection-start-column="102" selection-end-line="220" selection-end-column="102" />
+        <state relative-caret-position="150">
+          <caret line="10" column="79" selection-start-line="10" selection-start-column="79" selection-end-line="10" selection-end-column="79" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#isBlack#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#isBlack#0;class#SheetAnalyser#0" />
             <element signature="e#802#803#0" expanded="true" />
             <element signature="e#845#846#0" expanded="true" />
-            <element signature="method#markPoint#1;class#SheetAnalyser#0" expanded="false" />
-            <element signature="method#markLine#1;class#SheetAnalyser#0" expanded="false" />
+            <element signature="method#markPoint#1;class#SheetAnalyser#0" />
+            <element signature="method#markLine#1;class#SheetAnalyser#0" />
             <element signature="e#9451#9452#0" expanded="true" />
             <element signature="e#9502#9503#0" expanded="true" />
-            <element signature="class#MusicLine#0;class#SheetAnalyser#0" expanded="false" />
+            <element signature="class#MusicLine#0;class#SheetAnalyser#0" />
             <element signature="e#10934#10935#0" expanded="true" />
             <element signature="e#10968#10969#0" expanded="true" />
             <element signature="e#11011#11012#0" expanded="true" />
@@ -971,6 +914,27 @@
             <element signature="e#11094#11095#0" expanded="true" />
             <element signature="e#11134#11135#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Music/Pitch.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="12" column="33" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Music/SheetToWAV.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="56" lean-forward="true" selection-start-line="56" selection-end-line="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/freqProgram/Frequency_Modulation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="254" column="39" lean-forward="true" selection-start-line="254" selection-start-column="39" selection-end-line="254" selection-end-column="39" />
         </state>
       </provider>
     </entry>
@@ -1032,6 +996,18 @@
               <list>
                 <option value="0.2" />
                 <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>10</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
               </list>
             </option>
           </splitter-proportions>

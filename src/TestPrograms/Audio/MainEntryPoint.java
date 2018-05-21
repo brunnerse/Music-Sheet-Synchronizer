@@ -6,7 +6,8 @@ import java.io.InputStreamReader;
 public class MainEntryPoint {
 
 	public static void main(String[] args) throws Exception {
-		recordSomeTimes(1);
+		new freqProgram.Frequency_Modulation();
+		//recordSomeTimes(1);
 	}
 
 	public static void recordSomeTimes(int times) throws Exception {

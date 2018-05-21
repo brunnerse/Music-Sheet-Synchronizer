@@ -1,3 +1,12 @@
+Intervall-Verhältnisse
+	Oktave		-	2/1
+	Kleine Terz	-	6/5
+	Große Terz	-	5/4
+	Quinte		-	3/2
+
+	Quarte		-	4/3
+		
+
 Note	Frequency (Hz)	Wavelength (cm)
 C0			16.35		2109.89
  C#0/Db0 	17.32		1991.47
