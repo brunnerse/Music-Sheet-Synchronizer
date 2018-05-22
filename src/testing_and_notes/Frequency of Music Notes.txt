@@ -5,18 +5,15 @@ Intervall-Verhältnisse
 +	Quinte		-	3/2	(Kleine Terz + Große Terz)
 
 +	Quarte		-	4/3	(Oktave - Quinte)
-	Kleine Sexte	-	8/5	(Oktave - Große Terz, != Quarte + Kleine Terz)
 +	Große Sexte	-	5/3	(Oktave - Kleine Terz, Quarte + Große Terz)
-	Kleine Septime	-	9/5	(Quinte + Kleine Terz, != Quarte + Quarte)
+Nach reiner Stimmung:
+ 	Kleine Sexte	-	8/5	
+	Kleine Septime	-	9/5  bzw. 16/9
 	Große Septime	-	15/8	(Quinte + Große Terz)
 	
-	Kleine Sekunde	-	25/24	(Große Terz - Kleine Terz)
+	Kleine Sekunde	-	25/24 bzw. 16/15
 	Große Sekunde	-	9/8	(Quinte + Quinte - Oktave)
 	Überm. Quarte	-	36/25	(Kleine Terz + Kleine Terz)
-	
-	
-	
-	
 			
 
 Note	Frequency (Hz)	Wavelength (cm)
